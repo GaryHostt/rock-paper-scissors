@@ -90,6 +90,102 @@ def ai_hard(history):
     most_common = Counter(all_choices).most_common(1)[0][0]
     return get_counter_move(most_common)
 
+def ai_very_hard(history):
+    """
+    Very Hard AI: Master strategist using advanced game theory and psychology.
+    
+    Implements multiple advanced strategies:
+    1. Win-Stay, Lose-Shift Detection
+    2. Double-Throw Pattern (avoid repetition)
+    3. Opening move counter (Paper first defense)
+    4. Pattern frequency analysis
+    5. Sequence prediction
+    """
+    if not history or len(history) < 2:
+        # First move: Statistically, Rock is most common (35%), so play Paper
+        return 'paper'
+    
+    last_game = history[-1]
+    
+    # Strategy 1: Win-Stay, Lose-Shift Heuristic (Most exploitable pattern)
+    if len(history) >= 2:
+        prev_game = history[-2]
+        
+        # If player won last round, they likely repeat (Win-Stay)
+        if last_game['result'] == 'player':
+            if random.random() < 0.75:  # 75% confidence
+                # Counter the repeated move
+                return get_counter_move(last_game['player'])
+        
+        # If player lost last round, they likely shift to next in sequence (Lose-Shift)
+        if last_game['result'] == 'computer':
+            if random.random() < 0.70:  # 70% confidence
+                # Predict the shift: Rock -> Paper -> Scissors -> Rock
+                sequence_shift = {
+                    'rock': 'paper',
+                    'paper': 'scissors', 
+                    'scissors': 'rock'
+                }
+                predicted_next = sequence_shift[last_game['player']]
+                return get_counter_move(predicted_next)
+    
+    # Strategy 2: Double-Throw Detection (Humans avoid 3x repetition)
+    if len(history) >= 2:
+        last_two = [history[-2]['player'], history[-1]['player']]
+        if last_two[0] == last_two[1]:
+            # Player played same move twice, they will NOT play it again
+            repeated_move = last_two[0]
+            # They will play one of the other two moves
+            other_moves = [m for m in CHOICES if m != repeated_move]
+            
+            # Play the move that beats one and ties the other
+            # If they played Rock-Rock, they'll play Paper or Scissors
+            # We play Scissors (beats Paper, loses to Rock, ties Scissors)
+            # But Rock is unlikely, so this is optimal
+            if random.random() < 0.65:  # 65% confidence
+                # Choose the move that counters what beats the repeated move
+                what_beats_repeated = get_counter_move(repeated_move)
+                # Counter that
+                return get_counter_move(what_beats_repeated)
+    
+    # Strategy 3: Advanced Pattern Recognition (last 7 games)
+    if len(history) >= 7:
+        recent = history[-7:]
+        
+        # Check for alternating pattern
+        player_choices = [g['player'] for g in recent]
+        
+        # Check if player is cycling through moves
+        if len(set(player_choices[-3:])) == 3:
+            # Player is cycling, predict next in their cycle
+            last_three = player_choices[-3:]
+            # Find the pattern
+            cycle_map = {
+                ('rock', 'paper', 'scissors'): 'rock',
+                ('rock', 'scissors', 'paper'): 'rock',
+                ('paper', 'rock', 'scissors'): 'paper',
+                ('paper', 'scissors', 'rock'): 'paper',
+                ('scissors', 'rock', 'paper'): 'scissors',
+                ('scissors', 'paper', 'rock'): 'scissors',
+            }
+            predicted = cycle_map.get(tuple(last_three[-3:]))
+            if predicted and random.random() < 0.60:
+                return get_counter_move(predicted)
+    
+    # Strategy 4: Frequency Analysis with Recency Bias
+    if len(history) >= 5:
+        recent_choices = [game['player'] for game in history[-10:]]
+        choice_counts = Counter(recent_choices)
+        
+        # Heavily weight the most common choice
+        most_common = choice_counts.most_common(1)[0][0]
+        
+        if random.random() < 0.80:  # 80% confidence in frequency
+            return get_counter_move(most_common)
+    
+    # Fallback: Use hard AI logic
+    return ai_hard(history)
+
 @app.route('/')
 def index():
     """Serve the main page."""
@@ -116,6 +212,8 @@ def play():
         computer_choice = ai_medium(history)
     elif difficulty == 'hard':
         computer_choice = ai_hard(history)
+    elif difficulty == 'veryhard':
+        computer_choice = ai_very_hard(history)
     else:
         computer_choice = ai_easy()  # Default to easy
     
@@ -190,6 +288,12 @@ def mcp_play():
                       'result': 'player' if h.get('result') == 'agent_win' else ('computer' if h.get('result') == 'opponent_win' else 'tie')}
                      for h in session_history if 'agent_choice' in h]
         opponent_choice = ai_hard(ai_history)
+    elif opponent_difficulty == 'veryhard':
+        ai_history = [{'player': h.get('agent_choice'), 
+                      'computer': h.get('opponent_choice'),
+                      'result': 'player' if h.get('result') == 'agent_win' else ('computer' if h.get('result') == 'opponent_win' else 'tie')}
+                     for h in session_history if 'agent_choice' in h]
+        opponent_choice = ai_very_hard(ai_history)
     else:
         opponent_choice = ai_easy()
     

@@ -391,16 +391,20 @@ async function playGame(playerChoice, isAutoPlay = false) {
     }
     
     try {
+        // In auto-play mode, use the auto-player difficulty for the player's choice
+        // The opponent (computer) will use the regular difficulty setting
+        const requestData = {
+            choice: playerChoice,
+            difficulty: currentDifficulty, // This is the opponent's difficulty
+            history: gameHistory.slice(-10)
+        };
+        
         const response = await fetch('/api/play', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ 
-                choice: playerChoice,
-                difficulty: currentDifficulty,
-                history: gameHistory.slice(-10) // Send last 10 games for pattern analysis
-            })
+            body: JSON.stringify(requestData)
         });
         
         const data = await response.json();
@@ -586,7 +590,8 @@ function setDifficulty(difficulty) {
     const difficultyMessages = {
         easy: 'Easy mode: Computer plays randomly 🎲',
         medium: 'Medium mode: Computer adapts to your patterns 🤔',
-        hard: 'Hard mode: Computer predicts your moves! 😈'
+        hard: 'Hard mode: Computer predicts your moves! 😈',
+        veryhard: 'Very Hard mode: Master strategist with advanced psychology! 👹'
     };
     
     resultMessage.textContent = difficultyMessages[difficulty];
@@ -698,9 +703,52 @@ function playAutoRound() {
     if (!autoPlayActive) return;
     
     const choices = ['rock', 'paper', 'scissors'];
-    const randomChoice = choices[Math.floor(Math.random() * choices.length)];
+    let playerChoice;
     
-    playGame(randomChoice, true);
+    // Use AI to select player's choice based on auto-player difficulty
+    if (autoPlayerDifficulty === 'easy') {
+        playerChoice = choices[Math.floor(Math.random() * choices.length)];
+    } else if (autoPlayerDifficulty === 'medium' && gameHistory.length >= 3) {
+        // Auto-player analyzes opponent (computer) patterns
+        const opponentChoices = gameHistory.slice(-10).map(g => g.computer);
+        const counts = {};
+        opponentChoices.forEach(c => counts[c] = (counts[c] || 0) + 1);
+        const mostCommon = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+        
+        // Counter the opponent's most common choice 70% of the time
+        const counters = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
+        playerChoice = Math.random() < 0.7 ? counters[mostCommon] : choices[Math.floor(Math.random() * choices.length)];
+    } else if (autoPlayerDifficulty === 'hard' && gameHistory.length >= 5) {
+        // Advanced auto-player strategy
+        const recent = gameHistory.slice(-5);
+        const lastGame = recent[recent.length - 1];
+        
+        // Analyze opponent's patterns
+        const opponentChoices = recent.map(g => g.computer);
+        const counts = {};
+        opponentChoices.forEach(c => counts[c] = (counts[c] || 0) + 1);
+        
+        // Check if opponent repeats after winning
+        if (lastGame.result === 'computer' && Math.random() < 0.6) {
+            const counters = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
+            playerChoice = counters[lastGame.computer];
+        } else if (lastGame.result === 'player' && Math.random() < 0.6) {
+            // Check if opponent switches after losing
+            const nextInSequence = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
+            const predicted = nextInSequence[lastGame.computer];
+            const counters = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
+            playerChoice = counters[predicted];
+        } else {
+            // Counter most common
+            const mostCommon = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+            const counters = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
+            playerChoice = counters[mostCommon];
+        }
+    } else {
+        playerChoice = choices[Math.floor(Math.random() * choices.length)];
+    }
+    
+    playGame(playerChoice, true);
 }
 
 // Stop auto-play loop
