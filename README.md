@@ -263,7 +263,7 @@ cursor-11242025/
 ## 🌐 API Endpoints
 
 ### POST `/api/play`
-Play a round of rock, paper, scissors.
+Play a round of rock, paper, scissors (for human players via web interface).
 
 **Request Body:**
 ```json
@@ -288,6 +288,123 @@ Play a round of rock, paper, scissors.
   "result": "player|computer|tie"
 }
 ```
+
+---
+
+### POST `/mcp/play` - **MCP Endpoint for AI Agents** 🤖
+
+Model Context Protocol (MCP) endpoint designed for AI agents, bots, and automated systems to play Rock Paper Scissors programmatically.
+
+**Use Cases:**
+- AI agent integration (Claude, GPT, etc.)
+- Automated testing
+- Bot tournaments
+- API-based gameplay
+- Machine learning experiments
+
+**Request Body:**
+```json
+{
+  "agent_id": "my_ai_agent_v1",
+  "choice": "rock|paper|scissors",
+  "opponent_difficulty": "easy|medium|hard",
+  "session_history": [
+    {
+      "agent_choice": "rock",
+      "opponent_choice": "paper",
+      "result": "opponent_win"
+    }
+  ]
+}
+```
+
+**Parameters:**
+- `agent_id` (string, optional): Unique identifier for your agent (default: "anonymous_agent")
+- `choice` (string, required): Agent's hand choice - "rock", "paper", or "scissors"
+- `opponent_difficulty` (string, optional): AI opponent difficulty - "easy", "medium", or "hard" (default: "easy")
+- `session_history` (array, optional): Previous games in session for AI pattern learning
+
+**Response:**
+```json
+{
+  "agent_choice": "rock",
+  "opponent_choice": "scissors",
+  "result": "agent_win|opponent_win|tie",
+  "agent_id": "my_ai_agent_v1",
+  "game_number": 5,
+  "session_stats": {
+    "agent_wins": 3,
+    "opponent_wins": 1,
+    "ties": 1
+  },
+  "message": "Agent chose rock, opponent chose scissors. Result: agent_win!"
+}
+```
+
+**Example Usage with cURL:**
+```bash
+curl -X POST http://localhost:5000/mcp/play \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_id": "test_agent_001",
+    "choice": "rock",
+    "opponent_difficulty": "hard"
+  }'
+```
+
+**Example Usage with Python:**
+```python
+import requests
+
+response = requests.post('http://localhost:5000/mcp/play', json={
+    'agent_id': 'python_bot',
+    'choice': 'paper',
+    'opponent_difficulty': 'medium',
+    'session_history': []
+})
+
+result = response.json()
+print(f"Result: {result['result']}")
+print(f"Stats: {result['session_stats']}")
+```
+
+**Example Usage with JavaScript:**
+```javascript
+fetch('http://localhost:5000/mcp/play', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    agent_id: 'js_agent',
+    choice: 'scissors',
+    opponent_difficulty: 'easy'
+  })
+})
+.then(res => res.json())
+.then(data => console.log(data));
+```
+
+**Error Response:**
+```json
+{
+  "error": "Invalid choice. Must be rock, paper, or scissors.",
+  "agent_id": "my_agent",
+  "valid_choices": ["rock", "paper", "scissors"]
+}
+```
+
+**Features:**
+- ✅ Stateless - No server-side session tracking
+- ✅ Session history support for AI learning
+- ✅ All three difficulty levels available
+- ✅ Detailed statistics in response
+- ✅ Game numbering
+- ✅ Agent identification
+- ✅ Human-readable messages
+
+**AI Difficulty Behavior:**
+- **Easy**: Completely random, 33.3% win rate expected
+- **Medium**: Learns from session history, counters agent's most common choice (70% rate)
+- **Hard**: Advanced pattern recognition, exploits psychological patterns (75% rate)
 
 ---
 
@@ -375,6 +492,9 @@ This game demonstrates:
 - 🎨 Custom hand emoji selector
 - 📈 Advanced analytics dashboard
 - 🤖 Neural network AI opponent
+- 🔌 WebSocket support for real-time multiplayer
+- 🏅 Agent leaderboard for MCP endpoint users
+- 📊 MCP endpoint analytics dashboard
 
 ---
 

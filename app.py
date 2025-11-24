@@ -128,6 +128,107 @@ def play():
         'result': result
     })
 
+@app.route('/mcp/play', methods=['POST'])
+def mcp_play():
+    """
+    MCP (Model Context Protocol) endpoint for AI agents to play Rock Paper Scissors.
+    
+    This endpoint allows AI agents, bots, or other automated systems to play the game.
+    Designed for integration with AI assistants, automation tools, and testing frameworks.
+    
+    Request Body:
+        {
+            "agent_id": "unique_agent_identifier",
+            "choice": "rock|paper|scissors",
+            "opponent_difficulty": "easy|medium|hard",
+            "session_history": [...]  // Optional: previous games for context
+        }
+    
+    Response:
+        {
+            "agent_choice": "rock",
+            "opponent_choice": "scissors",
+            "result": "agent_win|opponent_win|tie",
+            "agent_id": "unique_agent_identifier",
+            "game_number": 1,
+            "session_stats": {
+                "agent_wins": 1,
+                "opponent_wins": 0,
+                "ties": 0
+            }
+        }
+    """
+    data = request.get_json()
+    
+    # Extract agent information
+    agent_id = data.get('agent_id', 'anonymous_agent')
+    agent_choice = data.get('choice', '').lower()
+    opponent_difficulty = data.get('opponent_difficulty', 'easy').lower()
+    session_history = data.get('session_history', [])
+    
+    # Validate agent choice
+    if agent_choice not in CHOICES:
+        return jsonify({
+            'error': 'Invalid choice. Must be rock, paper, or scissors.',
+            'agent_id': agent_id,
+            'valid_choices': CHOICES
+        }), 400
+    
+    # Opponent makes a choice based on difficulty
+    if opponent_difficulty == 'easy':
+        opponent_choice = ai_easy()
+    elif opponent_difficulty == 'medium':
+        # Convert session history to format AI expects
+        ai_history = [{'player': h.get('agent_choice'), 
+                      'computer': h.get('opponent_choice'),
+                      'result': 'player' if h.get('result') == 'agent_win' else ('computer' if h.get('result') == 'opponent_win' else 'tie')}
+                     for h in session_history if 'agent_choice' in h]
+        opponent_choice = ai_medium(ai_history)
+    elif opponent_difficulty == 'hard':
+        ai_history = [{'player': h.get('agent_choice'), 
+                      'computer': h.get('opponent_choice'),
+                      'result': 'player' if h.get('result') == 'agent_win' else ('computer' if h.get('result') == 'opponent_win' else 'tie')}
+                     for h in session_history if 'agent_choice' in h]
+        opponent_choice = ai_hard(ai_history)
+    else:
+        opponent_choice = ai_easy()
+    
+    # Determine winner
+    game_result = determine_winner(agent_choice, opponent_choice)
+    
+    # Map result to agent-friendly format
+    if game_result == 'player':
+        mcp_result = 'agent_win'
+    elif game_result == 'computer':
+        mcp_result = 'opponent_win'
+    else:
+        mcp_result = 'tie'
+    
+    # Calculate session statistics
+    session_stats = {
+        'agent_wins': sum(1 for h in session_history if h.get('result') == 'agent_win'),
+        'opponent_wins': sum(1 for h in session_history if h.get('result') == 'opponent_win'),
+        'ties': sum(1 for h in session_history if h.get('result') == 'tie')
+    }
+    
+    # Update stats with current game
+    if mcp_result == 'agent_win':
+        session_stats['agent_wins'] += 1
+    elif mcp_result == 'opponent_win':
+        session_stats['opponent_wins'] += 1
+    else:
+        session_stats['ties'] += 1
+    
+    return jsonify({
+        'agent_choice': agent_choice,
+        'opponent_choice': opponent_choice,
+        'result': mcp_result,
+        'agent_id': agent_id,
+        'game_number': len(session_history) + 1,
+        'session_stats': session_stats,
+        'message': f"Agent chose {agent_choice}, opponent chose {opponent_choice}. Result: {mcp_result}!"
+    })
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
 

@@ -22,8 +22,8 @@ body.dark-mode {
     --primary-gradient-end: #764ba2;
     --background-gradient-start: #1a1a2e;
     --background-gradient-end: #16213e;
-    --card-bg-start: #2a2a3e;
-    --card-bg-end: #1f1f2e;
+    --card-bg-start: #3a3a4e;
+    --card-bg-end: #2f2f3e;
     --text-primary: #e0e0e0;
     --text-secondary: #b0b0b0;
     --bg-white: #2a2a3e;
@@ -659,7 +659,7 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 15px;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .result-message.win {
