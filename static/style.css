@@ -301,6 +301,25 @@ body {
     border-color: var(--primary-gradient-start);
 }
 
+.language-select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--primary-gradient-start);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--bg-white);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.language-select:focus {
+    outline: none;
+    border-color: var(--primary-gradient-end);
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
 .menu-button {
     width: 100%;
     padding: 12px;

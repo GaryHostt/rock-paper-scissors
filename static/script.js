@@ -35,6 +35,292 @@ let bestStreak = 0;
 // Trend data
 let trendData = [];
 
+// Current language
+let currentLanguage = 'en';
+
+// Translation dictionary
+const translations = {
+    en: {
+        // Game interface
+        'game.title': 'Rock Paper Scissors',
+        'game.you': 'You',
+        'game.ties': 'Ties',
+        'game.computer': 'Computer',
+        'game.opponentDifficulty': 'Opponent Difficulty:',
+        'game.chooseMove': 'Choose your move!',
+        'game.winningHand': 'Winning Hand:',
+        'game.youWin': '🎉 You Win!',
+        'game.youLose': '😢 You Lose!',
+        'game.tie': '🤝 It\'s a Tie!',
+        'game.scoresReset': 'Scores reset! Choose your move!',
+        
+        // Hands
+        'hand.rock': 'Rock',
+        'hand.paper': 'Paper',
+        'hand.scissors': 'Scissors',
+        
+        // Difficulty levels
+        'difficulty.easy': 'Easy',
+        'difficulty.medium': 'Medium',
+        'difficulty.hard': 'Hard',
+        'difficulty.veryHard': 'Very Hard',
+        'difficulty.easyRandom': 'Easy (Random)',
+        'difficulty.mediumAdaptive': 'Medium (Adaptive)',
+        'difficulty.hardPredictive': 'Hard (Predictive)',
+        'difficulty.veryHardMaster': 'Very Hard (Master)',
+        
+        // Difficulty messages
+        'difficultyMsg.easy': 'Easy mode: Computer plays randomly 🎲',
+        'difficultyMsg.medium': 'Medium mode: Computer adapts to your patterns 🤔',
+        'difficultyMsg.hard': 'Hard mode: Computer predicts your moves! 😈',
+        'difficultyMsg.veryhard': 'Very Hard mode: Master strategist with advanced psychology! 👹',
+        
+        // Menu
+        'menu.appearance': '🎨 Appearance',
+        'menu.darkMode': '🌙 Dark Mode',
+        'menu.theme': 'Theme:',
+        'menu.autoPlay': '🤖 Auto-Play',
+        'menu.startAutoPlay': '▶️ Start Auto-Play',
+        'menu.stopAutoPlay': '⏸️ Stop Auto-Play',
+        'menu.playerAI': 'Player AI Level:',
+        'menu.speed': 'Speed:',
+        'menu.aiAnalysis': '🧠 AI Analysis',
+        'menu.viewPattern': 'View Pattern Analysis',
+        'menu.hidePattern': 'Hide Pattern Analysis',
+        'menu.statistics': '📊 Statistics',
+        'menu.viewHandStats': 'View Hand Statistics',
+        'menu.showTrendGraph': 'Show Trend Graph',
+        'menu.game': '🎮 Game',
+        'menu.resetScores': 'Reset Scores',
+        
+        // Themes
+        'theme.default': 'Default',
+        'theme.spring': 'Spring',
+        'theme.ocean': 'Ocean',
+        
+        // Speed
+        'speed.slow': 'Slow (2s)',
+        'speed.normal': 'Normal (1.5s)',
+        'speed.fast': 'Fast (0.8s)',
+        'speed.turbo': 'Turbo (0.3s)',
+        
+        // Analysis
+        'analysis.patternDetection': 'Pattern Detection',
+        'analysis.playForAnalysis': 'Play a few rounds for AI analysis...',
+        'analysis.strategyTips': '💡 Strategy Tips',
+        'analysis.strategiesAppear': 'Strategies will appear here...',
+        'analysis.winRates': '📈 Win Rates',
+        'analysis.noPatternsYet': 'No clear patterns detected yet...',
+        
+        // Stats
+        'stats.overall': 'Overall',
+        'stats.wins': 'Wins',
+        'stats.losses': 'Losses',
+        'stats.ties': 'Ties',
+        'stats.totalPlayed': 'Total Played',
+        
+        // Patterns
+        'pattern.repeatAfterWin': 'You tend to repeat your choice after winning',
+        'pattern.repeatAfterLoss': 'You tend to repeat your choice after losing',
+        'pattern.playsMoreOften': 'You play {hand} more often than other hands',
+        
+        // Strategies
+        'strategy.computerFavored': 'Computer recently favored {hand}. Try {counter}!',
+        'strategy.losingStreak': 'You\'re in a losing streak. Try changing your strategy!',
+        'strategy.bestHand': 'Your best hand is {hand}. But the AI may have noticed!',
+        
+        // Battle display
+        'battle.you': 'You',
+        'battle.computer': 'Computer'
+    },
+    fr: {
+        // Interface de jeu
+        'game.title': 'Pierre Papier Ciseaux',
+        'game.you': 'Vous',
+        'game.ties': 'Égalités',
+        'game.computer': 'Ordinateur',
+        'game.opponentDifficulty': 'Difficulté de l\'adversaire:',
+        'game.chooseMove': 'Choisissez votre coup!',
+        'game.winningHand': 'Main gagnante:',
+        'game.youWin': '🎉 Vous gagnez!',
+        'game.youLose': '😢 Vous perdez!',
+        'game.tie': '🤝 Égalité!',
+        'game.scoresReset': 'Scores réinitialisés! Choisissez votre coup!',
+        
+        // Mains
+        'hand.rock': 'Pierre',
+        'hand.paper': 'Papier',
+        'hand.scissors': 'Ciseaux',
+        
+        // Niveaux de difficulté
+        'difficulty.easy': 'Facile',
+        'difficulty.medium': 'Moyen',
+        'difficulty.hard': 'Difficile',
+        'difficulty.veryHard': 'Très Difficile',
+        'difficulty.easyRandom': 'Facile (Aléatoire)',
+        'difficulty.mediumAdaptive': 'Moyen (Adaptatif)',
+        'difficulty.hardPredictive': 'Difficile (Prédictif)',
+        'difficulty.veryHardMaster': 'Très Difficile (Maître)',
+        
+        // Messages de difficulté
+        'difficultyMsg.easy': 'Mode facile: L\'ordinateur joue aléatoirement 🎲',
+        'difficultyMsg.medium': 'Mode moyen: L\'ordinateur s\'adapte à vos schémas 🤔',
+        'difficultyMsg.hard': 'Mode difficile: L\'ordinateur prédit vos coups! 😈',
+        'difficultyMsg.veryhard': 'Mode très difficile: Stratège maître avec psychologie avancée! 👹',
+        
+        // Menu
+        'menu.appearance': '🎨 Apparence',
+        'menu.darkMode': '🌙 Mode Sombre',
+        'menu.theme': 'Thème:',
+        'menu.autoPlay': '🤖 Lecture Auto',
+        'menu.startAutoPlay': '▶️ Démarrer Lecture Auto',
+        'menu.stopAutoPlay': '⏸️ Arrêter Lecture Auto',
+        'menu.playerAI': 'Niveau IA du Joueur:',
+        'menu.speed': 'Vitesse:',
+        'menu.aiAnalysis': '🧠 Analyse IA',
+        'menu.viewPattern': 'Voir l\'Analyse de Motifs',
+        'menu.hidePattern': 'Masquer l\'Analyse de Motifs',
+        'menu.statistics': '📊 Statistiques',
+        'menu.viewHandStats': 'Voir Statistiques des Mains',
+        'menu.showTrendGraph': 'Afficher Graphique de Tendance',
+        'menu.game': '🎮 Jeu',
+        'menu.resetScores': 'Réinitialiser les Scores',
+        
+        // Thèmes
+        'theme.default': 'Par Défaut',
+        'theme.spring': 'Printemps',
+        'theme.ocean': 'Océan',
+        
+        // Vitesse
+        'speed.slow': 'Lent (2s)',
+        'speed.normal': 'Normal (1.5s)',
+        'speed.fast': 'Rapide (0.8s)',
+        'speed.turbo': 'Turbo (0.3s)',
+        
+        // Analyse
+        'analysis.patternDetection': 'Détection de Motifs',
+        'analysis.playForAnalysis': 'Jouez quelques rounds pour l\'analyse IA...',
+        'analysis.strategyTips': '💡 Conseils de Stratégie',
+        'analysis.strategiesAppear': 'Les stratégies apparaîtront ici...',
+        'analysis.winRates': '📈 Taux de Victoire',
+        'analysis.noPatternsYet': 'Aucun motif clair détecté pour le moment...',
+        
+        // Stats
+        'stats.overall': 'Global',
+        'stats.wins': 'Victoires',
+        'stats.losses': 'Défaites',
+        'stats.ties': 'Égalités',
+        'stats.totalPlayed': 'Total Joué',
+        
+        // Motifs
+        'pattern.repeatAfterWin': 'Vous avez tendance à répéter votre choix après avoir gagné',
+        'pattern.repeatAfterLoss': 'Vous avez tendance à répéter votre choix après avoir perdu',
+        'pattern.playsMoreOften': 'Vous jouez {hand} plus souvent que les autres mains',
+        
+        // Stratégies
+        'strategy.computerFavored': 'L\'ordinateur a récemment favorisé {hand}. Essayez {counter}!',
+        'strategy.losingStreak': 'Vous êtes dans une série de défaites. Essayez de changer votre stratégie!',
+        'strategy.bestHand': 'Votre meilleure main est {hand}. Mais l\'IA l\'a peut-être remarqué!',
+        
+        // Affichage de bataille
+        'battle.you': 'Vous',
+        'battle.computer': 'Ordinateur'
+    },
+    es: {
+        // Interfaz del juego
+        'game.title': 'Piedra Papel Tijeras',
+        'game.you': 'Tú',
+        'game.ties': 'Empates',
+        'game.computer': 'Computadora',
+        'game.opponentDifficulty': 'Dificultad del Oponente:',
+        'game.chooseMove': '¡Elige tu jugada!',
+        'game.winningHand': 'Mano Ganadora:',
+        'game.youWin': '🎉 ¡Ganaste!',
+        'game.youLose': '😢 ¡Perdiste!',
+        'game.tie': '🤝 ¡Es un Empate!',
+        'game.scoresReset': '¡Puntuaciones reiniciadas! ¡Elige tu jugada!',
+        
+        // Manos
+        'hand.rock': 'Piedra',
+        'hand.paper': 'Papel',
+        'hand.scissors': 'Tijeras',
+        
+        // Niveles de dificultad
+        'difficulty.easy': 'Fácil',
+        'difficulty.medium': 'Medio',
+        'difficulty.hard': 'Difícil',
+        'difficulty.veryHard': 'Muy Difícil',
+        'difficulty.easyRandom': 'Fácil (Aleatorio)',
+        'difficulty.mediumAdaptive': 'Medio (Adaptativo)',
+        'difficulty.hardPredictive': 'Difícil (Predictivo)',
+        'difficulty.veryHardMaster': 'Muy Difícil (Maestro)',
+        
+        // Mensajes de dificultad
+        'difficultyMsg.easy': 'Modo fácil: La computadora juega aleatoriamente 🎲',
+        'difficultyMsg.medium': 'Modo medio: La computadora se adapta a tus patrones 🤔',
+        'difficultyMsg.hard': 'Modo difícil: ¡La computadora predice tus movimientos! 😈',
+        'difficultyMsg.veryhard': 'Modo muy difícil: ¡Estratega maestro con psicología avanzada! 👹',
+        
+        // Menú
+        'menu.appearance': '🎨 Apariencia',
+        'menu.darkMode': '🌙 Modo Oscuro',
+        'menu.theme': 'Tema:',
+        'menu.autoPlay': '🤖 Juego Automático',
+        'menu.startAutoPlay': '▶️ Iniciar Juego Automático',
+        'menu.stopAutoPlay': '⏸️ Detener Juego Automático',
+        'menu.playerAI': 'Nivel de IA del Jugador:',
+        'menu.speed': 'Velocidad:',
+        'menu.aiAnalysis': '🧠 Análisis de IA',
+        'menu.viewPattern': 'Ver Análisis de Patrones',
+        'menu.hidePattern': 'Ocultar Análisis de Patrones',
+        'menu.statistics': '📊 Estadísticas',
+        'menu.viewHandStats': 'Ver Estadísticas de Manos',
+        'menu.showTrendGraph': 'Mostrar Gráfico de Tendencia',
+        'menu.game': '🎮 Juego',
+        'menu.resetScores': 'Reiniciar Puntuaciones',
+        
+        // Temas
+        'theme.default': 'Predeterminado',
+        'theme.spring': 'Primavera',
+        'theme.ocean': 'Océano',
+        
+        // Velocidad
+        'speed.slow': 'Lento (2s)',
+        'speed.normal': 'Normal (1.5s)',
+        'speed.fast': 'Rápido (0.8s)',
+        'speed.turbo': 'Turbo (0.3s)',
+        
+        // Análisis
+        'analysis.patternDetection': 'Detección de Patrones',
+        'analysis.playForAnalysis': 'Juega algunas rondas para análisis de IA...',
+        'analysis.strategyTips': '💡 Consejos de Estrategia',
+        'analysis.strategiesAppear': 'Las estrategias aparecerán aquí...',
+        'analysis.winRates': '📈 Tasas de Victoria',
+        'analysis.noPatternsYet': 'No se detectaron patrones claros aún...',
+        
+        // Stats
+        'stats.overall': 'General',
+        'stats.wins': 'Victorias',
+        'stats.losses': 'Derrotas',
+        'stats.ties': 'Empates',
+        'stats.totalPlayed': 'Total Jugado',
+        
+        // Patrones
+        'pattern.repeatAfterWin': 'Tiendes a repetir tu elección después de ganar',
+        'pattern.repeatAfterLoss': 'Tiendes a repetir tu elección después de perder',
+        'pattern.playsMoreOften': 'Juegas {hand} más a menudo que otras manos',
+        
+        // Estrategias
+        'strategy.computerFavored': 'La computadora favoreció recientemente {hand}. ¡Prueba {counter}!',
+        'strategy.losingStreak': '¡Estás en una racha perdedora! ¡Intenta cambiar tu estrategia!',
+        'strategy.bestHand': 'Tu mejor mano es {hand}. ¡Pero la IA puede haberlo notado!',
+        
+        // Pantalla de batalla
+        'battle.you': 'Tú',
+        'battle.computer': 'Computadora'
+    }
+};
+
 // Emoji mapping
 const emojiMap = {
     rock: '✊',
@@ -61,6 +347,7 @@ const leftSidebar = document.getElementById('left-sidebar');
 const closeSidebarBtn = document.getElementById('close-sidebar-btn');
 const darkModeToggle = document.getElementById('dark-mode-toggle');
 const themeSelect = document.getElementById('theme-select');
+const languageSelect = document.getElementById('language-select');
 const autoPlayerDifficultySelect = document.getElementById('auto-player-difficulty');
 const autoPlaySpeedSelect = document.getElementById('auto-play-speed');
 const showStatsBtn = document.getElementById('show-stats-btn');
@@ -185,6 +472,55 @@ function loadTheme() {
     }
 }
 
+// Translation functions
+function t(key, replacements = {}) {
+    let text = translations[currentLanguage][key] || translations['en'][key] || key;
+    
+    // Replace placeholders
+    Object.keys(replacements).forEach(placeholder => {
+        text = text.replace(`{${placeholder}}`, replacements[placeholder]);
+    });
+    
+    return text;
+}
+
+function updateAllTranslations() {
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        element.textContent = t(key);
+    });
+    
+    // Update placeholder texts
+    if (patternMessagesMenu) {
+        patternMessagesMenu.innerHTML = `<p class="pattern-placeholder">${t('analysis.playForAnalysis')}</p>`;
+    }
+    if (strategyMessagesMenu) {
+        strategyMessagesMenu.innerHTML = `<p class="strategy-placeholder">${t('analysis.strategiesAppear')}</p>`;
+    }
+}
+
+function changeLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('rps-language', lang);
+    updateAllTranslations();
+    
+    // Re-generate patterns and strategies in new language if they exist
+    if (gameHistory.length >= 5) {
+        detectPatterns();
+        generateStrategies();
+    }
+}
+
+function loadLanguage() {
+    const saved = localStorage.getItem('rps-language');
+    if (saved && translations[saved]) {
+        currentLanguage = saved;
+        languageSelect.value = saved;
+        updateAllTranslations();
+    }
+}
+
 // Update hand statistics display
 function updateHandStatsDisplay() {
     // Rock stats
@@ -258,7 +594,7 @@ function detectPatterns() {
         }
     }
     if (winCount >= 3 && repeatAfterWin / winCount > 0.6) {
-        patterns.push(`You tend to repeat your choice after winning (${((repeatAfterWin/winCount)*100).toFixed(0)}%)`);
+        patterns.push(`${t('pattern.repeatAfterWin')} (${((repeatAfterWin/winCount)*100).toFixed(0)}%)`);
     }
     
     // Pattern: Playing same hand after losing
@@ -273,7 +609,7 @@ function detectPatterns() {
         }
     }
     if (lossCount >= 3 && repeatAfterLoss / lossCount > 0.6) {
-        patterns.push(`You tend to repeat your choice after losing (${((repeatAfterLoss/lossCount)*100).toFixed(0)}%)`);
+        patterns.push(`${t('pattern.repeatAfterLoss')} (${((repeatAfterLoss/lossCount)*100).toFixed(0)}%)`);
     }
     
     // Pattern: Favorite hand
@@ -284,13 +620,14 @@ function detectPatterns() {
     const favorite = Object.keys(handCounts).reduce((a, b) => handCounts[a] > handCounts[b] ? a : b);
     const favoritePercent = (handCounts[favorite] / recentHistory.length * 100).toFixed(0);
     if (favoritePercent > 40) {
-        patterns.push(`You play ${favorite} more often than other hands (${favoritePercent}%)`);
+        const handName = t(`hand.${favorite}`);
+        patterns.push(t('pattern.playsMoreOften', { hand: handName }) + ` (${favoritePercent}%)`);
     }
     
     // Update both UIs (menu and sidebar if visible)
     const patternHTML = patterns.length > 0 
         ? patterns.map(p => `<div class="pattern-message">${p}</div>`).join('')
-        : '<p class="pattern-placeholder">No clear patterns detected yet...</p>';
+        : `<p class="pattern-placeholder">${t('analysis.noPatternsYet')}</p>`;
     
     if (patternMessagesMenu) patternMessagesMenu.innerHTML = patternHTML;
     if (patternMessages) patternMessages.innerHTML = patternHTML;
@@ -322,11 +659,13 @@ function generateStrategies() {
         scissors: 'rock'
     };
     
-    strategies.push(`Computer recently favored ${computerFavorite}. Try ${counters[computerFavorite]}!`);
+    const handName = t(`hand.${computerFavorite}`);
+    const counterName = t(`hand.${counters[computerFavorite]}`);
+    strategies.push(t('strategy.computerFavored', { hand: handName, counter: counterName }));
     
     // Check if player is in a losing streak
     if (currentStreak < -2 && currentStreakType === 'loss') {
-        strategies.push(`You're in a losing streak. Try changing your strategy!`);
+        strategies.push(t('strategy.losingStreak'));
     }
     
     // Analyze win rates
@@ -337,13 +676,14 @@ function generateStrategies() {
     });
     
     if (handStats[bestHand].wins > 3) {
-        strategies.push(`Your best hand is ${bestHand}. But the AI may have noticed!`);
+        const bestHandName = t(`hand.${bestHand}`);
+        strategies.push(t('strategy.bestHand', { hand: bestHandName }));
     }
     
     // Update both UIs
     const strategyHTML = strategies.length > 0
         ? strategies.map(s => `<div class="strategy-message">${s}</div>`).join('')
-        : '<p class="strategy-placeholder">Strategies will appear here...</p>';
+        : `<p class="strategy-placeholder">${t('analysis.strategiesAppear')}</p>`;
     
     if (strategyMessagesMenu) strategyMessagesMenu.innerHTML = strategyHTML;
     if (strategyMessages) strategyMessages.innerHTML = strategyHTML;
@@ -418,12 +758,12 @@ async function playGame(playerChoice, isAutoPlay = false) {
         battleDisplay.innerHTML = `
             <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 10px;">
                 <div style="text-align: center;">
-                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">You</div>
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">${t('battle.you')}</div>
                     <span class="battle-emoji">${emojiMap[data.player_choice]}</span>
                 </div>
                 <div style="font-size: 2rem; color: #667eea;">VS</div>
                 <div style="text-align: center;">
-                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Computer</div>
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">${t('battle.computer')}</div>
                     <span class="battle-emoji">${emojiMap[data.computer_choice]}</span>
                 </div>
             </div>
@@ -435,17 +775,17 @@ async function playGame(playerChoice, isAutoPlay = false) {
         let winningHand = null;
         
         if (data.result === 'player') {
-            resultMessage.textContent = '🎉 You Win!';
+            resultMessage.textContent = t('game.youWin');
             resultMessage.classList.add('win');
             scores.player++;
             winningHand = data.player_choice;
         } else if (data.result === 'computer') {
-            resultMessage.textContent = '😢 You Lose!';
+            resultMessage.textContent = t('game.youLose');
             resultMessage.classList.add('lose');
             scores.computer++;
             winningHand = data.computer_choice;
         } else {
-            resultMessage.textContent = '🤝 It\'s a Tie!';
+            resultMessage.textContent = t('game.tie');
             resultMessage.classList.add('tie');
             scores.ties++;
             winningHand = null; // No winner in a tie
@@ -553,15 +893,15 @@ function resetScores() {
     saveHandStats();
     saveTrend();
     saveStreaks();
-    resultMessage.textContent = 'Scores reset! Choose your move!';
+    resultMessage.textContent = t('game.scoresReset');
     resultMessage.classList.remove('win', 'lose', 'tie');
     battleDisplay.innerHTML = '';
     winningHandContainer.classList.remove('visible');
     winningEmojiEl.textContent = '?';
     
     // Reset pattern displays
-    const resetPattern = '<p class="pattern-placeholder">Play a few rounds for AI analysis...</p>';
-    const resetStrategy = '<p class="strategy-placeholder">Strategies will appear here...</p>';
+    const resetPattern = `<p class="pattern-placeholder">${t('analysis.playForAnalysis')}</p>`;
+    const resetStrategy = `<p class="strategy-placeholder">${t('analysis.strategiesAppear')}</p>`;
     if (patternMessages) patternMessages.innerHTML = resetPattern;
     if (strategyMessages) strategyMessages.innerHTML = resetStrategy;
     if (patternMessagesMenu) patternMessagesMenu.innerHTML = resetPattern;
@@ -587,14 +927,7 @@ function setDifficulty(difficulty) {
     saveDifficulty();
     
     // Show message about difficulty change
-    const difficultyMessages = {
-        easy: 'Easy mode: Computer plays randomly 🎲',
-        medium: 'Medium mode: Computer adapts to your patterns 🤔',
-        hard: 'Hard mode: Computer predicts your moves! 😈',
-        veryhard: 'Very Hard mode: Master strategist with advanced psychology! 👹'
-    };
-    
-    resultMessage.textContent = difficultyMessages[difficulty];
+    resultMessage.textContent = t(`difficultyMsg.${difficulty}`);
     resultMessage.classList.remove('win', 'lose', 'tie');
 }
 
@@ -649,7 +982,7 @@ function toggleAutoPlay() {
     
     if (autoPlayActive) {
         // Start auto-play
-        menuAutoPlayBtn.textContent = '⏸️ Stop Auto-Play';
+        menuAutoPlayBtn.textContent = t('menu.stopAutoPlay');
         menuAutoPlayBtn.classList.add('active');
         
         // Disable manual play buttons and difficulty buttons
@@ -666,7 +999,7 @@ function toggleAutoPlay() {
         startAutoPlay();
     } else {
         // Stop auto-play
-        menuAutoPlayBtn.textContent = '▶️ Start Auto-Play';
+        menuAutoPlayBtn.textContent = t('menu.startAutoPlay');
         menuAutoPlayBtn.classList.remove('active');
         
         // Re-enable manual play buttons and difficulty buttons
@@ -682,7 +1015,7 @@ function toggleAutoPlay() {
 function toggleAnalysis() {
     const isVisible = aiAnalysisContent.style.display !== 'none';
     aiAnalysisContent.style.display = isVisible ? 'none' : 'block';
-    showAnalysisBtn.textContent = isVisible ? 'View Pattern Analysis' : 'Hide Pattern Analysis';
+    showAnalysisBtn.textContent = isVisible ? t('menu.viewPattern') : t('menu.hidePattern');
 }
 
 // Start auto-play loop
@@ -772,6 +1105,7 @@ menuToggleBtn.addEventListener('click', toggleMenu);
 closeSidebarBtn.addEventListener('click', toggleMenu);
 darkModeToggle.addEventListener('click', toggleDarkMode);
 themeSelect.addEventListener('change', (e) => changeTheme(e.target.value));
+languageSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
 showAnalysisBtn.addEventListener('click', toggleAnalysis);
 showStatsBtn.addEventListener('click', () => {
     statsPanel.classList.toggle('open');
@@ -816,5 +1150,6 @@ loadStreaks();
 loadTrend();
 loadDarkMode();
 loadTheme();
+loadLanguage();
 updateWinRates();
 
