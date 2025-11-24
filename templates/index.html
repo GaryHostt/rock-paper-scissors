@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Left Sidebar Menu -->
+    <div class="left-sidebar" id="left-sidebar">
+        <div class="sidebar-header">
+            <h3>⚙️ Menu</h3>
+            <button class="close-sidebar-btn" id="close-sidebar-btn">✕</button>
+        </div>
+        
+        <div class="sidebar-content">
+            <!-- Appearance Section -->
+            <div class="menu-section">
+                <h4>🎨 Appearance</h4>
+                <div class="menu-item dark-mode-item">
+                    <label class="toggle-label-enhanced">
+                        <span class="toggle-text">🌙 Dark Mode</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="dark-mode-toggle" class="toggle-checkbox">
+                            <span class="toggle-slider-enhanced"></span>
+                        </div>
+                    </label>
+                </div>
+                <div class="menu-item">
+                    <label for="theme-select">Theme:</label>
+                    <select id="theme-select" class="theme-select">
+                        <option value="default">Default</option>
+                        <option value="halloween">🎃 Halloween</option>
+                        <option value="christmas">🎄 Christmas</option>
+                        <option value="spring">🌸 Spring</option>
+                        <option value="ocean">🌊 Ocean</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Auto-Play Section -->
+            <div class="menu-section">
+                <h4>🤖 Auto-Play</h4>
+                <button class="menu-button auto-play-menu-btn" id="menu-auto-play-btn">▶️ Start Auto-Play</button>
+                <div class="menu-item">
+                    <label>Player AI Level:</label>
+                    <select id="auto-player-difficulty" class="difficulty-select">
+                        <option value="easy">Easy (Random)</option>
+                        <option value="medium">Medium (Adaptive)</option>
+                        <option value="hard">Hard (Predictive)</option>
+                    </select>
+                </div>
+                <div class="menu-item">
+                    <label>Speed:</label>
+                    <select id="auto-play-speed" class="speed-select">
+                        <option value="slow">Slow (2s)</option>
+                        <option value="normal" selected>Normal (1.5s)</option>
+                        <option value="fast">Fast (0.8s)</option>
+                        <option value="turbo">Turbo (0.3s)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- AI Analysis Section -->
+            <div class="menu-section">
+                <h4>🧠 AI Analysis</h4>
+                <button class="menu-button" id="show-analysis-btn">View Pattern Analysis</button>
+                <div class="ai-analysis-content" id="ai-analysis-content" style="display: none;">
+                    <div class="analysis-subsection">
+                        <h5>Pattern Detection</h5>
+                        <div id="pattern-messages-menu" class="pattern-messages-menu">
+                            <p class="pattern-placeholder">Play a few rounds for AI analysis...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-subsection">
+                        <h5>💡 Strategy Tips</h5>
+                        <div id="strategy-messages-menu" class="strategy-messages-menu">
+                            <p class="strategy-placeholder">Strategies will appear here...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-subsection">
+                        <h5>📈 Win Rates</h5>
+                        <div id="win-rates-menu" class="win-rates-menu">
+                            <div class="win-rate-item">
+                                <span>Overall:</span>
+                                <span id="overall-win-rate" class="win-rate-value">--%</span>
+                            </div>
+                            <div class="win-rate-item">
+                                <span>✊ Rock:</span>
+                                <span id="rock-win-rate" class="win-rate-value">--%</span>
+                            </div>
+                            <div class="win-rate-item">
+                                <span>✋ Paper:</span>
+                                <span id="paper-win-rate" class="win-rate-value">--%</span>
+                            </div>
+                            <div class="win-rate-item">
+                                <span>✌️ Scissors:</span>
+                                <span id="scissors-win-rate" class="win-rate-value">--%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics & Analysis -->
+            <div class="menu-section">
+                <h4>📊 Statistics</h4>
+                <button class="menu-button" id="show-stats-btn">View Hand Statistics</button>
+                <button class="menu-button" id="show-trends-btn">Show Trend Graph</button>
+            </div>
+
+            <!-- Game Actions -->
+            <div class="menu-section">
+                <h4>🎮 Game</h4>
+                <button class="menu-button" id="menu-reset-btn">Reset Scores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pattern Detection Sidebar (Hidden by default) -->
+    <div class="pattern-sidebar hidden" id="pattern-sidebar">
+        <div class="pattern-header">
+            <h3>🧠 AI Analysis</h3>
+        </div>
+        <div class="pattern-content">
+            <div class="pattern-section">
+                <h4>Pattern Detection</h4>
+                <div id="pattern-messages" class="pattern-messages">
+                    <p class="pattern-placeholder">Play a few rounds for AI analysis...</p>
+                </div>
+            </div>
+            <div class="pattern-section">
+                <h4>💡 Strategy Tips</h4>
+                <div id="strategy-messages" class="strategy-messages">
+                    <p class="strategy-placeholder">Strategies will appear here...</p>
+                </div>
+            </div>
+            <div class="pattern-section">
+                <h4>📈 Win Rates</h4>
+                <div id="win-rates" class="win-rates">
+                    <div class="win-rate-item">
+                        <span>Overall:</span>
+                        <span id="overall-win-rate" class="win-rate-value">--%</span>
+                    </div>
+                    <div class="win-rate-item">
+                        <span>✊ Rock:</span>
+                        <span id="rock-win-rate" class="win-rate-value">--%</span>
+                    </div>
+                    <div class="win-rate-item">
+                        <span>✋ Paper:</span>
+                        <span id="paper-win-rate" class="win-rate-value">--%</span>
+                    </div>
+                    <div class="win-rate-item">
+                        <span>✌️ Scissors:</span>
+                        <span id="scissors-win-rate" class="win-rate-value">--%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <button class="menu-toggle-btn" id="menu-toggle-btn">☰</button>
+        
+        <h1 class="title">✊ ✋ ✌️</h1>
+        <h2 class="subtitle">Rock Paper Scissors</h2>
+        
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">You</div>
+                <div class="score-value" id="player-score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Ties</div>
+                <div class="score-value" id="tie-score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Computer</div>
+                <div class="score-value" id="computer-score">0</div>
+            </div>
+        </div>
+
+        <div class="difficulty-selector">
+            <div class="difficulty-label">Difficulty:</div>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn active" data-difficulty="easy">
+                    😊 Easy
+                </button>
+                <button class="difficulty-btn" data-difficulty="medium">
+                    🤔 Medium
+                </button>
+                <button class="difficulty-btn" data-difficulty="hard">
+                    😈 Hard
+                </button>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="choices">
+                <button class="choice-btn" data-choice="rock">
+                    <span class="emoji">✊</span>
+                    <span class="choice-label">Rock</span>
+                </button>
+                <button class="choice-btn" data-choice="paper">
+                    <span class="emoji">✋</span>
+                    <span class="choice-label">Paper</span>
+                </button>
+                <button class="choice-btn" data-choice="scissors">
+                    <span class="emoji">✌️</span>
+                    <span class="choice-label">Scissors</span>
+                </button>
+            </div>
+
+            <div class="result-area" id="result-area">
+                <div class="result-message" id="result-message">Choose your move!</div>
+                <div class="battle-display" id="battle-display"></div>
+            </div>
+        </div>
+
+        <div class="winning-hand-container" id="winning-hand-container">
+            <div class="winning-hand-label">Winning Hand:</div>
+            <div class="winning-hand-display" id="winning-hand-display">
+                <div class="hand-circle">
+                    <span class="winning-emoji" id="winning-emoji">?</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trend Graph Modal -->
+    <div class="modal" id="trend-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📈 Performance Trends</h3>
+                <button class="close-modal-btn" id="close-trend-modal">✕</button>
+            </div>
+            <div class="modal-body">
+                <canvas id="trend-chart" width="600" height="300"></canvas>
+                <div class="trend-stats">
+                    <div class="trend-stat">
+                        <span class="trend-label">Total Games:</span>
+                        <span id="total-games-stat" class="trend-value">0</span>
+                    </div>
+                    <div class="trend-stat">
+                        <span class="trend-label">Current Streak:</span>
+                        <span id="current-streak-stat" class="trend-value">0</span>
+                    </div>
+                    <div class="trend-stat">
+                        <span class="trend-label">Best Streak:</span>
+                        <span id="best-streak-stat" class="trend-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-panel" id="stats-panel">
+        <div class="stats-panel-header">
+            <h3>📊 Hand Statistics</h3>
+            <button class="close-stats-btn" id="close-stats-btn">✕</button>
+        </div>
+        <div class="stats-panel-content">
+            <div class="hand-stats">
+                <div class="hand-stat-card">
+                    <div class="hand-stat-icon">✊</div>
+                    <div class="hand-stat-title">Rock</div>
+                    <div class="hand-stat-details">
+                        <div class="stat-row">
+                            <span class="stat-label">Wins:</span>
+                            <span class="stat-value wins" id="rock-wins">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Losses:</span>
+                            <span class="stat-value losses" id="rock-losses">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Ties:</span>
+                            <span class="stat-value ties" id="rock-ties">0</span>
+                        </div>
+                        <div class="stat-row total">
+                            <span class="stat-label">Total Played:</span>
+                            <span class="stat-value" id="rock-total">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hand-stat-card">
+                    <div class="hand-stat-icon">✋</div>
+                    <div class="hand-stat-title">Paper</div>
+                    <div class="hand-stat-details">
+                        <div class="stat-row">
+                            <span class="stat-label">Wins:</span>
+                            <span class="stat-value wins" id="paper-wins">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Losses:</span>
+                            <span class="stat-value losses" id="paper-losses">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Ties:</span>
+                            <span class="stat-value ties" id="paper-ties">0</span>
+                        </div>
+                        <div class="stat-row total">
+                            <span class="stat-label">Total Played:</span>
+                            <span class="stat-value" id="paper-total">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hand-stat-card">
+                    <div class="hand-stat-icon">✌️</div>
+                    <div class="hand-stat-title">Scissors</div>
+                    <div class="hand-stat-details">
+                        <div class="stat-row">
+                            <span class="stat-label">Wins:</span>
+                            <span class="stat-value wins" id="scissors-wins">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Losses:</span>
+                            <span class="stat-value losses" id="scissors-losses">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Ties:</span>
+                            <span class="stat-value ties" id="scissors-ties">0</span>
+                        </div>
+                        <div class="stat-row total">
+                            <span class="stat-label">Total Played:</span>
+                            <span class="stat-value" id="scissors-total">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
