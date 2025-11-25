@@ -58,7 +58,7 @@ set OPENAI_API_KEY=sk-your-api-key-here
 
 1. Create a file named `.env` in your project root:
 ```bash
-cd /Users/alex.macdonald/cursor-11242025
+cd /path/to/cursor-11242025
 touch .env
 ```
 
@@ -82,7 +82,7 @@ load_dotenv()  # Add this at the top of your app.py
 
 ```bash
 # If using virtual environment (recommended):
-cd /Users/alex.macdonald/cursor-11242025
+cd /path/to/cursor-11242025
 source venv/bin/activate
 
 # Install openai
@@ -105,7 +105,7 @@ pip3 install -r requirements.txt
 
 1. Start your Flask server:
 ```bash
-cd /Users/alex.macdonald/cursor-11242025
+cd /path/to/cursor-11242025
 source venv/bin/activate  # if using venv
 python3 app.py
 ```

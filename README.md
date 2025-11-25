@@ -197,7 +197,7 @@ A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advan
 
 1. **Clone or navigate to the project directory:**
 ```bash
-cd /Users/alex.macdonald/cursor-11242025
+cd /path/to/cursor-11242025
 ```
 
 2. **Install Python dependencies:**

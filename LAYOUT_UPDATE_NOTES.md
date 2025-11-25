@@ -9,7 +9,7 @@ pkill -f "python.*app.py"
 
 2. Start the server with the virtual environment:
 ```bash
-cd /Users/alex.macdonald/cursor-11242025
+cd /path/to/cursor-11242025
 source venv/bin/activate
 python app.py
 ```

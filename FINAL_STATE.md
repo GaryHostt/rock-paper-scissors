@@ -193,7 +193,7 @@ scipy>=1.10.0
 
 ### 1. Install Dependencies
 ```bash
-cd /Users/alex.macdonald/cursor-11242025
+cd /path/to/cursor-11242025
 source venv/bin/activate
 pip3 install -r requirements.txt
 ```
