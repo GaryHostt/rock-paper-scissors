@@ -87,11 +87,12 @@ const translations = {
         'menu.playerAI': 'Player AI Level:',
         'menu.speed': 'Speed:',
         'menu.aiAnalysis': '🧠 AI Analysis',
-        'menu.viewPattern': 'View Pattern Analysis',
+        'menu.viewPattern': 'View Local Pattern Analysis',
+        'menu.viewOpenAI': '🤖 View OpenAI Commentary',
         'menu.hidePattern': 'Hide Pattern Analysis',
         'menu.statistics': '📊 Statistics',
         'menu.viewHandStats': 'Aggregated Data',
-        'menu.showTrendGraph': 'Show Trend Graph',
+        'menu.showTrendGraph': '📈 Trend Graph',
         'menu.game': '🎮 Game',
         'menu.resetScores': 'Reset Scores',
         
@@ -107,7 +108,7 @@ const translations = {
         'speed.turbo': 'Turbo (0.3s)',
         
         // Analysis
-        'analysis.patternDetection': 'Pattern Detection',
+        'analysis.patternDetection': 'Pattern Detection - Last 50 Games',
         'analysis.playForAnalysis': 'Play a few rounds for AI analysis...',
         'analysis.strategyTips': '💡 Strategy Tips',
         'analysis.strategiesAppear': 'Strategies will appear here...',
@@ -145,7 +146,13 @@ const translations = {
         
         // Battle display
         'battle.you': 'You',
-        'battle.computer': 'Computer'
+        'battle.computer': 'Computer',
+        
+        // OpenAI Commentary
+        'openai.placeholder': 'Click "View OpenAI Commentary" to get AI-powered analysis of your gameplay.',
+        'openai.loading': 'Analyzing your gameplay...',
+        'openai.error': 'Error fetching commentary. Check API key or try again.',
+        'openai.noData': 'Play at least 5 games to get meaningful commentary.'
     },
     fr: {
         // Interface de jeu
@@ -196,7 +203,7 @@ const translations = {
         'menu.hidePattern': 'Masquer l\'Analyse de Motifs',
         'menu.statistics': '📊 Statistiques',
         'menu.viewHandStats': 'Données Agrégées',
-        'menu.showTrendGraph': 'Afficher Graphique de Tendance',
+        'menu.showTrendGraph': '📈 Graphique de Tendance',
         'menu.game': '🎮 Jeu',
         'menu.resetScores': 'Réinitialiser les Scores',
         
@@ -212,7 +219,7 @@ const translations = {
         'speed.turbo': 'Turbo (0.3s)',
         
         // Analyse
-        'analysis.patternDetection': 'Détection de Motifs',
+        'analysis.patternDetection': 'Détection de Motifs - 50 Derniers Jeux',
         'analysis.playForAnalysis': 'Jouez quelques rounds pour l\'analyse IA...',
         'analysis.strategyTips': '💡 Conseils de Stratégie',
         'analysis.strategiesAppear': 'Les stratégies apparaîtront ici...',
@@ -250,7 +257,14 @@ const translations = {
         
         // Affichage de bataille
         'battle.you': 'Vous',
-        'battle.computer': 'Ordinateur'
+        'battle.computer': 'Ordinateur',
+        
+        // OpenAI Commentary
+        'openai.title': '🤖 Commentaire OpenAI',
+        'openai.placeholder': 'Cliquez sur "Voir Commentaire OpenAI" pour obtenir une analyse IA de votre jeu.',
+        'openai.loading': 'Analyse de votre jeu...',
+        'openai.error': 'Erreur lors de l\'obtention du commentaire. Vérifiez la clé API ou réessayez.',
+        'openai.noData': 'Jouez au moins 5 jeux pour obtenir un commentaire significatif.'
     },
     es: {
         // Interfaz del juego
@@ -297,11 +311,12 @@ const translations = {
         'menu.playerAI': 'Nivel de IA del Jugador:',
         'menu.speed': 'Velocidad:',
         'menu.aiAnalysis': '🧠 Análisis de IA',
-        'menu.viewPattern': 'Ver Análisis de Patrones',
+        'menu.viewPattern': 'Ver Análisis de Patrones Locales',
+        'menu.viewOpenAI': '🤖 Ver Comentario de OpenAI',
         'menu.hidePattern': 'Ocultar Análisis de Patrones',
         'menu.statistics': '📊 Estadísticas',
         'menu.viewHandStats': 'Datos Agregados',
-        'menu.showTrendGraph': 'Mostrar Gráfico de Tendencia',
+        'menu.showTrendGraph': '📈 Gráfico de Tendencia',
         'menu.game': '🎮 Juego',
         'menu.resetScores': 'Reiniciar Puntuaciones',
         
@@ -317,7 +332,7 @@ const translations = {
         'speed.turbo': 'Turbo (0.3s)',
         
         // Análisis
-        'analysis.patternDetection': 'Detección de Patrones',
+        'analysis.patternDetection': 'Detección de Patrones - Últimos 50 Juegos',
         'analysis.playForAnalysis': 'Juega algunas rondas para análisis de IA...',
         'analysis.strategyTips': '💡 Consejos de Estrategia',
         'analysis.strategiesAppear': 'Las estrategias aparecerán aquí...',
@@ -355,7 +370,14 @@ const translations = {
         
         // Pantalla de batalla
         'battle.you': 'Tú',
-        'battle.computer': 'Computadora'
+        'battle.computer': 'Computadora',
+        
+        // OpenAI Commentary
+        'openai.title': '🤖 Comentario de OpenAI',
+        'openai.placeholder': 'Haz clic en "Ver Comentario de OpenAI" para obtener un análisis IA de tu juego.',
+        'openai.loading': 'Analizando tu juego...',
+        'openai.error': 'Error al obtener comentario. Verifica la clave API o intenta nuevamente.',
+        'openai.noData': 'Juega al menos 5 juegos para obtener un comentario significativo.'
     }
 };
 
@@ -403,7 +425,21 @@ const showTrendsBtn = document.getElementById('show-trends-btn');
 const menuResetBtn = document.getElementById('menu-reset-btn');
 const menuAutoPlayBtn = document.getElementById('menu-auto-play-btn');
 const showAnalysisBtn = document.getElementById('show-analysis-btn');
+const showOpenAIBtn = document.getElementById('show-openai-btn');
 const aiAnalysisContent = document.getElementById('ai-analysis-content');
+
+// OpenAI sidebar elements
+const openaiSidebar = document.getElementById('openai-sidebar');
+const closeOpenAIBtn = document.getElementById('close-openai-btn');
+const openaiContent = document.getElementById('openai-content');
+const openaiLoading = document.getElementById('openai-loading');
+
+// Add console logs to verify elements
+console.log('=== OPENAI ELEMENTS CHECK ===');
+console.log('openaiSidebar:', openaiSidebar);
+console.log('closeOpenAIBtn:', closeOpenAIBtn);
+console.log('openaiContent:', openaiContent);
+console.log('openaiLoading:', openaiLoading);
 
 // Pattern sidebar (now used in menu)
 const patternMessages = document.getElementById('pattern-messages');
@@ -726,7 +762,7 @@ function detectPatterns() {
     }
     
     const patterns = [];
-    const recentHistory = gameHistory.slice(-10);
+    const recentHistory = gameHistory.slice(-50);
     
     // Pattern: Playing same hand after winning
     let repeatAfterWin = 0;
@@ -909,12 +945,12 @@ async function playGame(playerChoice, isAutoPlay = false) {
         battleDisplay.innerHTML = `
             <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 10px;">
                 <div style="text-align: center;">
-                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">${t('battle.you')}</div>
+                    <div style="font-size: 2.0rem; color: #666; margin-bottom: 5px; font-weight: 600;">${t('battle.you')}</div>
                     <span class="battle-emoji">${emojiMap[data.player_choice]}</span>
                 </div>
                 <div style="font-size: 2rem; color: #667eea;">VS</div>
                 <div style="text-align: center;">
-                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">${t('battle.computer')}</div>
+                    <div style="font-size: 2.0rem; color: #666; margin-bottom: 5px; font-weight: 600;">${t('battle.computer')}</div>
                     <span class="battle-emoji">${emojiMap[data.computer_choice]}</span>
                 </div>
             </div>
@@ -991,8 +1027,8 @@ async function playGame(playerChoice, isAutoPlay = false) {
             player: scores.player,
             computer: scores.computer
         });
-        // Keep last 50 data points
-        if (trendData.length > 50) {
+        // Keep last 100 data points
+        if (trendData.length > 100) {
             trendData.shift();
         }
         saveTrend();
@@ -1016,6 +1052,9 @@ async function playGame(playerChoice, isAutoPlay = false) {
         // Update and save scores
         updateScoreDisplay();
         saveScores();
+        
+        // Update trend graph if it's open
+        updateTrendGraphIfOpen();
         
     } catch (error) {
         console.error('=== GAME ERROR ===');
@@ -1113,6 +1152,7 @@ function setDifficulty(difficulty) {
 // Toggle menu sidebar
 function toggleMenu() {
     leftSidebar.classList.toggle('open');
+    document.body.classList.toggle('menu-open');
 }
 
 // Toggle dark mode
@@ -1139,19 +1179,38 @@ function changeTheme(theme) {
 function showTrendGraph() {
     console.log('showTrendGraph called');
     console.log('Trend modal:', trendModal);
-    trendModal.classList.add('open');
-    document.body.classList.add('trends-open');
-    console.log('After adding open class:', trendModal.classList.contains('open'));
     
-    // Update stats
-    totalGamesStat.textContent = scores.player + scores.computer + scores.ties;
-    currentStreakStat.textContent = currentStreak >= 0 ? `+${currentStreak}` : currentStreak;
-    bestStreakStat.textContent = bestStreak >= 0 ? `+${bestStreak}` : bestStreak;
+    // Toggle the graph
+    const isOpen = trendModal.classList.contains('open');
     
-    // Draw chart
-    setTimeout(() => {
-        drawTrendChart(trendChart, trendData);
-    }, 100);
+    if (isOpen) {
+        // Close it
+        trendModal.classList.remove('open');
+        document.body.classList.remove('trends-open');
+    } else {
+        // Open it
+        trendModal.classList.add('open');
+        document.body.classList.add('trends-open');
+        
+        // Update the title with total game count (capped at 100)
+        const trendTitle = document.getElementById('trend-graph-title');
+        const totalGames = scores.player + scores.computer + scores.ties;
+        if (trendTitle) {
+            // Cap the title at 100 games
+            const displayGames = Math.min(totalGames, 100);
+            trendTitle.textContent = `📈 Data from last ${displayGames} games`;
+        }
+        
+        // Update stats
+        totalGamesStat.textContent = totalGames;
+        currentStreakStat.textContent = currentStreak >= 0 ? `+${currentStreak}` : currentStreak;
+        bestStreakStat.textContent = bestStreak >= 0 ? `+${bestStreak}` : bestStreak;
+        
+        // Draw chart
+        setTimeout(() => {
+            drawTrendChart(trendChart, trendData);
+        }, 100);
+    }
 }
 
 // Close trend modal
@@ -1159,6 +1218,29 @@ function closeTrendGraphModal() {
     console.log('closeTrendGraphModal called');
     trendModal.classList.remove('open');
     document.body.classList.remove('trends-open');
+}
+
+// Update trend graph if it's currently open
+function updateTrendGraphIfOpen() {
+    if (trendModal && trendModal.classList.contains('open')) {
+        const trendTitle = document.getElementById('trend-graph-title');
+        const totalGames = scores.player + scores.computer + scores.ties;
+        if (trendTitle) {
+            // Cap the title at 100 games
+            const displayGames = Math.min(totalGames, 100);
+            trendTitle.textContent = `📈 Data from last ${displayGames} games`;
+        }
+        
+        // Update stats
+        if (totalGamesStat) totalGamesStat.textContent = totalGames;
+        if (currentStreakStat) currentStreakStat.textContent = currentStreak >= 0 ? `+${currentStreak}` : currentStreak;
+        if (bestStreakStat) bestStreakStat.textContent = bestStreak >= 0 ? `+${bestStreak}` : bestStreak;
+        
+        // Redraw chart
+        if (trendChart && trendData) {
+            drawTrendChart(trendChart, trendData);
+        }
+    }
 }
 
 // Toggle auto-play mode
@@ -1173,6 +1255,10 @@ function toggleAutoPlay() {
         // Disable manual play buttons and difficulty buttons
         choiceBtns.forEach(btn => btn.disabled = true);
         difficultyBtns.forEach(btn => btn.disabled = true);
+        
+        // Disable auto-play settings dropdowns
+        autoPlayerDifficultySelect.disabled = true;
+        autoPlaySpeedSelect.disabled = true;
         
         // Get auto-play settings
         autoPlayerDifficulty = autoPlayerDifficultySelect.value;
@@ -1191,6 +1277,10 @@ function toggleAutoPlay() {
         choiceBtns.forEach(btn => btn.disabled = false);
         difficultyBtns.forEach(btn => btn.disabled = false);
         
+        // Re-enable auto-play settings dropdowns
+        autoPlayerDifficultySelect.disabled = false;
+        autoPlaySpeedSelect.disabled = false;
+        
         // Stop the auto-play loop
         stopAutoPlay();
     }
@@ -1201,6 +1291,144 @@ function toggleAnalysis() {
     const isVisible = aiAnalysisContent.style.display !== 'none';
     aiAnalysisContent.style.display = isVisible ? 'none' : 'block';
     showAnalysisBtn.textContent = isVisible ? t('menu.viewPattern') : t('menu.hidePattern');
+}
+
+// Toggle OpenAI sidebar
+function toggleOpenAISidebar() {
+    if (openaiSidebar) {
+        openaiSidebar.classList.toggle('open');
+    }
+}
+
+// Close OpenAI sidebar
+function closeOpenAISidebar() {
+    if (openaiSidebar) {
+        openaiSidebar.classList.remove('open');
+        // Stop the timer when closing
+        if (commentaryTimerInterval) {
+            clearInterval(commentaryTimerInterval);
+            commentaryTimerInterval = null;
+        }
+    }
+}
+
+// Fetch OpenAI commentary
+async function fetchOpenAICommentary() {
+    console.log('=== FETCH OPENAI COMMENTARY CALLED ===');
+    
+    if (!openaiSidebar || !openaiContent || !openaiLoading) {
+        console.error('OpenAI elements not found!');
+        alert('Error: OpenAI sidebar elements not found. Please refresh the page.');
+        return;
+    }
+    
+    if (gameHistory.length < 5) {
+        openaiContent.innerHTML = `<div class="openai-error"><p>${t('openai.noData')}</p></div>`;
+        openaiSidebar.classList.add('open');
+        return;
+    }
+    
+    // Show loading
+    openaiContent.style.display = 'none';
+    openaiLoading.style.display = 'block';
+    openaiSidebar.classList.add('open');
+    
+    console.log('Sending request to OpenAI endpoint...');
+    
+    try {
+        const response = await fetch('/api/openai-commentary', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                game_history: gameHistory.slice(-100), // Last 100 games
+                scores: scores,
+                hand_stats: handStats,
+                current_difficulty: currentDifficulty
+            })
+        });
+        
+        console.log('Response received:', response.status);
+        const data = await response.json();
+        console.log('Data:', data);
+        
+        // Hide loading
+        openaiLoading.style.display = 'none';
+        openaiContent.style.display = 'block';
+        
+        if (data.error) {
+            openaiContent.innerHTML = `<div class="openai-error"><p>${data.error}</p></div>`;
+        } else {
+            // Store the timestamp when commentary was received
+            const commentaryTimestamp = Date.now();
+            const totalGames = scores.player + scores.computer + scores.ties;
+            
+            // Format the commentary with game info, timer and refresh button
+            const commentaryHTML = `
+                <div class="commentary-controls">
+                    <div class="commentary-game-info">
+                        📊 Commentary refreshed on game ${totalGames}
+                    </div>
+                    <div class="commentary-timer" id="commentary-timer">
+                        <span class="timer-icon">⏱️</span>
+                        <span id="commentary-time-elapsed">0</span> seconds ago
+                    </div>
+                    <button class="refresh-commentary-btn" id="refresh-commentary-btn">
+                        🔄 Refresh
+                    </button>
+                </div>
+                <div class="openai-commentary">
+                    ${data.commentary.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '').join('')}
+                </div>
+            `;
+            openaiContent.innerHTML = commentaryHTML;
+            
+            // Add event listener to refresh button
+            const refreshBtn = document.getElementById('refresh-commentary-btn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', refreshOpenAICommentary);
+            }
+            
+            // Start the timer
+            startCommentaryTimer(commentaryTimestamp);
+        }
+    } catch (error) {
+        console.error('Error fetching OpenAI commentary:', error);
+        openaiLoading.style.display = 'none';
+        openaiContent.style.display = 'block';
+        openaiContent.innerHTML = `<div class="openai-error"><p>${t('openai.error')}</p><p>${error.message}</p></div>`;
+    }
+}
+
+// Refresh OpenAI commentary with latest game data
+async function refreshOpenAICommentary() {
+    console.log('=== REFRESH OPENAI COMMENTARY CALLED ===');
+    
+    // Call the same function to fetch fresh commentary
+    await fetchOpenAICommentary();
+}
+
+// Timer for commentary freshness
+let commentaryTimerInterval = null;
+
+function startCommentaryTimer(timestamp) {
+    // Clear any existing timer
+    if (commentaryTimerInterval) {
+        clearInterval(commentaryTimerInterval);
+    }
+    
+    // Update timer every second
+    commentaryTimerInterval = setInterval(() => {
+        const timeElapsedElement = document.getElementById('commentary-time-elapsed');
+        if (timeElapsedElement) {
+            const secondsElapsed = Math.floor((Date.now() - timestamp) / 1000);
+            timeElapsedElement.textContent = secondsElapsed;
+        } else {
+            // Element not found, stop the timer
+            clearInterval(commentaryTimerInterval);
+        }
+    }, 1000);
 }
 
 // Start auto-play loop
@@ -1292,21 +1520,82 @@ darkModeToggle.addEventListener('click', toggleDarkMode);
 themeSelect.addEventListener('change', (e) => changeTheme(e.target.value));
 languageSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
 showAnalysisBtn.addEventListener('click', toggleAnalysis);
+if (showOpenAIBtn) {
+    console.log('Adding OpenAI button listener');
+    console.log('OpenAI elements:', { openaiSidebar, openaiContent, openaiLoading });
+    
+    // Function to check and update button state
+    function updateOpenAIButtonState() {
+        const totalGames = scores.player + scores.computer + scores.ties;
+        if (totalGames < 5) {
+            showOpenAIBtn.disabled = true;
+            showOpenAIBtn.style.opacity = '0.5';
+            showOpenAIBtn.style.cursor = 'not-allowed';
+        } else {
+            showOpenAIBtn.disabled = false;
+            showOpenAIBtn.style.opacity = '1';
+            showOpenAIBtn.style.cursor = 'pointer';
+        }
+    }
+    
+    // Initial check
+    updateOpenAIButtonState();
+    
+    // Add click listener
+    showOpenAIBtn.addEventListener('click', () => {
+        console.log('=== OPENAI BUTTON CLICKED ===');
+        console.log('openaiSidebar classList before:', openaiSidebar.classList);
+        console.log('gameHistory length:', gameHistory.length);
+        
+        const totalGames = scores.player + scores.computer + scores.ties;
+        if (totalGames < 5) {
+            alert('Play at least 5 games to get meaningful commentary.');
+            return;
+        }
+        
+        fetchOpenAICommentary();
+    });
+    
+    // Store original updateScoreDisplay to add our check
+    const originalUpdateScoreDisplay = updateScoreDisplay;
+    updateScoreDisplay = function() {
+        originalUpdateScoreDisplay();
+        updateOpenAIButtonState();
+    };
+} else {
+    console.error('showOpenAIBtn not found!');
+}
+if (closeOpenAIBtn) {
+    closeOpenAIBtn.addEventListener('click', closeOpenAISidebar);
+} else {
+    console.error('closeOpenAIBtn not found!');
+}
+
+// Show stats button - toggle visibility like trend graph
 showStatsBtn.addEventListener('click', () => {
-    console.log('Stats button clicked!');
+    console.log('=== STATS BUTTON CLICKED ===');
     console.log('Stats panel:', statsPanel);
-    console.log('Stats panel classes:', statsPanel.classList);
-    statsPanel.classList.toggle('open');
-    document.body.classList.toggle('stats-open');
-    console.log('After toggle - open?', statsPanel.classList.contains('open'));
-    // Don't close menu - keep it open
+    console.log('Current classes:', statsPanel.classList);
+    
+    const isOpen = statsPanel.classList.contains('open');
+    
+    if (isOpen) {
+        // Close it
+        statsPanel.classList.remove('open');
+        document.body.classList.remove('stats-open');
+    } else {
+        // Open it
+        statsPanel.classList.add('open');
+        document.body.classList.add('stats-open');
+    }
 });
+
 showTrendsBtn.addEventListener('click', () => {
-    console.log('Trends button clicked!');
+    console.log('=== TRENDS BUTTON CLICKED ===');
     console.log('Trend modal:', trendModal);
-    console.log('Trend modal classes:', trendModal.classList);
+    console.log('Current classes:', trendModal.classList);
     showTrendGraph();
-    console.log('After showTrendGraph - open?', trendModal.classList.contains('open'));
+    console.log('After showTrendGraph');
     // Don't close menu - keep it open
 });
 menuResetBtn.addEventListener('click', () => {
@@ -1323,6 +1612,7 @@ if (showTrendsBtn) {
 // Stats panel close button (if it exists)
 if (closeStatsBtn) {
     closeStatsBtn.addEventListener('click', () => {
+        console.log('Close stats button clicked');
         statsPanel.classList.remove('open');
         document.body.classList.remove('stats-open');
     });

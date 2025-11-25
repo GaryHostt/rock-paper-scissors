@@ -2,6 +2,15 @@ from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import random
 from collections import Counter
+import os
+import json
+
+# OpenAI import (will work if openai library is installed)
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
 
 app = Flask(__name__)
 CORS(app)
@@ -332,6 +341,103 @@ def mcp_play():
         'session_stats': session_stats,
         'message': f"Agent chose {agent_choice}, opponent chose {opponent_choice}. Result: {mcp_result}!"
     })
+
+@app.route('/api/openai-commentary', methods=['POST'])
+def openai_commentary():
+    """
+    Get OpenAI-powered commentary on gameplay
+    Request body:
+        - game_history: list of recent games
+        - scores: dict with player, computer, ties
+        - hand_stats: dict with per-hand statistics
+        - current_difficulty: string difficulty level
+    """
+    try:
+        data = request.json
+        
+        # Check if OpenAI is available
+        if not OPENAI_AVAILABLE:
+            return jsonify({
+                'error': 'OpenAI library is not installed. Run: pip install openai'
+            }), 500
+        
+        # Check for API key
+        api_key = os.environ.get('OPENAI_API_KEY')
+        if not api_key:
+            return jsonify({
+                'error': 'OpenAI API key not found. Please set OPENAI_API_KEY environment variable.'
+            }), 500
+        
+        # Get game data
+        game_history = data.get('game_history', [])
+        scores = data.get('scores', {})
+        hand_stats = data.get('hand_stats', {})
+        difficulty = data.get('current_difficulty', 'unknown')
+        
+        # Validate data
+        if len(game_history) < 5:
+            return jsonify({
+                'error': 'Need at least 5 games for meaningful commentary.'
+            }), 400
+        
+        # Prepare prompt for OpenAI - Sports Journalist Style
+        total_games = scores.get('player', 0) + scores.get('computer', 0) + scores.get('ties', 0)
+        win_rate = (scores.get('player', 0) / total_games * 100) if total_games > 0 else 0
+        
+        # Analyze recent patterns
+        recent_100 = game_history[-100:] if len(game_history) >= 100 else game_history
+        player_choices = [g.get('player') for g in recent_100]
+        computer_choices = [g.get('computer') for g in recent_100]
+        
+        prompt = f"""You are a sports journalist covering an intense Rock Paper Scissors championship match between PLAYER and COMPUTER.
+
+**Current Standings:**
+- Total Rounds: {total_games}
+- PLAYER Score: {scores.get('player', 0)}
+- COMPUTER Score: {scores.get('computer', 0)}
+- Ties: {scores.get('ties', 0)}
+- PLAYER Win Rate: {win_rate:.1f}%
+
+**Last 100 Moves:**
+- PLAYER's moves: {', '.join(player_choices[-20:])}... (showing last 20)
+- COMPUTER's moves: {', '.join(computer_choices[-20:])}... (showing last 20)
+
+**Hand Performance:**
+- Rock: {hand_stats.get('rock', {}).get('wins', 0)}W-{hand_stats.get('rock', {}).get('losses', 0)}L-{hand_stats.get('rock', {}).get('ties', 0)}T
+- Paper: {hand_stats.get('paper', {}).get('wins', 0)}W-{hand_stats.get('paper', {}).get('losses', 0)}L-{hand_stats.get('paper', {}).get('ties', 0)}T  
+- Scissors: {hand_stats.get('scissors', {}).get('wins', 0)}W-{hand_stats.get('scissors', {}).get('losses', 0)}L-{hand_stats.get('scissors', {}).get('ties', 0)}T
+
+Analyze this match with sports commentary. Be slightly humorous but professional. Focus on:
+1. The current state of the competition
+2. Notable patterns or strategies
+3. Momentum and what to watch for next
+
+Respond in 100 words or less. Write like you're commenting live for an ESPN broadcast."""
+
+        # Call OpenAI API
+        client = OpenAI(api_key=api_key)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",  # or "gpt-4" for better quality
+            messages=[
+                {"role": "system", "content": "You are an enthusiastic sports journalist covering a Rock Paper Scissors championship. Be engaging, slightly humorous, and professional like an ESPN commentator."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=300,
+            temperature=0.8
+        )
+        
+        commentary = response.choices[0].message.content
+        
+        return jsonify({
+            'commentary': commentary,
+            'games_analyzed': len(game_history),
+            'model_used': 'gpt-4o-mini'
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'error': f'Error generating commentary: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='openai.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='wrapper.css') }}">
 </head>
 <body>
     <!-- Left Sidebar Menu -->
@@ -61,7 +63,7 @@
                     <select id="auto-player-difficulty" class="difficulty-select">
                         <option value="easy" data-i18n="difficulty.easyRandom">Easy (Random)</option>
                         <option value="medium" data-i18n="difficulty.mediumAdaptive">Medium (Adaptive)</option>
-                        <option value="hard" data-i18n="difficulty.hardPredictive">Hard (Predictive)</option>
+                        <option value="hard" selected data-i18n="difficulty.hardPredictive">Hard (Predictive)</option>
                         <option value="veryhard" data-i18n="difficulty.veryHardMaster">Very Hard (Master)</option>
                     </select>
                 </div>
@@ -69,8 +71,8 @@
                     <label data-i18n="menu.speed">Speed:</label>
                     <select id="auto-play-speed" class="speed-select">
                         <option value="slow" data-i18n="speed.slow">Slow (2s)</option>
-                        <option value="normal" selected data-i18n="speed.normal">Normal (1.5s)</option>
-                        <option value="fast" data-i18n="speed.fast">Fast (0.8s)</option>
+                        <option value="normal" data-i18n="speed.normal">Normal (1.5s)</option>
+                        <option value="fast" selected data-i18n="speed.fast">Fast (0.8s)</option>
                         <option value="turbo" data-i18n="speed.turbo">Turbo (0.3s)</option>
                     </select>
                 </div>
@@ -79,10 +81,11 @@
             <!-- AI Analysis Section -->
             <div class="menu-section">
                 <h4 data-i18n="menu.aiAnalysis">🧠 AI Analysis</h4>
-                <button class="menu-button" id="show-analysis-btn" data-i18n="menu.viewPattern">View Pattern Analysis</button>
+                <button class="menu-button" id="show-analysis-btn" data-i18n="menu.viewPattern">View Local Pattern Analysis</button>
+                <button class="menu-button" id="show-openai-btn" data-i18n="menu.viewOpenAI">🤖 View OpenAI Commentary</button>
                 <div class="ai-analysis-content" id="ai-analysis-content" style="display: none;">
                     <div class="analysis-subsection">
-                        <h5 data-i18n="analysis.patternDetection">Pattern Detection</h5>
+                        <h5 data-i18n="analysis.patternDetection">Pattern Detection - Last 50 Games</h5>
                         <div id="pattern-messages-menu" class="pattern-messages-menu">
                             <p class="pattern-placeholder" data-i18n="analysis.playForAnalysis">Play a few rounds for AI analysis...</p>
                         </div>
@@ -121,7 +124,7 @@
             <div class="menu-section">
                 <h4 data-i18n="menu.statistics">📊 Statistics</h4>
                 <button class="menu-button" id="show-stats-btn" data-i18n="menu.viewHandStats">📊 Aggregated Data</button>
-                <button class="menu-button" id="show-trends-btn" data-i18n="menu.showTrendGraph">Show Trend Graph</button>
+                <button class="menu-button" id="show-trends-btn" data-i18n="menu.showTrendGraph">📈 Trend Graph</button>
             </div>
 
             <!-- Game Actions -->
@@ -154,11 +157,24 @@
     </div>
 
     <!-- Main Game Container -->
+    <div class="main-game-wrapper">
     <div class="container">
         <button class="menu-toggle-btn" id="menu-toggle-btn">☰</button>
         
-        <h1 class="title">✊ ✋ ✌️</h1>
-        <h2 class="subtitle" data-i18n="game.title">Rock Paper Scissors</h2>
+        <div class="game-title-section">
+            <div class="title-column">
+                <span class="title-emoji">✊</span>
+                <span class="title-text" data-i18n="hand.rock">Rock</span>
+            </div>
+            <div class="title-column">
+                <span class="title-emoji">✋</span>
+                <span class="title-text" data-i18n="hand.paper">Paper</span>
+            </div>
+            <div class="title-column">
+                <span class="title-emoji">✌️</span>
+                <span class="title-text" data-i18n="hand.scissors">Scissors</span>
+            </div>
+        </div>
         
         <div class="score-board">
             <div class="score-item">
@@ -243,10 +259,32 @@
         </div>
     </div>
 
+    <!-- OpenAI Commentary Panel (positioned below game box) -->
+    <div class="openai-sidebar" id="openai-sidebar">
+        <div class="openai-header">
+            <h3>💬 ChatGPT Commentary</h3>
+            <button class="close-openai-btn" id="close-openai-btn">✕</button>
+        </div>
+        <div class="openai-content" id="openai-content">
+            <div class="openai-placeholder">
+                <p data-i18n="openai.placeholder">Click "View OpenAI Commentary" to get AI-powered analysis of your gameplay.</p>
+            </div>
+        </div>
+        <div class="openai-loading" id="openai-loading" style="display: none;">
+            <div class="spinner"></div>
+            <p data-i18n="openai.loading">Analyzing your gameplay...</p>
+        </div>
+    </div>
+    </div>
+
     <!-- Bottom Panels Container -->
     <div class="bottom-panels">
         <!-- Statistics Panel -->
         <div class="stats-panel" id="stats-panel">
+            <div class="stats-panel-header">
+                <h3>📊 Aggregated Data</h3>
+                <button class="close-stats-btn" id="close-stats-btn">✕</button>
+            </div>
             <div class="hand-stats">
                 <div class="hand-stat-card">
                     <div class="hand-stat-icon">✊</div>
@@ -362,25 +400,25 @@
         <div class="modal" id="trend-modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 data-i18n="trends.title">📈 Performance Trends</h3>
+                    <h3 id="trend-graph-title" data-i18n="trends.title">📈 Data from last 50 games</h3>
                     <button class="close-modal-btn" id="close-trend-modal">✕</button>
                 </div>
                 <div class="modal-body">
                     <canvas id="trend-chart" width="600" height="300"></canvas>
-                    <div class="trend-stats">
-                        <div class="trend-stat">
-                            <span class="trend-label" data-i18n="trends.totalGames">Total Games:</span>
-                            <span id="total-games-stat" class="trend-value">0</span>
-                        </div>
-                        <div class="trend-stat">
-                            <span class="trend-label" data-i18n="trends.currentStreak">Current Streak:</span>
-                            <span id="current-streak-stat" class="trend-value">0</span>
-                        </div>
-                        <div class="trend-stat">
-                            <span class="trend-label" data-i18n="trends.bestStreak">Best Streak:</span>
-                            <span id="best-streak-stat" class="trend-value">0</span>
-                        </div>
+                <div class="trend-stats">
+                    <div class="trend-stat">
+                        <span class="trend-label">Total Games:</span>
+                        <span id="total-games-stat" class="trend-value">0</span>
                     </div>
+                    <div class="trend-stat">
+                        <span class="trend-label">Current Streak:</span>
+                        <span id="current-streak-stat" class="trend-value">0</span>
+                    </div>
+                    <div class="trend-stat">
+                        <span class="trend-label">Best Streak:</span>
+                        <span id="best-streak-stat" class="trend-value">0</span>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

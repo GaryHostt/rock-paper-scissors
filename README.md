@@ -2,6 +2,8 @@
 
 A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advanced AI opponents, and a beautiful responsive web frontend.
 
+![Rock Paper Scissors Game Screenshot](RPS.png)
+
 ## 🎯 Version History
 
 ### Version 2.1 - Streak Visualization & AI Evaluation (Nov 2025)
@@ -48,18 +50,55 @@ A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advan
 - **Responsive Layout** - Optimized for desktop, tablet, and mobile
 
 #### 🧠 **AI Analysis & Strategy**
-- **Pattern Detection** - AI analyzes your playing behavior:
-  - Detects if you repeat moves after winning/losing
-  - Identifies your favorite hands
-  - Tracks behavioral patterns in real-time
+- **Local Pattern Detection** - Built-in AI analyzes your playing behavior:
+  - **Detection Algorithms**:
+    - **Win-Stay Analysis**: Tracks if you repeat moves after winning (60%+ threshold triggers pattern alert)
+    - **Lose-Shift Analysis**: Detects if you stick with losing hands or switch predictably (60%+ threshold)
+    - **Frequency Bias Detection**: Identifies your favorite hand if played >40% of the time in recent games
+    - **Temporal Weighting**: Recent 10 games analyzed with higher weight on latest moves
+  - **Real-time Pattern Tracking**: Updates after every game round
+  - **Confidence Metrics**: Shows percentage confidence for detected patterns
+  
 - **Strategy Suggestions** - Smart tips based on:
-  - Computer's recent play patterns
-  - Your winning/losing streaks
-  - Statistical analysis of your best-performing hands
+  - **Computer Behavior Analysis**:
+    - Tracks opponent's most common hand in last 5 games
+    - Suggests optimal counter-play based on statistical frequency
+    - Adapts recommendations based on difficulty level
+  - **Performance Monitoring**:
+    - Warns during losing streaks (>2 consecutive losses)
+    - Identifies your best-performing hand by win rate
+    - Alerts you when AI may have learned your patterns
+  - **Psychological Insights**:
+    - Detects common human biases (gambler's fallacy, hot-hand fallacy)
+    - Recognizes emotional play patterns
+    - Suggests strategic diversity when needed
+    
+- **OpenAI Commentary** 🤖 NEW!
+  - **AI-Powered Deep Analysis**: Click "View OpenAI Commentary" for GPT-powered insights
+  - **Commentary Features**:
+    - Requires 5+ games to activate
+    - Analyzes last 100 games with full context
+    - Shows "Commentary refreshed on game X" with current game count
+    - Refresh button to get updated analysis with latest games
+    - Timer showing how old the commentary is
+    - 100-word concise analysis (reduced from 200 words)
+  - **Comprehensive Gameplay Review**:
+    - Overall performance assessment across all games
+    - Advanced pattern detection using machine learning
+    - Psychological analysis of your decision-making
+    - Personalized strategic recommendations
+    - Trend identification and prediction
+  - **Data-Driven Insights**:
+    - Considers difficulty level and opponent behavior
+    - Provides win rate breakdown by hand
+    - Identifies exploitable patterns in your play
+  - **Setup**: See `OPENAI_SETUP.md` for API key configuration
+  
 - **Win Rate Percentages**:
-  - Overall win rate tracking
+  - Overall win rate tracking with trend indicators
   - Individual win rates for Rock, Paper, and Scissors
   - Real-time updates after each game
+  - Historical performance comparison
 
 #### 📊 **Advanced Statistics**
 - **Trend Graph** - Visual performance chart showing:
@@ -78,12 +117,14 @@ A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advan
 - **Adjustable AI Difficulty**:
   - Easy: Pure random selection
   - Medium: Adaptive - counters your most common plays
-  - Hard: Predictive - uses advanced pattern recognition
+  - Hard: Predictive - uses advanced pattern recognition (Default)
+  - Very Hard: Master strategist with advanced psychology
 - **Variable Speed Control**:
   - Slow (2 seconds per round)
   - Normal (1.5 seconds per round)
-  - Fast (0.8 seconds per round)
+  - Fast (0.8 seconds per round) - Default
   - Turbo (0.3 seconds per round)
+- **Settings Lock**: Speed and AI level disabled while Auto-Play is active
 - **AI vs AI Battles** - Watch different AI difficulties compete!
 
 #### 🎮 **Difficulty Levels**
@@ -163,6 +204,19 @@ cd /Users/alex.macdonald/cursor-11242025
 ```bash
 pip3 install -r requirements.txt
 ```
+
+3. **Set up OpenAI API (Optional - for AI Commentary feature):**
+```bash
+# Create .env file
+touch .env
+
+# Add your OpenAI API key to .env
+echo "OPENAI_API_KEY=your-key-here" >> .env
+```
+
+**Note**: The `.env` file is automatically ignored by Git for security.
+
+See `OPENAI_SETUP.md` for detailed setup instructions.
 
 ---
 
@@ -292,11 +346,27 @@ The framework validates:
 
 ## 🎯 Advanced Features Explained
 
+### UI Enhancements
+- **Menu Button**: Large, prominent ☰ button in top-left for easy access
+- **Responsive Layout**: When menu opens, all content shifts right to remain visible
+- **Larger Text**: Game text is 67% larger for better readability
+- **Menu Text**: Menu text is 70% larger with 550px width sidebar
+- **Trend Graph**: 900px wide, positioned on the left side
+- **ChatGPT Commentary**: 1200px wide, positioned below Trend Graph on left
+- **Aggregated Data**: 750px wide, positioned on the right side
+
+### Auto-Play Defaults
+- **Default Speed**: Fast (0.8 seconds per game)
+- **Default AI Level**: Hard (Predictive)
+- **Settings Locked**: Speed and AI level cannot be changed while Auto-Play is active
+
 ### Pattern Detection
-The AI analyzes your last 10 games to detect:
+The AI analyzes your last 50 games to detect:
 - **Repeat-after-win**: Do you play the same hand after winning?
 - **Repeat-after-loss**: Do you stick with losing hands?
 - **Favorite hand bias**: Do you over-rely on one hand?
+
+The pattern detection is displayed in the menu under "Pattern Detection - Last 50 Games".
 
 ### Strategy Suggestions
 Based on analysis, you'll receive tips like:
@@ -337,10 +407,11 @@ Calculated separately for:
 - Resets on outcome change (win → loss or loss → win)
 
 ### Trend Data
-- Tracks last 50 games
+- Tracks last 100 games
 - Plots player score vs computer score
 - Visualized on canvas-based chart
 - Updates in real-time
+- Title shows "Data from last X games" (capped at 100)
 
 ---
 
@@ -348,15 +419,27 @@ Calculated separately for:
 
 ```
 cursor-11242025/
-├── app.py                  # Flask backend with AI logic
-├── requirements.txt        # Python dependencies
-├── README.md              # This file
+├── .env                   # Environment variables (not in Git)
+├── .gitignore            # Git ignore rules
+├── app.py                # Flask backend with AI logic
+├── requirements.txt      # Python dependencies
+├── README.md            # This file
+├── OPENAI_SETUP.md      # OpenAI API setup guide
+├── STRATEGIES.md        # AI strategy documentation
+├── CHANGELOG_v2.1.md    # Version 2.1 changes
 ├── templates/
-│   └── index.html         # Main HTML page with menu & modals
-└── static/
-    ├── style.css          # Comprehensive styles with themes
-    ├── script.js          # Game logic, AI analysis, UI controls
-    └── chart.min.js       # Lightweight chart rendering
+│   └── index.html       # Main HTML page with menu & modals
+├── static/
+│   ├── style.css        # Main styles with themes
+│   ├── openai.css       # OpenAI commentary styles
+│   ├── wrapper.css      # Layout wrapper styles
+│   ├── script.js        # Game logic, AI analysis, UI controls
+│   └── chart.min.js     # Lightweight chart rendering
+└── testing/             # AI testing framework
+    ├── README.md
+    ├── ai_evaluator.py
+    ├── statistical_tests.py
+    └── visualization.py
 ```
 
 ---
@@ -602,6 +685,14 @@ This game demonstrates:
 ## 📝 License
 
 Free to use and modify as needed.
+
+---
+
+## 🔒 Security Notes
+
+- **API Keys**: Never commit `.env` file to Git - it's in `.gitignore`
+- **Local Storage**: All game data stays in your browser
+- **Privacy**: No external data collection (except optional OpenAI API calls)
 
 ---
 

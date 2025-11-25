@@ -78,9 +78,9 @@ body {
     background: var(--bg-white);
     border: 2px solid var(--primary-gradient-start);
     color: var(--primary-gradient-start);
-    padding: 12px 18px;
+    padding: 17px 25px;
     border-radius: 10px;
-    font-size: 1.5rem;
+    font-size: 2.1rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -98,8 +98,8 @@ body {
 .left-sidebar {
     position: fixed;
     top: 0;
-    left: -350px;
-    width: 350px;
+    left: -550px;
+    width: 550px;
     height: 100vh;
     background: var(--bg-white);
     box-shadow: 5px 0 25px var(--shadow-color);
@@ -126,7 +126,7 @@ body {
 
 .sidebar-header h3 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 2.3rem;
 }
 
 .close-sidebar-btn {
@@ -164,7 +164,7 @@ body {
 }
 
 .menu-section h4 {
-    font-size: 1.1rem;
+    font-size: 1.6rem;
     margin-bottom: 15px;
     color: var(--text-primary);
 }
@@ -175,7 +175,7 @@ body {
 
 .menu-item label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     color: var(--text-secondary);
     margin-bottom: 8px;
     font-weight: 600;
@@ -205,7 +205,7 @@ body {
 }
 
 .toggle-text {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
 }
@@ -286,14 +286,20 @@ body {
 
 .theme-select, .difficulty-select, .speed-select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 2px solid var(--card-bg-end);
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     background: var(--bg-white);
     color: var(--text-primary);
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.theme-select:disabled, .difficulty-select:disabled, .speed-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--card-bg-start);
 }
 
 .theme-select:focus, .difficulty-select:focus, .speed-select:focus {
@@ -303,10 +309,10 @@ body {
 
 .language-select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 2px solid var(--primary-gradient-start);
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     background: var(--bg-white);
     color: var(--text-primary);
     cursor: pointer;
@@ -322,12 +328,12 @@ body {
 
 .menu-button {
     width: 100%;
-    padding: 12px;
+    padding: 16px;
     background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -341,8 +347,8 @@ body {
 
 .menu-button.auto-play-menu-btn {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    font-size: 1rem;
-    padding: 14px;
+    font-size: 1.4rem;
+    padding: 18px;
     margin-bottom: 15px;
 }
 
@@ -368,28 +374,28 @@ body {
 }
 
 .analysis-subsection h5 {
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     color: var(--text-secondary);
     margin-bottom: 8px;
 }
 
 .pattern-messages-menu, .strategy-messages-menu, .win-rates-menu {
     background: var(--bg-white);
-    padding: 10px;
+    padding: 12px;
     border-radius: 6px;
-    font-size: 0.8rem;
-    min-height: 60px;
+    font-size: 1.2rem;
+    min-height: 70px;
 }
 
 .pattern-messages-menu .pattern-message,
 .strategy-messages-menu .strategy-message {
     background: var(--card-bg-start);
-    padding: 8px;
+    padding: 10px;
     border-radius: 6px;
     margin-bottom: 6px;
     border-left: 3px solid var(--primary-gradient-start);
     color: var(--text-primary);
-    font-size: 0.8rem;
+    font-size: 1.2rem;
 }
 
 /* Pattern Detection Sidebar (Right) */
@@ -460,11 +466,19 @@ body {
 .win-rate-item {
     display: flex;
     justify-content: space-between;
-    padding: 8px 10px;
+    padding: 10px 12px;
     background: var(--bg-white);
     border-radius: 8px;
     margin-bottom: 8px;
-    font-size: 0.9rem;
+    font-size: 1.25rem;
+}
+
+.win-rate-item span:first-child {
+    color: var(--text-primary);
+}
+
+body.dark-mode .win-rate-item span:first-child {
+    color: #e0e0e0;
 }
 
 .win-rate-value {
@@ -481,8 +495,13 @@ body {
     width: 100%;
     animation: fadeIn 0.5s ease-in;
     position: relative;
-    margin-left: 320px;
+    margin-left: 520px;
     transition: all 0.5s ease;
+}
+
+/* Shift container right when menu is open */
+body.menu-open .container {
+    margin-left: 800px;
 }
 
 @keyframes fadeIn {
@@ -494,6 +513,34 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.game-title-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 30px;
+    padding: 20px 0;
+}
+
+.title-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.title-emoji {
+    font-size: 6.7rem;
+    color: var(--text-primary);
+}
+
+.title-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-gradient-start);
+    text-align: center;
 }
 
 .title {
@@ -527,7 +574,7 @@ body {
 }
 
 .score-label {
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     color: var(--text-secondary);
     margin-bottom: 8px;
     text-transform: uppercase;
@@ -536,7 +583,7 @@ body {
 }
 
 .score-value {
-    font-size: 2.5rem;
+    font-size: 4.2rem;
     font-weight: bold;
     color: var(--primary-gradient-start);
 }
@@ -608,7 +655,7 @@ body {
 }
 
 .streak-emoji {
-    font-size: 2rem;
+    font-size: 3.3rem;
     animation: emojiFloat 1.5s ease-in-out infinite;
 }
 
@@ -622,7 +669,7 @@ body {
 }
 
 .streak-text {
-    font-size: 1.2rem;
+    font-size: 2.0rem;
     font-weight: 700;
     color: var(--text-primary);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -667,7 +714,7 @@ body {
 }
 
 .longest-streak-box .streak-label {
-    font-size: 0.85rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-secondary);
     margin-bottom: 8px;
@@ -676,7 +723,7 @@ body {
 }
 
 .longest-streak-box .streak-number {
-    font-size: 2rem;
+    font-size: 3.3rem;
     font-weight: 800;
     color: var(--text-primary);
 }
@@ -695,7 +742,7 @@ body {
 }
 
 .difficulty-label {
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     color: var(--text-secondary);
     margin-bottom: 12px;
     font-weight: 600;
@@ -718,7 +765,7 @@ body {
     background: var(--bg-white);
     border: 2px solid transparent;
     border-radius: 8px;
-    font-size: 0.95rem;
+    font-size: 1.6rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -759,6 +806,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
@@ -802,15 +850,17 @@ body {
 }
 
 .emoji {
-    font-size: 3rem;
+    font-size: 5.0rem;
     transition: all 0.3s ease;
 }
 
 .choice-label {
-    font-size: 1rem;
+    font-size: 1.67rem;
     font-weight: 600;
     color: #667eea;
     transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
 }
 
 .result-area {
@@ -823,7 +873,7 @@ body {
 }
 
 .result-message {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 15px;
     color: var(--text-primary);
@@ -868,12 +918,12 @@ body {
 }
 
 .battle-display {
-    font-size: 1.2rem;
+    font-size: 2.0rem;
     color: #666;
 }
 
 .battle-emoji {
-    font-size: 2rem;
+    font-size: 6.7rem;
     margin: 0 10px;
 }
 
@@ -985,21 +1035,47 @@ body {
 }
 
 /* Statistics Panel */
-/* Stats Panel - Bottom Layout */
+/* Stats Panel - Right Side, Flush to Game Box */
 .stats-panel {
-    max-height: 0;
-    overflow: hidden;
+    position: fixed;
+    left: calc(50% + 700px);
+    top: 50%;
+    transform: translateY(-50%) translateX(100%);
+    width: 750px;
+    max-height: 92vh;
+    overflow-y: auto;
     background: linear-gradient(135deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%);
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
-    transition: max-height 0.5s ease, padding 0.5s ease;
-    border-radius: 0 0 20px 20px;
-    padding: 0;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s ease;
+    border-radius: 20px;
+    padding: 30px;
+    z-index: 900;
+    display: none;
 }
 
 .stats-panel.open {
-    max-height: 1000px;
-    padding: 30px;
-    overflow-y: auto;
+    display: block;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Shift stats panel right when menu is open */
+body.menu-open .stats-panel {
+    left: calc(50% + 980px);
+}
+
+.stats-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--primary-gradient-start);
+}
+
+.stats-panel-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.5rem;
 }
 
 .stats-panel-header {
@@ -1015,7 +1091,7 @@ body {
 
 .stats-panel-header h3 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
 }
 
 .close-stats-btn {
@@ -1044,7 +1120,7 @@ body {
 
 .hand-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
@@ -1062,13 +1138,13 @@ body {
 }
 
 .hand-stat-icon {
-    font-size: 3rem;
+    font-size: 5.0rem;
     text-align: center;
     margin-bottom: 10px;
 }
 
 .hand-stat-title {
-    font-size: 1.3rem;
+    font-size: 2.2rem;
     font-weight: 700;
     text-align: center;
     color: var(--primary-gradient-start);
@@ -1102,7 +1178,7 @@ body {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.75rem;
     margin-top: 5px;
 }
 
@@ -1117,13 +1193,13 @@ body {
 }
 
 .stat-label {
-    font-size: 0.95rem;
+    font-size: 1.6rem;
     color: #666;
     font-weight: 600;
 }
 
 .stat-value {
-    font-size: 1.2rem;
+    font-size: 2.0rem;
     font-weight: 700;
 }
 
@@ -1153,7 +1229,7 @@ body {
 }
 
 .winning-hand-label {
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     color: #666;
     margin-bottom: 12px;
     font-weight: 600;
@@ -1168,8 +1244,8 @@ body {
 }
 
 .hand-circle {
-    width: 100px;
-    height: 100px;
+    width: 167px;
+    height: 167px;
     border-radius: 50%;
     border: 4px solid #667eea;
     display: flex;
@@ -1210,7 +1286,7 @@ body {
 }
 
 .winning-emoji {
-    font-size: 3.5rem;
+    font-size: 5.8rem;
     color: white;
     animation: emojiSpin 0.5s ease;
 }
@@ -1225,21 +1301,32 @@ body {
 }
 
 /* Modal Styles */
-/* Trend Graph Modal - Bottom Layout */
+/* Trend Graph Modal - Left Side, Upper Position */
 .modal {
-    max-height: 0;
-    overflow: hidden;
+    position: fixed;
+    right: calc(50% + 420px);
+    top: 20%;
+    transform: translateY(-20%) translateX(-100%);
+    width: 900px;
+    max-height: 70vh;
+    overflow-y: auto;
     background: linear-gradient(135deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%);
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
-    transition: max-height 0.5s ease, padding 0.5s ease;
-    border-radius: 0 0 20px 20px;
-    padding: 0;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s ease;
+    border-radius: 20px;
+    padding: 30px;
+    z-index: 900;
+    display: none;
 }
 
 .modal.open {
-    max-height: 700px;
-    padding: 30px;
-    overflow-y: auto;
+    display: block;
+    transform: translateY(-20%) translateX(20px);
+}
+
+/* Shift trend graph right when menu is open */
+body.menu-open .modal {
+    right: calc(50% + 140px);
 }
 
 .modal-content {
@@ -1263,7 +1350,7 @@ body {
 
 .modal-header h3 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
 }
 
 .close-modal-btn {
@@ -1312,7 +1399,7 @@ body {
 
 .trend-label {
     display: block;
-    font-size: 0.85rem;
+    font-size: 1.4rem;
     color: var(--text-secondary);
     margin-bottom: 8px;
     font-weight: 600;
@@ -1320,7 +1407,7 @@ body {
 
 .trend-value {
     display: block;
-    font-size: 1.8rem;
+    font-size: 3.0rem;
     font-weight: 700;
     color: var(--primary-gradient-start);
 }
