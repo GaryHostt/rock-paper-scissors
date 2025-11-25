@@ -1590,24 +1590,27 @@ body.menu-open .modal {
 
     /* Difficulty selector - much smaller */
     .difficulty-selector {
-        padding: 10px;
-        margin: 10px 0;
+        padding: 6px;
+        margin: 8px 0;
     }
 
     .difficulty-label {
-        font-size: 0.85rem;
-        margin-bottom: 6px;
+        font-size: 0.75rem;
+        margin-bottom: 4px;
     }
 
     .difficulty-buttons {
         flex-direction: column;
-        gap: 6px;
+        gap: 4px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .difficulty-btn {
-        font-size: 0.85rem;
-        padding: 8px 12px;
+        font-size: 0.7rem;
+        padding: 6px 8px;
         width: 100%;
+        white-space: nowrap;
     }
 
     /* Choice buttons - smaller, single column */
@@ -2085,12 +2088,14 @@ body.menu-open .modal {
 
     .difficulty-buttons {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .difficulty-btn {
-        font-size: 0.9rem;
-        padding: 10px 15px;
+        font-size: 0.85rem;
+        padding: 8px 10px;
         width: 100%;
     }
 
@@ -2178,188 +2183,7 @@ body.menu-open .modal {
         font-size: 0.95rem;
     }
 
-    /* STATS PANEL - Mobile Optimized */
-    .stats-panel {
-        width: 100%;
-        max-width: 100%;
-        right: -100%;
-        top: 0;
-        bottom: 0;
-        max-height: 100vh;
-        overflow-y: auto;
-        z-index: 1001;
-    }
-
-    .stats-panel.open {
-        right: 0;
-    }
-
-    .stats-panel-header {
-        padding: 12px 15px;
-        position: sticky;
-        top: 0;
-        background: inherit;
-        z-index: 10;
-    }
-
-    .stats-panel-header h3 {
-        font-size: 1.1rem;
-    }
-
-    .close-stats-btn {
-        font-size: 1.3rem;
-        padding: 8px;
-        width: 35px;
-        height: 35px;
-    }
-
-    .hand-stats {
-        gap: 12px;
-        padding: 10px;
-    }
-
-    /* TREND MODAL - Mobile Optimized */
-    .modal {
-        padding: 10px;
-        z-index: 2000;
-    }
-
-    .modal-content {
-        width: 95%;
-        max-width: 95%;
-        max-height: 85vh;
-        padding: 15px;
-        margin: 20px auto;
-        overflow-y: auto;
-    }
-
-    .modal-header {
-        padding: 12px;
-        margin-bottom: 15px;
-    }
-
-    .modal-header h3 {
-        font-size: 1.1rem;
-    }
-
-    .close-modal-btn {
-        font-size: 1.3rem;
-        padding: 6px;
-        width: 32px;
-        height: 32px;
-    }
-
-    .modal-body {
-        padding: 10px;
-    }
-
-    /* Trend chart responsive */
-    #trend-chart {
-        max-width: 100%;
-        width: 100% !important;
-        height: auto !important;
-    }
-
-    .trend-stats {
-        flex-direction: column;
-        gap: 8px;
-        margin-top: 15px;
-    }
-
-    .trend-stat {
-        padding: 8px;
-    }
-
-    .trend-label {
-        font-size: 0.85rem;
-    }
-
-    .trend-value {
-        font-size: 1rem;
-    }
-
-    /* OPENAI SIDEBAR - Mobile Optimized */
-    .openai-sidebar {
-        width: 100%;
-        max-width: 100%;
-        bottom: -100%;
-        left: 0;
-        right: 0;
-        top: auto;
-        max-height: 75vh;
-        border-radius: 20px 20px 0 0;
-        transition: bottom 0.3s ease;
-        z-index: 1500;
-    }
-
-    .openai-sidebar.open {
-        bottom: 0;
-    }
-
-    .openai-header {
-        padding: 12px 15px;
-        border-radius: 20px 20px 0 0;
-    }
-
-    .openai-header h3 {
-        font-size: 1rem;
-    }
-
-    .close-openai-btn {
-        font-size: 1.3rem;
-        padding: 6px;
-        width: 35px;
-        height: 35px;
-    }
-
-    .openai-content {
-        font-size: 0.9rem;
-        padding: 15px;
-        max-height: calc(75vh - 80px);
-        overflow-y: auto;
-    }
-
-    .openai-placeholder {
-        font-size: 0.85rem;
-        padding: 15px;
-    }
-
-    .openai-loading {
-        padding: 20px;
-    }
-
-    .spinner {
-        width: 30px;
-        height: 30px;
-        border-width: 3px;
-    }
-
-    /* Modal adjustments */
-    .modal-content {
-        width: 95%;
-        max-width: 95%;
-        padding: 15px;
-        margin: 20px auto;
-    }
-
-    .modal-header h3 {
-        font-size: 1.2rem;
-    }
-
-    /* OpenAI sidebar */
-    .openai-sidebar {
-        width: 100%;
-        bottom: 0;
-        max-height: 70vh;
-    }
-
-    .openai-header h3 {
-        font-size: 1.1rem;
-    }
-
-    .openai-content {
-        font-size: 0.9rem;
-    }
+    /* Removed conflicting panel styles - using earlier relative positioning styles instead */
 
     /* Winning hand display */
     .winning-hand-container {
