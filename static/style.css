@@ -1424,7 +1424,13 @@ body.menu-open .modal {
     color: var(--primary-gradient-start);
 }
 
+/* ============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================ */
+
+/* Tablets and smaller (max-width: 768px) */
 @media (max-width: 768px) {
+    /* Sidebars take full width on mobile */
     .stats-panel {
         width: 100%;
         right: -100%;
@@ -1450,23 +1456,155 @@ body.menu-open .modal {
     .trend-stats {
         flex-direction: column;
     }
+
+    /* Reduce menu toggle button size on tablets */
+    .menu-toggle-btn {
+        font-size: 1.5rem;
+        padding: 12px 15px;
+    }
+
+    /* Make game title section more compact */
+    .game-title-section {
+        gap: 15px;
+    }
+
+    .title-column {
+        gap: 8px;
+    }
+
+    .title-emoji {
+        font-size: 2.5rem;
+    }
+
+    .title-text {
+        font-size: 1.3rem;
+    }
+
+    /* Compact score board */
+    .score-board {
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .score-label {
+        font-size: 0.9rem;
+    }
+
+    .score-value {
+        font-size: 2rem;
+    }
+
+    /* Make OpenAI sidebar more mobile-friendly */
+    .openai-sidebar {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Bottom panels adjustments */
+    .bottom-panels {
+        flex-direction: column;
+    }
 }
 
+/* Mobile phones (max-width: 480px) */
 @media (max-width: 480px) {
+    /* Main container adjustments */
     .container {
-        padding: 20px;
-        max-width: 95%;
+        padding: 15px;
+        max-width: 100%;
+        border-radius: 15px;
     }
     
-    .title {
-        font-size: 3rem;
-        letter-spacing: 15px;
+    /* Very compact game title */
+    .game-title-section {
+        gap: 10px;
+        padding: 15px 10px;
+    }
+
+    .title-column {
+        gap: 5px;
+    }
+
+    .title-emoji {
+        font-size: 2rem;
+    }
+
+    .title-text {
+        font-size: 1rem;
     }
     
-    .subtitle {
+    /* Compact score board */
+    .score-board {
+        gap: 10px;
+        padding: 12px;
+        flex-wrap: wrap;
+    }
+
+    .score-item {
+        min-width: auto;
+    }
+
+    .score-label {
+        font-size: 0.8rem;
+    }
+
+    .score-value {
+        font-size: 1.8rem;
+    }
+
+    /* Streak display adjustments */
+    .streak-display {
+        padding: 10px 15px;
+    }
+
+    .streak-emoji {
         font-size: 1.5rem;
     }
+
+    .streak-text {
+        font-size: 0.95rem;
+    }
+
+    /* Longest streaks container */
+    .longest-streaks-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .longest-streak-box {
+        padding: 12px;
+    }
+
+    .streak-label {
+        font-size: 0.85rem;
+    }
+
+    .streak-number {
+        font-size: 1.8rem;
+    }
+
+    /* Difficulty selector */
+    .difficulty-selector {
+        padding: 12px;
+    }
+
+    .difficulty-label {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .difficulty-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
     
+    .difficulty-btn {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+        width: 100%;
+    }
+
+    /* Choice buttons - single column on mobile */
     .choices {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -1475,40 +1613,229 @@ body.menu-open .modal {
     .choice-btn {
         flex-direction: row;
         justify-content: center;
-        padding: 20px;
+        padding: 18px;
+        gap: 15px;
     }
     
     .emoji {
         font-size: 2.5rem;
     }
-    
+
+    .choice-label {
+        font-size: 1.2rem;
+    }
+
+    /* Result area */
+    .result-message {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    /* Battle display */
+    .battle-display {
+        gap: 10px;
+    }
+
     .hand-circle {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
     }
     
     .winning-emoji {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
-    
-    .stats-btn {
-        font-size: 0.85rem;
+
+    /* Menu button */
+    .menu-toggle-btn {
+        font-size: 1.3rem;
+        padding: 10px 12px;
+        top: 10px;
+        left: 10px;
+    }
+
+    /* Menu sections */
+    .menu-section h4 {
+        font-size: 1rem;
+    }
+
+    .menu-button {
+        padding: 14px;
+        font-size: 1.1rem;
+    }
+
+    .menu-item label {
+        font-size: 0.9rem;
+    }
+
+    /* Stats panel adjustments */
+    .hand-stat-card {
         padding: 12px;
     }
-    
-    .auto-play-btn {
+
+    .hand-stat-icon {
+        font-size: 2rem;
+    }
+
+    .hand-stat-title {
+        font-size: 1rem;
+    }
+
+    .stat-label {
         font-size: 0.85rem;
+    }
+
+    .stat-value {
+        font-size: 0.95rem;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+
+    /* OpenAI sidebar */
+    .openai-sidebar {
+        width: 100%;
+        bottom: 0;
+        max-height: 70vh;
+    }
+
+    .openai-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .openai-content {
+        font-size: 0.9rem;
+    }
+
+    /* Winning hand display */
+    .winning-hand-container {
         padding: 12px;
     }
-    
-    .difficulty-buttons {
-        flex-direction: column;
+
+    .winning-hand-label {
+        font-size: 0.9rem;
+    }
+
+    /* Trend chart */
+    #trend-chart {
+        max-width: 100%;
+        height: auto !important;
+    }
+
+    /* Pattern sidebar */
+    .pattern-sidebar {
+        font-size: 0.9rem;
+    }
+
+    .pattern-header h3 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Very small phones (max-width: 360px) */
+@media (max-width: 360px) {
+    .container {
+        padding: 10px;
+    }
+
+    .game-title-section {
+        padding: 10px 5px;
         gap: 8px;
     }
-    
+
+    .title-emoji {
+        font-size: 1.5rem;
+    }
+
+    .title-text {
+        font-size: 0.85rem;
+    }
+
+    .score-board {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .score-label {
+        font-size: 0.7rem;
+    }
+
+    .score-value {
+        font-size: 1.5rem;
+    }
+
+    .choice-btn {
+        padding: 15px;
+    }
+
+    .emoji {
+        font-size: 2rem;
+    }
+
+    .choice-label {
+        font-size: 1rem;
+    }
+
     .difficulty-btn {
         font-size: 0.85rem;
+        padding: 8px 12px;
+    }
+
+    .menu-button {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+/* Landscape orientation optimizations */
+@media (max-height: 600px) and (orientation: landscape) {
+    .container {
         padding: 10px;
+    }
+
+    .game-title-section {
+        padding: 10px;
+    }
+
+    .score-board {
+        padding: 10px;
+    }
+
+    .streak-display {
+        padding: 8px 12px;
+    }
+
+    .longest-streaks-container {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .difficulty-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .choices {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .choice-btn {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .left-sidebar {
+        overflow-y: auto;
+        max-height: 100vh;
     }
 }
 
