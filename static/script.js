@@ -1037,6 +1037,19 @@ async function playGame(playerChoice, isAutoPlay = false) {
         if (trendChart && trendModal) {
             setTimeout(() => {
                 drawTrendChart(trendChart, trendData);
+                
+                // Update the stats below the chart
+                const totalGames = scores.player + scores.computer + scores.ties;
+                if (totalGamesStat) totalGamesStat.textContent = totalGames;
+                if (currentStreakStat) currentStreakStat.textContent = currentStreak >= 0 ? `+${currentStreak}` : currentStreak;
+                if (bestStreakStat) bestStreakStat.textContent = bestStreak >= 0 ? `+${bestStreak}` : bestStreak;
+                
+                // Update the title
+                const trendTitle = document.getElementById('trend-graph-title');
+                if (trendTitle) {
+                    const displayGames = Math.min(totalGames, 100);
+                    trendTitle.textContent = `📈 Data from last ${displayGames} games`;
+                }
             }, 50);
         }
         
@@ -1698,6 +1711,19 @@ if (trendChart && trendData && trendModal) {
     console.log('Drawing trend chart on page load...');
     setTimeout(() => {
         drawTrendChart(trendChart, trendData);
+        
+        // Initialize stats on page load
+        const totalGames = scores.player + scores.computer + scores.ties;
+        if (totalGamesStat) totalGamesStat.textContent = totalGames;
+        if (currentStreakStat) currentStreakStat.textContent = currentStreak >= 0 ? `+${currentStreak}` : currentStreak;
+        if (bestStreakStat) bestStreakStat.textContent = bestStreak >= 0 ? `+${bestStreak}` : bestStreak;
+        
+        // Update the title
+        const trendTitle = document.getElementById('trend-graph-title');
+        if (trendTitle) {
+            const displayGames = Math.min(totalGames, 100);
+            trendTitle.textContent = `📈 Data from last ${displayGames} games`;
+        }
     }, 200); // Small delay to ensure canvas is rendered
 }
 console.log('About to load dark mode...');
