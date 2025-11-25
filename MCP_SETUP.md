@@ -4,7 +4,11 @@ This guide shows how to add the Rock Paper Scissors game as an MCP server in Cla
 
 ## 📋 What is MCP?
 
-Model Context Protocol (MCP) allows Claude to interact directly with external applications. By setting up this game as an MCP server, Claude can play Rock Paper Scissors programmatically via the `/mcp/play` API endpoint.
+Model Context Protocol (MCP) is a standardized protocol that allows Claude to discover and use tools. This implementation provides two tools:
+- `play_rps` - Play a game of Rock Paper Scissors
+- `get_stats` - Get current game statistics
+
+The MCP server communicates via stdio (standard input/output) using JSON-RPC messages, allowing Claude to interact with the game programmatically.
 
 ## 🚀 Quick Setup
 
@@ -39,18 +43,8 @@ If the file is empty or has just `{}`, replace it with:
     "rock-paper-scissors": {
       "command": "python3",
       "args": [
-        "-m",
-        "flask",
-        "run",
-        "--host=0.0.0.0",
-        "--port=5000"
-      ],
-      "cwd": "/path/to/cursor-11242025",
-      "env": {
-        "FLASK_APP": "app.py",
-        "FLASK_ENV": "production",
-        "PYTHONPATH": "/path/to/cursor-11242025"
-      }
+        "/absolute/path/to/cursor-11242025/mcp_server.py"
+      ]
     }
   }
 }
@@ -67,18 +61,8 @@ If you already have other MCP servers configured, add the `rock-paper-scissors` 
     "rock-paper-scissors": {
       "command": "python3",
       "args": [
-        "-m",
-        "flask",
-        "run",
-        "--host=0.0.0.0",
-        "--port=5000"
-      ],
-      "cwd": "/path/to/cursor-11242025",
-      "env": {
-        "FLASK_APP": "app.py",
-        "FLASK_ENV": "production",
-        "PYTHONPATH": "/path/to/cursor-11242025"
-      }
+        "/absolute/path/to/cursor-11242025/mcp_server.py"
+      ]
     }
   }
 }
@@ -86,13 +70,21 @@ If you already have other MCP servers configured, add the `rock-paper-scissors` 
 
 ### Step 3: Update the Path
 
-⚠️ **Important**: Replace `/path/to/cursor-11242025` with the actual path to your project directory.
+⚠️ **Important**: Replace `/absolute/path/to/cursor-11242025/mcp_server.py` with the actual **absolute path** to the `mcp_server.py` file.
 
 To find your project path, run:
 ```bash
 cd /path/to/cursor-11242025
-pwd
+realpath mcp_server.py
 ```
+
+Or on macOS:
+```bash
+cd /path/to/cursor-11242025
+echo "$(pwd)/mcp_server.py"
+```
+
+Copy the output and paste it into the config file.
 
 ### Step 4: Restart Claude Desktop
 
@@ -100,50 +92,72 @@ Close and reopen Claude Desktop for the changes to take effect.
 
 ## 🎮 Using the MCP Server
 
-Once configured, Claude can interact with the game by making requests to `http://localhost:5000/mcp/play`.
+Once configured, Claude will automatically discover two tools:
 
-### Example Interaction
+### Available Tools
+
+1. **`play_rps`** - Play a game of Rock Paper Scissors
+   - Parameters:
+     - `choice` (required): "rock", "paper", or "scissors"
+     - `difficulty` (optional): "easy", "medium", or "hard" (default: "medium")
+
+2. **`get_stats`** - Get current game statistics
+   - No parameters required
+
+### Example Interactions
 
 You can ask Claude:
 ```
-"Play a game of rock paper scissors with me using the MCP server. 
-You choose rock, paper, or scissors, and I'll play against the hard AI."
+"Use the play_rps tool to play rock against the hard AI"
+```
+
+```
+"Play 5 games of rock paper scissors and tell me my win rate"
+```
+
+```
+"Get my current game statistics"
 ```
 
 Claude will:
-1. Start the Flask server automatically
-2. Make API calls to `/mcp/play`
-3. Track game history
-4. Provide analysis and strategy
+1. Automatically start the MCP server
+2. Use the `play_rps` tool to play games
+3. Use the `get_stats` tool to check statistics
+4. Track game history across the session
+5. Provide analysis and strategy
 
-### API Endpoint Details
+### Tool Response Format
 
-**Endpoint:** `POST http://localhost:5000/mcp/play`
-
-**Request Body:**
+**play_rps Response:**
 ```json
 {
-  "agent_id": "claude_agent",
-  "choice": "rock",
-  "opponent_difficulty": "hard",
-  "session_history": []
+  "player_choice": "rock",
+  "computer_choice": "paper",
+  "result": "computer",
+  "message": "You lose! Paper beats rock.",
+  "stats": {
+    "wins": 0,
+    "losses": 1,
+    "ties": 0
+  },
+  "total_games": 1
 }
 ```
 
-**Response:**
+**get_stats Response:**
 ```json
 {
-  "agent_choice": "rock",
-  "opponent_choice": "paper",
-  "result": "opponent_win",
-  "agent_id": "claude_agent",
-  "game_number": 1,
-  "session_stats": {
-    "agent_wins": 0,
-    "opponent_wins": 1,
-    "ties": 0
+  "stats": {
+    "wins": 5,
+    "losses": 3,
+    "ties": 2
   },
-  "message": "Agent chose rock, opponent chose paper. Result: opponent_win!"
+  "total_games": 10,
+  "win_rate": 50.0,
+  "recent_games": [
+    {"player": "rock", "computer": "scissors", "result": "player"},
+    {"player": "paper", "computer": "rock", "result": "player"}
+  ]
 }
 ```
 
@@ -151,147 +165,196 @@ Claude will:
 
 ### Using a Virtual Environment
 
-If you're using a virtual environment, update the config to use the venv's Python:
+If you're using a virtual environment, use the venv's Python executable:
 
 ```json
 {
   "mcpServers": {
     "rock-paper-scissors": {
-      "command": "/path/to/cursor-11242025/venv/bin/python3",
+      "command": "/absolute/path/to/cursor-11242025/venv/bin/python3",
       "args": [
-        "-m",
-        "flask",
-        "run",
-        "--host=0.0.0.0",
-        "--port=5000"
-      ],
-      "cwd": "/path/to/cursor-11242025",
-      "env": {
-        "FLASK_APP": "app.py",
-        "FLASK_ENV": "production"
-      }
+        "/absolute/path/to/cursor-11242025/mcp_server.py"
+      ]
     }
   }
 }
 ```
 
-### Using a Different Port
+### How MCP Protocol Works
 
-If port 5000 is already in use, change it in the args:
+The MCP server communicates via **stdio** (standard input/output):
 
+1. **Claude sends JSON-RPC requests** to the server's stdin
+2. **Server processes** the request and executes the tool
+3. **Server sends JSON-RPC responses** back via stdout
+4. **Claude receives** the results and displays them
+
+This is different from HTTP/REST APIs - no ports or network communication needed!
+
+### Protocol Messages
+
+**Initialize:**
 ```json
-"args": [
-  "-m",
-  "flask",
-  "run",
-  "--host=0.0.0.0",
-  "--port=5001"
-]
+{"jsonrpc": "2.0", "method": "initialize", "id": 1}
 ```
 
-Then update your API calls to use `http://localhost:5001/mcp/play`.
-
-### Adding OpenAI API Key
-
-If you want Claude to access the OpenAI commentary feature, add your API key to the env:
-
+**List Tools:**
 ```json
-"env": {
-  "FLASK_APP": "app.py",
-  "FLASK_ENV": "production",
-  "OPENAI_API_KEY": "sk-your-api-key-here",
-  "PYTHONPATH": "/path/to/cursor-11242025"
+{"jsonrpc": "2.0", "method": "tools/list", "id": 2}
+```
+
+**Call Tool:**
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "play_rps",
+    "arguments": {
+      "choice": "rock",
+      "difficulty": "hard"
+    }
+  },
+  "id": 3
 }
 ```
 
 ## 🧪 Testing the Setup
 
-### Method 1: Test with Python Script
+### Method 1: Manual Testing (Command Line)
 
-Run the included test script:
+Test the MCP server directly:
 
 ```bash
 cd /path/to/cursor-11242025
-python3 test_mcp.py medium 10
+python3 mcp_server.py
 ```
 
-This will play 10 games against the medium AI.
+Then type JSON-RPC requests (press Enter after each):
 
-### Method 2: Test with cURL
-
-```bash
-curl -X POST http://localhost:5000/mcp/play \
-  -H "Content-Type: application/json" \
-  -d '{
-    "agent_id": "test_agent",
-    "choice": "rock",
-    "opponent_difficulty": "easy"
-  }'
+```json
+{"jsonrpc": "2.0", "method": "initialize", "id": 1}
+{"jsonrpc": "2.0", "method": "tools/list", "id": 2}
+{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "play_rps", "arguments": {"choice": "rock", "difficulty": "easy"}}, "id": 3}
 ```
 
-### Method 3: Test in Claude Desktop
+Press Ctrl+D or Ctrl+C to exit.
+
+### Method 2: Test in Claude Desktop
 
 After restarting Claude Desktop, ask:
 ```
-"Can you access the rock-paper-scissors MCP server? 
-Play a game choosing paper against the medium difficulty."
+"What tools do you have available?"
+```
+
+Claude should list the `play_rps` and `get_stats` tools.
+
+Then ask:
+```
+"Use the play_rps tool to play rock against the medium difficulty"
+```
+
+### Method 3: Play Multiple Games
+
+```
+"Play 10 games of rock paper scissors, trying different strategies. 
+After each 5 games, use get_stats to check my performance."
 ```
 
 ## 🐛 Troubleshooting
 
-### Port Already in Use
+### MCP Server Not Showing in Claude
 
-If you see "Port 5000 is in use":
+**Check:**
+1. The path to `mcp_server.py` is absolute (starts with `/`)
+2. The config file has valid JSON syntax
+3. You've restarted Claude Desktop after changes
+4. Python 3 is installed: `python3 --version`
 
-1. **On macOS**: Disable AirPlay Receiver in System Preferences → General → AirDrop & Handoff
-2. **Or kill the process**:
-   ```bash
-   lsof -ti:5000 | xargs kill -9
-   ```
-3. **Or use a different port** (see Advanced Configuration above)
+**Test the server manually:**
+```bash
+python3 /absolute/path/to/mcp_server.py
+```
 
-### Server Won't Start
+If it runs without errors, type:
+```json
+{"jsonrpc": "2.0", "method": "initialize", "id": 1}
+```
 
-Check that:
-- Python 3 is installed: `python3 --version`
-- Dependencies are installed: `pip3 install -r requirements.txt`
-- The path in the config is correct
-- You have write permissions in the project directory
+You should see a response. Press Ctrl+C to exit.
 
-### Claude Can't Connect
+### Tools Not Showing
 
-Verify:
-- The server is running: `curl http://localhost:5000/`
-- The config file has correct JSON syntax
-- You've restarted Claude Desktop after changing the config
+In Claude Desktop, click the tools icon (🔧) in the bottom-right to see available tools. If you don't see `play_rps` and `get_stats`, check the Claude Desktop logs.
+
+**macOS Logs:**
+```bash
+tail -f ~/Library/Logs/Claude/mcp*.log
+```
+
+### Permission Denied
+
+Make sure the script is executable:
+```bash
+chmod +x /path/to/cursor-11242025/mcp_server.py
+```
+
+### Import Errors
+
+The MCP server uses only Python standard library, so no extra dependencies are needed. If you see import errors, ensure you're using Python 3.7+:
+```bash
+python3 --version
+```
 
 ## 📊 Game Statistics
 
-The MCP endpoint tracks:
+The MCP server maintains session state:
 - Total games played
-- Agent wins, losses, and ties
-- Session history for pattern analysis
-- AI difficulty performance
+- Wins, losses, and ties
+- Win rate percentage
+- Recent game history (last 5 games)
+
+Use the `get_stats` tool anytime to check your performance!
 
 ## 🎯 Difficulty Levels
 
 - **Easy**: Random play (~33% win rate for both sides)
 - **Medium**: Learns patterns, counters most common play (up to 78% win rate vs. predictable patterns)
 - **Hard**: Advanced pattern recognition (up to 63% win rate vs. predictable patterns)
-- **Very Hard**: Master-level psychology-based AI
 
 ## 📚 Additional Resources
 
 - See `README.md` for complete game documentation
 - See `STRATEGIES.md` for AI algorithm details
-- See `testing/README.md` for testing framework
-- See `OPENAI_SETUP.md` for AI commentary setup
+- See `TEST_RESULTS.md` for AI performance analysis
+- See `test_mcp.py` for HTTP API testing (different from MCP protocol)
+
+## 🔄 MCP vs HTTP API
+
+This project includes **two different ways** to interact programmatically:
+
+### MCP Protocol (for Claude Desktop)
+- **File**: `mcp_server.py`
+- **Protocol**: stdio, JSON-RPC
+- **Use**: Claude Desktop integration
+- **Tools**: `play_rps`, `get_stats`
+
+### HTTP REST API (for general use)
+- **File**: `app.py` (Flask server)
+- **Protocol**: HTTP/REST
+- **Endpoints**: `/api/play`, `/mcp/play`
+- **Use**: Web interface, API clients, testing
+
+Both work independently - use MCP for Claude Desktop, HTTP for everything else!
 
 ## 🎉 Have Fun!
 
-Now Claude can play Rock Paper Scissors programmatically! Try asking Claude to:
+Now Claude can play Rock Paper Scissors using the proper MCP protocol! Try asking Claude to:
 - Play multiple games and track statistics
 - Test different strategies
 - Analyze patterns in gameplay
 - Compare performance across difficulty levels
+- Use both tools together for comprehensive gameplay
+
+The MCP server maintains all game state within each session, so statistics persist across multiple tool calls!
 

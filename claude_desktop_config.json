@@ -3,18 +3,8 @@
     "rock-paper-scissors": {
       "command": "python3",
       "args": [
-        "-m",
-        "flask",
-        "run",
-        "--host=0.0.0.0",
-        "--port=5000"
-      ],
-      "cwd": "/path/to/cursor-11242025",
-      "env": {
-        "FLASK_APP": "app.py",
-        "FLASK_ENV": "production",
-        "PYTHONPATH": "/path/to/cursor-11242025"
-      }
+        "mcp_server.py"
+      ]
     }
   }
 }

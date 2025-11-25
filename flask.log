@@ -3780,3 +3780,17 @@
 127.0.0.1 - - [25/Nov/2025 01:46:14] "POST /api/play HTTP/1.1" 200 -
 127.0.0.1 - - [25/Nov/2025 01:46:15] "POST /api/play HTTP/1.1" 200 -
 127.0.0.1 - - [25/Nov/2025 01:46:16] "POST /api/play HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2025 01:52:01] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2025 01:52:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [25/Nov/2025 01:52:01] "[36mGET /static/openai.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [25/Nov/2025 01:52:01] "[36mGET /static/chart.min.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [25/Nov/2025 01:52:01] "[36mGET /static/wrapper.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [25/Nov/2025 01:52:01] "GET /static/script.js HTTP/1.1" 200 -
+ * Detected change in '/Users/alex.macdonald/cursor-11242025/test_mcp_protocol.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 104-306-504
+ * Detected change in '/Users/alex.macdonald/cursor-11242025/mcp_server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 104-306-504
