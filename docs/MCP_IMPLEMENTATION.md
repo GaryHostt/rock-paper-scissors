@@ -25,7 +25,7 @@
 ## 📁 Files Created/Updated
 
 ### New Files
-1. **`integrations/mcp_server.py`** - Actual MCP protocol server (327 lines)
+1. **`mcp_server.py`** - Actual MCP protocol server (327 lines)
    - Implements Model Context Protocol specification
    - Provides two tools: `play_rps` and `get_stats`
    - Communicates via stdio using JSON-RPC
@@ -38,10 +38,10 @@
    - Confirms error handling
 
 ### Updated Files
-1. **`integrations/claude_desktop_config.json`** - Simplified to proper MCP format
-   - Now points directly to `integrations/mcp_server.py`
+1. **`claude_desktop_config.json`** - Simplified to proper MCP format
+   - Now points directly to `mcp_server.py`
    - No Flask, no ports, no environment variables
-   - Just: `python3 integrations/mcp_server.py`
+   - Just: `python3 mcp_server.py`
 
 2. **`docs/MCP_SETUP.md`** - Complete rewrite
    - Explains actual MCP protocol
@@ -63,7 +63,7 @@
 
 1. **Claude Desktop starts the server**
    ```bash
-   python3 integrations/mcp_server.py
+   python3 mcp_server.py
    ```
 
 2. **Claude sends initialize request** (via stdin)
@@ -211,11 +211,11 @@ Get current game statistics
 ## 📚 Two Ways to Interact
 
 ### Option 1: MCP Protocol (Claude Desktop)
-- **File**: `integrations/mcp_server.py`
+- **File**: `mcp_server.py`
 - **Use**: Claude Desktop integration
 - **Protocol**: stdio, JSON-RPC
 - **Tools**: `play_rps`, `get_stats`
-- **Config**: `integrations/claude_desktop_config.json`
+- **Config**: `claude_desktop_config.json`
 
 ### Option 2: Web Interface (Browser)
 - **File**: `app.py` (Flask)
@@ -232,7 +232,7 @@ Both work independently!
 
 1. **Find your absolute path:**
    ```bash
-   cd /path/to/cursor-11242025/integrations
+   cd /path/to/cursor-11242025
    realpath mcp_server.py
    ```
 
@@ -242,7 +242,7 @@ Both work independently!
      "mcpServers": {
        "rock-paper-scissors": {
          "command": "python3",
-         "args": ["/absolute/path/to/integrations/mcp_server.py"]
+         "args": ["/absolute/path/to/mcp_server.py"]
        }
      }
    }

@@ -15,7 +15,7 @@ This guide explains how to deploy the Rock Paper Scissors game to Heroku.
 
 ## 📝 Required Files (Already Configured)
 
-The following files have been created for Heroku deployment (located in `deployment/` directory):
+The following files have been created for Heroku deployment:
 
 ### 1. **Procfile**
 Tells Heroku how to run your app:
@@ -63,7 +63,7 @@ heroku config:set OPENAI_API_KEY=your_openai_api_key_here
 
 ### Step 4: Commit Changes
 ```bash
-git add deployment/Procfile .python-version requirements.txt
+git add Procfile .python-version requirements.txt
 git commit -m "Add Heroku deployment configuration"
 ```
 
@@ -134,7 +134,7 @@ The original deployment failed because:
 ❌ **Problem 1**: No `Procfile`
 - Heroku didn't know how to start the app
 
-✅ **Solution**: Created `deployment/Procfile` with gunicorn command
+✅ **Solution**: Created `Procfile` with gunicorn command
 
 ❌ **Problem 2**: No Python version specified
 - Warning about relying on default version
@@ -256,7 +256,7 @@ git push heroku main
 
 ## ✅ Deployment Checklist
 
-- [x] Create `deployment/Procfile`
+- [x] Create `Procfile`
 - [x] Create `.python-version`
 - [x] Add `gunicorn` to requirements.txt
 - [x] Test locally with gunicorn: `gunicorn app:app`

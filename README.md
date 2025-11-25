@@ -540,6 +540,10 @@ Calculated separately for:
 ```
 cursor-11242025/
 ├── app.py                # Flask backend with AI logic
+├── mcp_server.py         # MCP server for Claude Desktop
+├── claude_desktop_config.json  # Claude Desktop configuration
+├── Procfile              # Heroku deployment
+├── HEROKU_DEPLOYMENT.md  # Heroku deployment guide
 ├── requirements.txt      # Python dependencies
 ├── README.md            # This file
 ├── RPS.png              # Screenshot
@@ -547,9 +551,6 @@ cursor-11242025/
 ├── .gitignore           # Git ignore rules
 ├── config/              # Configuration files
 │   └── env.example      # Environment variables template
-├── deployment/          # Deployment configuration
-│   ├── Procfile         # Heroku process file
-│   └── HEROKU_DEPLOYMENT.md  # Heroku deployment guide
 ├── docs/                # Documentation
 │   ├── BEST_PRACTICES.md     # Best practices and recommendations
 │   ├── OPENAI_SETUP.md       # OpenAI API setup guide
@@ -558,9 +559,6 @@ cursor-11242025/
 │   ├── MCP_IMPLEMENTATION.md # MCP protocol details
 │   ├── TEST_RESULTS.md       # AI performance testing results
 │   └── [other docs...]
-├── integrations/        # External tool integrations
-│   ├── mcp_server.py           # MCP protocol server for Claude Desktop
-│   └── claude_desktop_config.json  # Claude Desktop configuration
 ├── scripts/             # Utility scripts
 │   ├── start_server.sh  # Server startup script
 │   └── validate.sh      # Validation script
