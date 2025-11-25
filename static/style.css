@@ -1398,9 +1398,11 @@ body.menu-open .modal {
 
 #trend-chart {
     width: 100%;
-    height: auto;
+    min-height: 300px;
+    height: 300px;
     border-radius: 10px;
     margin-bottom: 20px;
+    display: block;
 }
 
 .trend-stats {
@@ -1931,8 +1933,10 @@ body.menu-open .modal {
     /* Make trend chart responsive */
     #trend-chart {
         width: 100% !important;
-        height: auto !important;
+        min-height: 250px !important;
+        height: 250px !important;
         max-width: 100% !important;
+        display: block !important;
     }
     
     .modal-body {

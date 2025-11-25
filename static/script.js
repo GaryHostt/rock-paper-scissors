@@ -1033,6 +1033,13 @@ async function playGame(playerChoice, isAutoPlay = false) {
         }
         saveTrend();
         
+        // MOBILE FIX: Redraw chart if visible (always visible on mobile)
+        if (trendChart && trendModal) {
+            setTimeout(() => {
+                drawTrendChart(trendChart, trendData);
+            }, 50);
+        }
+        
         // Detect patterns
         detectPatterns();
         generateStrategies();
@@ -1686,6 +1693,13 @@ console.log('About to load streaks...');
 loadStreaks();
 console.log('About to load trend...');
 loadTrend();
+// MOBILE FIX: Draw chart immediately if modal is visible (always visible on mobile)
+if (trendChart && trendData && trendModal) {
+    console.log('Drawing trend chart on page load...');
+    setTimeout(() => {
+        drawTrendChart(trendChart, trendData);
+    }, 200); // Small delay to ensure canvas is rendered
+}
 console.log('About to load dark mode...');
 loadDarkMode();
 console.log('About to load theme...');
