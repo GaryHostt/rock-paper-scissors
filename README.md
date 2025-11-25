@@ -4,6 +4,71 @@ A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advan
 
 ![Rock Paper Scissors Game Screenshot](RPS.png)
 
+---
+
+## 🚀 Quick Start
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/GaryHostt/rock-paper-scissors.git
+   ```
+
+2. **Navigate to the project directory:**
+   ```bash
+   cd rock-paper-scissors
+   ```
+
+3. **Create a virtual environment (recommended):**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+4. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Playing the Game
+
+1. **Start the Flask server:**
+   ```bash
+   python app.py
+   ```
+
+2. **Open your browser to:**
+   ```
+   http://localhost:5000
+   ```
+
+3. **Start playing!**
+   - Choose your difficulty level (Easy, Medium, Hard, Very Hard)
+   - Click Rock ✊, Paper ✋, or Scissors ✌️
+   - Try to beat the AI!
+
+### How to Play
+
+- **Choose Difficulty**: Select from 4 AI difficulty levels
+  - 😊 **Easy**: Random play (fair opponent)
+  - 🤔 **Medium**: Learns your patterns (80% win rate vs predictable play)
+  - 😈 **Hard**: Advanced psychology (62% win rate vs patterns)
+  - 👹 **Very Hard**: Master AI (90% win rate vs predictable play!)
+
+- **Manage Stats**: Track your performance
+  - View win rates per hand
+  - See trend graphs of last 50 games
+  - Analyze patterns with AI
+
+- **Explore Features**: 
+  - Try dark mode 🌙
+  - Enable auto-play to watch AIs battle
+  - Get OpenAI commentary on your gameplay
+  - View detailed statistics
+
+---
+
 ## 🎯 Version History
 
 ### Version 2.1 - Streak Visualization & AI Evaluation (Nov 2025)
