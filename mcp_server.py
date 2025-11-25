@@ -28,7 +28,7 @@ class MCPServer:
                         },
                         "difficulty": {
                             "type": "string",
-                            "enum": ["easy", "medium", "hard", "veryhard"],
+                            "enum": ["easy", "medium", "hard", "veryhard", "ultrahard"],
                             "default": "medium",
                             "description": "AI difficulty level"
                         }
@@ -238,6 +238,177 @@ class MCPServer:
         # Final Fallback: Use hard AI logic
         return self.ai_hard()
     
+    def ai_ultra_hard(self):
+        """
+        Ultra Hard AI: Expert-level play using advanced machine learning techniques.
+        Combines Markov chains, opponent modeling, and counter-counter prediction.
+        """
+        if len(self.game_history) < 5:
+            if len(self.game_history) < 2:
+                return 'paper'
+            return self.ai_very_hard()
+        
+        predictions = []
+        last_game = self.game_history[-1]
+        player_choices = [game['player'] for game in self.game_history]
+        
+        # Markov Chain Prediction
+        if len(self.game_history) >= 10:
+            transitions = {}
+            for i in range(len(self.game_history) - 1):
+                current = self.game_history[i]['player']
+                next_move = self.game_history[i + 1]['player']
+                if current not in transitions:
+                    transitions[current] = []
+                transitions[current].append(next_move)
+            
+            if last_game['player'] in transitions:
+                transition_counts = Counter(transitions[last_game['player']])
+                total = len(transitions[last_game['player']])
+                most_likely, count = transition_counts.most_common(1)[0]
+                probability = count / total
+                
+                if probability >= 0.5:
+                    confidence = 0.85 + (probability - 0.5) * 0.2
+                    predictions.append((self.get_counter_move(most_likely), confidence, 'markov'))
+                elif probability >= 0.4:
+                    confidence = 0.70 + (probability - 0.4) * 0.15
+                    predictions.append((self.get_counter_move(most_likely), confidence, 'markov'))
+        
+        # Opponent Modeling
+        if len(self.game_history) >= 15:
+            choice_counts = Counter(player_choices[-20:])
+            total_recent = len(player_choices[-20:])
+            
+            if len(choice_counts) == 1:
+                randomness_score = 0.0
+            elif len(choice_counts) == 2:
+                counts = sorted(choice_counts.values(), reverse=True)
+                randomness_score = counts[1] / counts[0]
+            else:
+                expected = total_recent / 3
+                variance = sum((count - expected) ** 2 for count in choice_counts.values()) / 3
+                max_variance = (total_recent ** 2) / 3
+                randomness_score = 1.0 - (variance / max_variance) if max_variance > 0 else 0.5
+            
+            if randomness_score < 0.3:
+                most_common = Counter(player_choices[-15:]).most_common(1)[0][0]
+                predictions.append((self.get_counter_move(most_common), 0.92, 'exploit_predictable'))
+            elif randomness_score > 0.7:
+                predictions.append((random.choice(['rock', 'paper', 'scissors']), 0.40, 'nash_equilibrium'))
+        
+        # Counter-Counter Prediction
+        if len(self.game_history) >= 12:
+            recent_choices = player_choices[-12:]
+            choice_counts = Counter(recent_choices)
+            most_common_move, _ = choice_counts.most_common(1)[0]
+            ai_would_counter = self.get_counter_move(most_common_move)
+            counter_ai_counter = self.get_counter_move(ai_would_counter)
+            counter_counter_count = recent_choices.count(counter_ai_counter)
+            counter_counter_freq = counter_counter_count / len(recent_choices)
+            
+            if counter_counter_freq >= 0.4:
+                predictions.append((self.get_counter_move(counter_ai_counter), 0.78, 'level_3_reasoning'))
+            
+            last_6 = recent_choices[-6:]
+            if len(set(last_6)) == 3 and max(Counter(last_6).values()) == 2:
+                predictions.append((random.choice(['rock', 'paper', 'scissors']), 0.45, 'counter_sophistication'))
+        
+        # Enhanced Pattern Detection
+        if len(self.game_history) >= 8:
+            recent_choices = player_choices[-15:]
+            choice_counts = Counter(recent_choices)
+            most_common_move, count = choice_counts.most_common(1)[0]
+            frequency = count / len(recent_choices)
+            
+            if frequency >= 0.60:
+                predictions.append((self.get_counter_move(most_common_move), 0.94, 'strong_frequency'))
+            elif frequency >= 0.50:
+                predictions.append((self.get_counter_move(most_common_move), 0.84, 'moderate_frequency'))
+            elif frequency >= 0.42:
+                predictions.append((self.get_counter_move(most_common_move), 0.72, 'weak_frequency'))
+        
+        # Win-Stay Detection
+        if last_game['result'] == 'player' and len(self.game_history) >= 6:
+            win_stay_count = 0
+            win_opportunities = 0
+            for i in range(max(0, len(self.game_history) - 12), len(self.game_history) - 1):
+                if self.game_history[i]['result'] == 'player':
+                    win_opportunities += 1
+                    if i + 1 < len(self.game_history) and self.game_history[i]['player'] == self.game_history[i + 1]['player']:
+                        win_stay_count += 1
+            
+            if win_opportunities > 0:
+                win_stay_rate = win_stay_count / win_opportunities
+                if win_stay_rate >= 0.5:
+                    confidence = 0.70 + (win_stay_rate - 0.5) * 0.3
+                    predictions.append((self.get_counter_move(last_game['player']), confidence, 'win_stay'))
+        
+        # Lose-Shift Detection
+        if last_game['result'] == 'computer' and len(self.game_history) >= 6:
+            lose_shift_count = 0
+            lose_opportunities = 0
+            for i in range(max(0, len(self.game_history) - 12), len(self.game_history) - 1):
+                if self.game_history[i]['result'] == 'computer':
+                    lose_opportunities += 1
+                    if i + 1 < len(self.game_history) and self.game_history[i]['player'] != self.game_history[i + 1]['player']:
+                        lose_shift_count += 1
+            
+            if lose_opportunities > 0:
+                lose_shift_rate = lose_shift_count / lose_opportunities
+                if lose_shift_rate >= 0.55:
+                    sequence_shift = {'rock': 'paper', 'paper': 'scissors', 'scissors': 'rock'}
+                    predicted_next = sequence_shift[last_game['player']]
+                    confidence = 0.68 + (lose_shift_rate - 0.55) * 0.25
+                    predictions.append((self.get_counter_move(predicted_next), confidence, 'lose_shift'))
+        
+        # Cycle Detection
+        if len(self.game_history) >= 6:
+            recent = player_choices[-9:]
+            if len(recent) >= 6:
+                if recent[-6:-3] == recent[-3:]:
+                    next_in_cycle = recent[-2]
+                    predictions.append((self.get_counter_move(next_in_cycle), 0.87, 'cycle_3'))
+            if len(recent) >= 4:
+                if recent[-4] == recent[-2] and recent[-3] == recent[-1]:
+                    next_in_pattern = recent[-2]
+                    predictions.append((self.get_counter_move(next_in_pattern), 0.80, 'cycle_2'))
+        
+        # Anti-Triple Pattern
+        if len(self.game_history) >= 2:
+            if self.game_history[-2]['player'] == self.game_history[-1]['player']:
+                repeated_move = self.game_history[-1]['player']
+                likely_next = self.get_counter_move(repeated_move)
+                predictions.append((self.get_counter_move(likely_next), 0.74, 'anti_triple'))
+        
+        # Ensemble Voting
+        if predictions:
+            move_votes = {}
+            for move, confidence, source in predictions:
+                if move not in move_votes:
+                    move_votes[move] = []
+                move_votes[move].append((confidence, source))
+            
+            move_scores = {}
+            for move, votes in move_votes.items():
+                total_confidence = sum(conf for conf, _ in votes)
+                vote_count_bonus = len(votes) * 0.15
+                move_scores[move] = total_confidence + vote_count_bonus
+            
+            best_move = max(move_scores, key=move_scores.get)
+            best_score = move_scores[best_move]
+            
+            if best_score >= 1.5 and random.random() < 0.96:
+                return best_move
+            elif best_score >= 1.0 and random.random() < 0.88:
+                return best_move
+            elif best_score >= 0.7 and random.random() < 0.75:
+                return best_move
+            elif best_score >= 0.5 and random.random() < 0.60:
+                return best_move
+        
+        return self.ai_very_hard()
+    
     def play_game(self, choice: str, difficulty: str = "medium"):
         """Play a game and return the result."""
         choice = choice.lower()
@@ -253,6 +424,8 @@ class MCPServer:
             computer_choice = self.ai_hard()
         elif difficulty == 'veryhard':
             computer_choice = self.ai_very_hard()
+        elif difficulty == 'ultrahard':
+            computer_choice = self.ai_ultra_hard()
         else:  # medium is default
             computer_choice = self.ai_medium()
         
