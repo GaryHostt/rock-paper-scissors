@@ -1048,6 +1048,14 @@ body.menu-open .container {
 
 /* Statistics Panel */
 /* Stats Panel - Right Side, Flush to Game Box */
+
+/* Bottom Panels Container - For mobile layout */
+.bottom-panels {
+    position: relative;
+    width: 100%;
+    display: block;
+}
+
 .stats-panel {
     position: fixed;
     left: calc(50% + 700px);
@@ -1809,6 +1817,10 @@ body.menu-open .modal {
         transform: none !important;
         margin-bottom: 15px;
         display: none; /* Hidden by default */
+        background: linear-gradient(135deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%) !important;
+        padding: 20px !important;
+        border-radius: 15px !important;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
     }
 
     .stats-panel.open {
@@ -1865,7 +1877,7 @@ body.menu-open .modal {
         padding: 0 !important;
         background: transparent !important;
         z-index: 1 !important;
-        display: none !important;
+        display: none !important; /* Hidden by default */
         /* Override all fixed positioning */
         left: auto !important;
         right: auto !important;
@@ -1885,12 +1897,13 @@ body.menu-open .modal {
         width: 100% !important;
         max-width: 100% !important;
         max-height: none !important;
-        padding: 12px !important;
+        padding: 15px !important;
         margin: 0 !important;
         transform: none !important;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
         background: linear-gradient(135deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%) !important;
         border-radius: 15px !important;
+        display: block !important; /* Ensure content is visible */
     }
 
     .modal-header {
@@ -1951,7 +1964,7 @@ body.menu-open .modal {
         border-radius: 15px !important;
         transform: none !important;
         margin-bottom: 15px;
-        display: none;
+        display: none; /* Hidden by default */
         overflow: visible !important;
         padding: 20px !important;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
