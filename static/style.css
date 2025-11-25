@@ -1516,18 +1516,21 @@ body.menu-open .modal {
 
 /* Mobile phones (max-width: 480px) */
 @media (max-width: 480px) {
-    /* CRITICAL: Allow scrolling on mobile */
+    /* CRITICAL: Allow scrolling on mobile - completely override desktop layout */
     html {
         height: 100%;
-        overflow: auto;
+        overflow: visible;
     }
     
     body {
-        align-items: flex-start !important;
+        display: block !important;           ← Force block layout, NOT flex
+        align-items: unset !important;
+        justify-content: unset !important;
         min-height: 100%;
         height: auto !important;
-        overflow-y: auto !important;
+        overflow-y: visible !important;
         overflow-x: hidden;
+        padding: 10px !important;
         /* iOS Safari fix for 100vh issue */
         -webkit-overflow-scrolling: touch;
     }

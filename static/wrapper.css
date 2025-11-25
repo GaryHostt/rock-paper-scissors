@@ -8,11 +8,15 @@
     margin: 0 auto;
 }
 
-/* Mobile: Allow wrapper to grow with content */
+/* Mobile: Allow wrapper to grow with content and remove centering */
 @media (max-width: 480px) {
     .main-game-wrapper {
         min-height: auto;
         height: auto;
+        display: block !important;  /* Remove flex layout */
+        align-items: unset;
+        margin: 0;
+        padding: 0;
     }
 }
 
