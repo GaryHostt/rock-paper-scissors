@@ -1866,6 +1866,14 @@ body.menu-open .modal {
         background: transparent !important;
         z-index: 1 !important;
         display: none !important;
+        /* Override all fixed positioning */
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        max-height: none !important;
+        width: 100% !important;
     }
 
     .modal.open {
@@ -1880,6 +1888,9 @@ body.menu-open .modal {
         padding: 12px !important;
         margin: 0 !important;
         transform: none !important;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
+        background: linear-gradient(135deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%) !important;
+        border-radius: 15px !important;
     }
 
     .modal-header {
@@ -1941,12 +1952,22 @@ body.menu-open .modal {
         transform: none !important;
         margin-bottom: 15px;
         display: none;
+        overflow: visible !important;
+        padding: 20px !important;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
+        background: linear-gradient(135deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%) !important;
     }
 
     .openai-sidebar.open {
         display: block !important;
         position: relative !important;
         bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        transform: none !important;
+        max-height: none !important;
+        overflow: visible !important;
     }
 
     .openai-header {
