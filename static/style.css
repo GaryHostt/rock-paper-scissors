@@ -1516,6 +1516,22 @@ body.menu-open .modal {
 
 /* Mobile phones (max-width: 480px) */
 @media (max-width: 480px) {
+    /* CRITICAL: Allow scrolling on mobile */
+    html {
+        height: 100%;
+        overflow: auto;
+    }
+    
+    body {
+        align-items: flex-start !important;
+        min-height: 100%;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        /* iOS Safari fix for 100vh issue */
+        -webkit-overflow-scrolling: touch;
+    }
+    
     /* CRITICAL: Make panels appear BELOW game box, not as overlays */
     
     /* Main container adjustments - MUCH smaller */
@@ -1524,6 +1540,9 @@ body.menu-open .modal {
         max-width: 100%;
         border-radius: 12px;
         margin-bottom: 15px;
+        margin-left: 0 !important;
+        height: auto !important;
+        min-height: auto !important;
     }
 
     /* GAME ELEMENTS - All smaller */

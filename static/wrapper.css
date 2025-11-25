@@ -8,3 +8,11 @@
     margin: 0 auto;
 }
 
+/* Mobile: Allow wrapper to grow with content */
+@media (max-width: 480px) {
+    .main-game-wrapper {
+        min-height: auto;
+        height: auto;
+    }
+}
+
