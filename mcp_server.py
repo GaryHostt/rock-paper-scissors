@@ -223,8 +223,9 @@ class MCPServer:
     
     def ai_very_hard(self):
         """
-        Very Hard AI: Ultimate expert-level play with cutting-edge techniques.
-        (Formerly Ultra Hard + Advanced features)
+        Very Hard AI: Expert-level play with cutting-edge techniques.
+        
+        Implements advanced pattern recognition and strategic play.
         """
         if len(self.game_history) < 5:
             if len(self.game_history) < 2:

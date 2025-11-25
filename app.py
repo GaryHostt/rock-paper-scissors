@@ -219,7 +219,6 @@ def ai_hard(history):
 def ai_very_hard(history):
     """
     Very Hard AI: Expert-level play using advanced machine learning techniques.
-    (Formerly Ultra Hard - proven effective implementation)
     
     Core capabilities:
     - 2nd-order Markov chain for transition probability prediction

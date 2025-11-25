@@ -17,7 +17,7 @@ This document outlines best practices for maintaining and improving the Rock Pap
 ### ✅ Git Hygiene
 - **Removed tracked artifacts**: `__pycache__/` and `flask.log` now properly ignored
 - **Proper `.gitignore`**: Comprehensive coverage of Python, IDE, and runtime artifacts
-- **Clean history**: Deleted obsolete test files (`test_ultra_hard.py`, `test_veryhard_revert.py`)
+- **Clean history**: Deleted obsolete test files
 
 ### ✅ Documentation Accuracy
 - **README updated**: Removed outdated `/mcp/play` REST endpoint documentation
