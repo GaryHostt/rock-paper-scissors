@@ -1,0 +1,185 @@
+{
+  "timestamp": "20251125_102036",
+  "results": {
+    "easy_random": {
+      "wins": 336,
+      "losses": 331,
+      "ties": 333,
+      "win_rate": 33.6,
+      "loss_rate": 33.1,
+      "tie_rate": 33.300000000000004,
+      "total_games": 1000
+    },
+    "easy_always_rock": {
+      "wins": 314,
+      "losses": 344,
+      "ties": 342,
+      "win_rate": 31.4,
+      "loss_rate": 34.4,
+      "tie_rate": 34.2,
+      "total_games": 1000
+    },
+    "easy_cycle": {
+      "wins": 321,
+      "losses": 339,
+      "ties": 340,
+      "win_rate": 32.1,
+      "loss_rate": 33.900000000000006,
+      "tie_rate": 34.0,
+      "total_games": 1000
+    },
+    "easy_win_stay_lose_shift": {
+      "wins": 350,
+      "losses": 325,
+      "ties": 325,
+      "win_rate": 35.0,
+      "loss_rate": 32.5,
+      "tie_rate": 32.5,
+      "total_games": 1000
+    },
+    "easy_anti_ai": {
+      "wins": 314,
+      "losses": 351,
+      "ties": 335,
+      "win_rate": 31.4,
+      "loss_rate": 35.099999999999994,
+      "tie_rate": 33.5,
+      "total_games": 1000
+    },
+    "medium_random": {
+      "wins": 319,
+      "losses": 341,
+      "ties": 340,
+      "win_rate": 31.900000000000002,
+      "loss_rate": 34.1,
+      "tie_rate": 34.0,
+      "total_games": 1000
+    },
+    "medium_always_rock": {
+      "wins": 102,
+      "losses": 803,
+      "ties": 95,
+      "win_rate": 10.2,
+      "loss_rate": 80.30000000000001,
+      "tie_rate": 9.5,
+      "total_games": 1000
+    },
+    "medium_cycle": {
+      "wins": 320,
+      "losses": 350,
+      "ties": 330,
+      "win_rate": 32.0,
+      "loss_rate": 35.0,
+      "tie_rate": 33.0,
+      "total_games": 1000
+    },
+    "medium_win_stay_lose_shift": {
+      "wins": 405,
+      "losses": 258,
+      "ties": 337,
+      "win_rate": 40.5,
+      "loss_rate": 25.8,
+      "tie_rate": 33.7,
+      "total_games": 1000
+    },
+    "medium_anti_ai": {
+      "wins": 572,
+      "losses": 315,
+      "ties": 113,
+      "win_rate": 57.199999999999996,
+      "loss_rate": 31.5,
+      "tie_rate": 11.3,
+      "total_games": 1000
+    },
+    "hard_random": {
+      "wins": 340,
+      "losses": 372,
+      "ties": 288,
+      "win_rate": 34.0,
+      "loss_rate": 37.2,
+      "tie_rate": 28.799999999999997,
+      "total_games": 1000
+    },
+    "hard_always_rock": {
+      "wins": 2,
+      "losses": 624,
+      "ties": 374,
+      "win_rate": 0.2,
+      "loss_rate": 62.4,
+      "tie_rate": 37.4,
+      "total_games": 1000
+    },
+    "hard_cycle": {
+      "wins": 559,
+      "losses": 45,
+      "ties": 396,
+      "win_rate": 55.900000000000006,
+      "loss_rate": 4.5,
+      "tie_rate": 39.6,
+      "total_games": 1000
+    },
+    "hard_win_stay_lose_shift": {
+      "wins": 459,
+      "losses": 363,
+      "ties": 178,
+      "win_rate": 45.9,
+      "loss_rate": 36.3,
+      "tie_rate": 17.8,
+      "total_games": 1000
+    },
+    "hard_anti_ai": {
+      "wins": 242,
+      "losses": 486,
+      "ties": 272,
+      "win_rate": 24.2,
+      "loss_rate": 48.6,
+      "tie_rate": 27.200000000000003,
+      "total_games": 1000
+    },
+    "veryhard_random": {
+      "wins": 343,
+      "losses": 318,
+      "ties": 339,
+      "win_rate": 34.300000000000004,
+      "loss_rate": 31.8,
+      "tie_rate": 33.900000000000006,
+      "total_games": 1000
+    },
+    "veryhard_always_rock": {
+      "wins": 86,
+      "losses": 904,
+      "ties": 10,
+      "win_rate": 8.6,
+      "loss_rate": 90.4,
+      "tie_rate": 1.0,
+      "total_games": 1000
+    },
+    "veryhard_cycle": {
+      "wins": 70,
+      "losses": 808,
+      "ties": 122,
+      "win_rate": 7.000000000000001,
+      "loss_rate": 80.80000000000001,
+      "tie_rate": 12.2,
+      "total_games": 1000
+    },
+    "veryhard_win_stay_lose_shift": {
+      "wins": 184,
+      "losses": 701,
+      "ties": 115,
+      "win_rate": 18.4,
+      "loss_rate": 70.1,
+      "tie_rate": 11.5,
+      "total_games": 1000
+    },
+    "veryhard_anti_ai": {
+      "wins": 524,
+      "losses": 464,
+      "ties": 12,
+      "win_rate": 52.400000000000006,
+      "loss_rate": 46.400000000000006,
+      "tie_rate": 1.2,
+      "total_games": 1000
+    }
+  }
+}

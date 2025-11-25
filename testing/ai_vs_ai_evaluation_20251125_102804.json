@@ -1,0 +1,137 @@
+{
+  "timestamp": "20251125_102804",
+  "results": {
+    "easy_vs_medium": {
+      "player1": "easy",
+      "player2": "medium",
+      "player1_wins": 306,
+      "player2_wins": 348,
+      "ties": 346,
+      "player1_win_rate": 30.599999999999998,
+      "player2_win_rate": 34.8,
+      "tie_rate": 34.599999999999994,
+      "total_games": 1000
+    },
+    "easy_vs_hard": {
+      "player1": "easy",
+      "player2": "hard",
+      "player1_wins": 326,
+      "player2_wins": 329,
+      "ties": 345,
+      "player1_win_rate": 32.6,
+      "player2_win_rate": 32.9,
+      "tie_rate": 34.5,
+      "total_games": 1000
+    },
+    "easy_vs_veryhard": {
+      "player1": "easy",
+      "player2": "veryhard",
+      "player1_wins": 320,
+      "player2_wins": 325,
+      "ties": 355,
+      "player1_win_rate": 32.0,
+      "player2_win_rate": 32.5,
+      "tie_rate": 35.5,
+      "total_games": 1000
+    },
+    "medium_vs_easy": {
+      "player1": "medium",
+      "player2": "easy",
+      "player1_wins": 338,
+      "player2_wins": 329,
+      "ties": 333,
+      "player1_win_rate": 33.800000000000004,
+      "player2_win_rate": 32.9,
+      "tie_rate": 33.300000000000004,
+      "total_games": 1000
+    },
+    "medium_vs_hard": {
+      "player1": "medium",
+      "player2": "hard",
+      "player1_wins": 415,
+      "player2_wins": 354,
+      "ties": 231,
+      "player1_win_rate": 41.5,
+      "player2_win_rate": 35.4,
+      "tie_rate": 23.1,
+      "total_games": 1000
+    },
+    "medium_vs_veryhard": {
+      "player1": "medium",
+      "player2": "veryhard",
+      "player1_wins": 324,
+      "player2_wins": 372,
+      "ties": 304,
+      "player1_win_rate": 32.4,
+      "player2_win_rate": 37.2,
+      "tie_rate": 30.4,
+      "total_games": 1000
+    },
+    "hard_vs_easy": {
+      "player1": "hard",
+      "player2": "easy",
+      "player1_wins": 350,
+      "player2_wins": 327,
+      "ties": 323,
+      "player1_win_rate": 35.0,
+      "player2_win_rate": 32.7,
+      "tie_rate": 32.300000000000004,
+      "total_games": 1000
+    },
+    "hard_vs_medium": {
+      "player1": "hard",
+      "player2": "medium",
+      "player1_wins": 433,
+      "player2_wins": 315,
+      "ties": 252,
+      "player1_win_rate": 43.3,
+      "player2_win_rate": 31.5,
+      "tie_rate": 25.2,
+      "total_games": 1000
+    },
+    "hard_vs_veryhard": {
+      "player1": "hard",
+      "player2": "veryhard",
+      "player1_wins": 302,
+      "player2_wins": 361,
+      "ties": 337,
+      "player1_win_rate": 30.2,
+      "player2_win_rate": 36.1,
+      "tie_rate": 33.7,
+      "total_games": 1000
+    },
+    "veryhard_vs_easy": {
+      "player1": "veryhard",
+      "player2": "easy",
+      "player1_wins": 334,
+      "player2_wins": 353,
+      "ties": 313,
+      "player1_win_rate": 33.4,
+      "player2_win_rate": 35.3,
+      "tie_rate": 31.3,
+      "total_games": 1000
+    },
+    "veryhard_vs_medium": {
+      "player1": "veryhard",
+      "player2": "medium",
+      "player1_wins": 346,
+      "player2_wins": 334,
+      "ties": 320,
+      "player1_win_rate": 34.599999999999994,
+      "player2_win_rate": 33.4,
+      "tie_rate": 32.0,
+      "total_games": 1000
+    },
+    "veryhard_vs_hard": {
+      "player1": "veryhard",
+      "player2": "hard",
+      "player1_wins": 346,
+      "player2_wins": 288,
+      "ties": 366,
+      "player1_win_rate": 34.599999999999994,
+      "player2_win_rate": 28.799999999999997,
+      "tie_rate": 36.6,
+      "total_games": 1000
+    }
+  }
+}
