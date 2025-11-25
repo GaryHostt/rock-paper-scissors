@@ -150,30 +150,10 @@
                     <p class="strategy-placeholder">Strategies will appear here...</p>
                 </div>
             </div>
-            <div class="pattern-section">
-                <h4>📈 Win Rates</h4>
-                <div id="win-rates" class="win-rates">
-                    <div class="win-rate-item">
-                        <span>Overall:</span>
-                        <span id="overall-win-rate" class="win-rate-value">--%</span>
-                    </div>
-                    <div class="win-rate-item">
-                        <span>✊ Rock:</span>
-                        <span id="rock-win-rate" class="win-rate-value">--%</span>
-                    </div>
-                    <div class="win-rate-item">
-                        <span>✋ Paper:</span>
-                        <span id="paper-win-rate" class="win-rate-value">--%</span>
-                    </div>
-                    <div class="win-rate-item">
-                        <span>✌️ Scissors:</span>
-                        <span id="scissors-win-rate" class="win-rate-value">--%</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
+    <!-- Main Game Container -->
     <div class="container">
         <button class="menu-toggle-btn" id="menu-toggle-btn">☰</button>
         
@@ -192,6 +172,24 @@
             <div class="score-item">
                 <div class="score-label" data-i18n="game.computer">Computer</div>
                 <div class="score-value" id="computer-score">0</div>
+            </div>
+        </div>
+
+        <div class="streak-display" id="streak-display">
+            <div class="streak-content">
+                <span class="streak-emoji" id="streak-emoji">🔥</span>
+                <span class="streak-text" id="streak-text" data-i18n="streak.noStreak">No Streak</span>
+            </div>
+        </div>
+
+        <div class="longest-streaks-container">
+            <div class="longest-streak-box winning">
+                <div class="streak-label" data-i18n="streak.longestWinning">Longest Winning Streak</div>
+                <div class="streak-number" id="longest-winning-streak">0</div>
+            </div>
+            <div class="longest-streak-box losing">
+                <div class="streak-label" data-i18n="streak.longestLosing">Longest Losing Streak</div>
+                <div class="streak-number" id="longest-losing-streak">0</div>
             </div>
         </div>
 
@@ -245,105 +243,142 @@
         </div>
     </div>
 
-    <!-- Trend Graph Modal -->
-    <div class="modal" id="trend-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>📈 Performance Trends</h3>
-                <button class="close-modal-btn" id="close-trend-modal">✕</button>
-            </div>
-            <div class="modal-body">
-                <canvas id="trend-chart" width="600" height="300"></canvas>
-                <div class="trend-stats">
-                    <div class="trend-stat">
-                        <span class="trend-label">Total Games:</span>
-                        <span id="total-games-stat" class="trend-value">0</span>
-                    </div>
-                    <div class="trend-stat">
-                        <span class="trend-label">Current Streak:</span>
-                        <span id="current-streak-stat" class="trend-value">0</span>
-                    </div>
-                    <div class="trend-stat">
-                        <span class="trend-label">Best Streak:</span>
-                        <span id="best-streak-stat" class="trend-value">0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="stats-panel" id="stats-panel">
-        <div class="stats-panel-header">
-            <h3>📊 Hand Statistics</h3>
-            <button class="close-stats-btn" id="close-stats-btn">✕</button>
-        </div>
-        <div class="stats-panel-content">
+    <!-- Bottom Panels Container -->
+    <div class="bottom-panels">
+        <!-- Statistics Panel -->
+        <div class="stats-panel" id="stats-panel">
             <div class="hand-stats">
                 <div class="hand-stat-card">
                     <div class="hand-stat-icon">✊</div>
-                    <div class="hand-stat-title">Rock</div>
+                    <div class="hand-stat-title" data-i18n="hand.rock">Rock</div>
                     <div class="hand-stat-details">
                         <div class="stat-row">
-                            <span class="stat-label">Wins:</span>
+                            <span class="stat-label" data-i18n="stats.wins">Wins:</span>
                             <span class="stat-value wins" id="rock-wins">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Losses:</span>
+                            <span class="stat-label" data-i18n="stats.losses">Losses:</span>
                             <span class="stat-value losses" id="rock-losses">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Ties:</span>
+                            <span class="stat-label" data-i18n="stats.ties">Ties:</span>
                             <span class="stat-value ties" id="rock-ties">0</span>
                         </div>
                         <div class="stat-row total">
-                            <span class="stat-label">Total Played:</span>
+                            <span class="stat-label" data-i18n="stats.totalPlayed">Total Played:</span>
                             <span class="stat-value" id="rock-total">0</span>
+                        </div>
+                        <div class="stat-row winrate">
+                            <span class="stat-label" data-i18n="stats.winRate">Win Rate:</span>
+                            <span class="stat-value" id="rock-winrate">0%</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="hand-stat-card">
                     <div class="hand-stat-icon">✋</div>
-                    <div class="hand-stat-title">Paper</div>
+                    <div class="hand-stat-title" data-i18n="hand.paper">Paper</div>
                     <div class="hand-stat-details">
                         <div class="stat-row">
-                            <span class="stat-label">Wins:</span>
+                            <span class="stat-label" data-i18n="stats.wins">Wins:</span>
                             <span class="stat-value wins" id="paper-wins">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Losses:</span>
+                            <span class="stat-label" data-i18n="stats.losses">Losses:</span>
                             <span class="stat-value losses" id="paper-losses">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Ties:</span>
+                            <span class="stat-label" data-i18n="stats.ties">Ties:</span>
                             <span class="stat-value ties" id="paper-ties">0</span>
                         </div>
                         <div class="stat-row total">
-                            <span class="stat-label">Total Played:</span>
+                            <span class="stat-label" data-i18n="stats.totalPlayed">Total Played:</span>
                             <span class="stat-value" id="paper-total">0</span>
+                        </div>
+                        <div class="stat-row winrate">
+                            <span class="stat-label" data-i18n="stats.winRate">Win Rate:</span>
+                            <span class="stat-value" id="paper-winrate">0%</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="hand-stat-card">
                     <div class="hand-stat-icon">✌️</div>
-                    <div class="hand-stat-title">Scissors</div>
+                    <div class="hand-stat-title" data-i18n="hand.scissors">Scissors</div>
                     <div class="hand-stat-details">
                         <div class="stat-row">
-                            <span class="stat-label">Wins:</span>
+                            <span class="stat-label" data-i18n="stats.wins">Wins:</span>
                             <span class="stat-value wins" id="scissors-wins">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Losses:</span>
+                            <span class="stat-label" data-i18n="stats.losses">Losses:</span>
                             <span class="stat-value losses" id="scissors-losses">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Ties:</span>
+                            <span class="stat-label" data-i18n="stats.ties">Ties:</span>
                             <span class="stat-value ties" id="scissors-ties">0</span>
                         </div>
                         <div class="stat-row total">
-                            <span class="stat-label">Total Played:</span>
+                            <span class="stat-label" data-i18n="stats.totalPlayed">Total Played:</span>
                             <span class="stat-value" id="scissors-total">0</span>
+                        </div>
+                        <div class="stat-row winrate">
+                            <span class="stat-label" data-i18n="stats.winRate">Win Rate:</span>
+                            <span class="stat-value" id="scissors-winrate">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hand-stat-card overall-card">
+                    <div class="hand-stat-icon">📊</div>
+                    <div class="hand-stat-title" data-i18n="stats.overall">Overall</div>
+                    <div class="hand-stat-details">
+                        <div class="stat-row">
+                            <span class="stat-label" data-i18n="stats.wins">Wins:</span>
+                            <span class="stat-value wins" id="overall-wins">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label" data-i18n="stats.losses">Losses:</span>
+                            <span class="stat-value losses" id="overall-losses">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label" data-i18n="stats.ties">Ties:</span>
+                            <span class="stat-value ties" id="overall-ties">0</span>
+                        </div>
+                        <div class="stat-row total">
+                            <span class="stat-label" data-i18n="stats.totalPlayed">Total Played:</span>
+                            <span class="stat-value" id="overall-total">0</span>
+                        </div>
+                        <div class="stat-row winrate">
+                            <span class="stat-label" data-i18n="stats.winRate">Win Rate:</span>
+                            <span class="stat-value" id="overall-winrate">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trend Graph Panel -->
+        <div class="modal" id="trend-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 data-i18n="trends.title">📈 Performance Trends</h3>
+                    <button class="close-modal-btn" id="close-trend-modal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <canvas id="trend-chart" width="600" height="300"></canvas>
+                    <div class="trend-stats">
+                        <div class="trend-stat">
+                            <span class="trend-label" data-i18n="trends.totalGames">Total Games:</span>
+                            <span id="total-games-stat" class="trend-value">0</span>
+                        </div>
+                        <div class="trend-stat">
+                            <span class="trend-label" data-i18n="trends.currentStreak">Current Streak:</span>
+                            <span id="current-streak-stat" class="trend-value">0</span>
+                        </div>
+                        <div class="trend-stat">
+                            <span class="trend-label" data-i18n="trends.bestStreak">Best Streak:</span>
+                            <span id="best-streak-stat" class="trend-value">0</span>
                         </div>
                     </div>
                 </div>

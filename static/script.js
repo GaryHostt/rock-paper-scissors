@@ -31,6 +31,8 @@ let gameHistory = [];
 let currentStreak = 0;
 let currentStreakType = null; // 'win' or 'loss'
 let bestStreak = 0;
+let longestWinningStreak = 0;
+let longestLosingStreak = 0;
 
 // Trend data
 let trendData = [];
@@ -113,11 +115,23 @@ const translations = {
         'analysis.noPatternsYet': 'No clear patterns detected yet...',
         
         // Stats
+        'stats.handStats': 'Hand Statistics',
         'stats.overall': 'Overall',
         'stats.wins': 'Wins',
         'stats.losses': 'Losses',
         'stats.ties': 'Ties',
         'stats.totalPlayed': 'Total Played',
+        'stats.winRate': 'Win Rate',
+        
+        // Streak messages
+        'streak.noStreak': 'No Streak',
+        'streak.winning': 'Winning Streak',
+        'streak.losing': 'Losing Streak',
+        'streak.onFire': 'ON FIRE',
+        'streak.unstoppable': 'UNSTOPPABLE',
+        'streak.legendary': 'LEGENDARY',
+        'streak.longestWinning': 'Longest Winning Streak',
+        'streak.longestLosing': 'Longest Losing Streak',
         
         // Patterns
         'pattern.repeatAfterWin': 'You tend to repeat your choice after winning',
@@ -206,11 +220,23 @@ const translations = {
         'analysis.noPatternsYet': 'Aucun motif clair détecté pour le moment...',
         
         // Stats
+        'stats.handStats': 'Statistiques des Mains',
         'stats.overall': 'Global',
         'stats.wins': 'Victoires',
         'stats.losses': 'Défaites',
         'stats.ties': 'Égalités',
         'stats.totalPlayed': 'Total Joué',
+        'stats.winRate': 'Taux de Victoire',
+        
+        // Messages de série
+        'streak.noStreak': 'Aucune Série',
+        'streak.winning': 'Série de Victoires',
+        'streak.losing': 'Série de Défaites',
+        'streak.onFire': 'EN FEU',
+        'streak.unstoppable': 'INARRÊTABLE',
+        'streak.legendary': 'LÉGENDAIRE',
+        'streak.longestWinning': 'Série Gagnante la Plus Longue',
+        'streak.longestLosing': 'Série Perdante la Plus Longue',
         
         // Motifs
         'pattern.repeatAfterWin': 'Vous avez tendance à répéter votre choix après avoir gagné',
@@ -299,11 +325,23 @@ const translations = {
         'analysis.noPatternsYet': 'No se detectaron patrones claros aún...',
         
         // Stats
+        'stats.handStats': 'Estadísticas de Manos',
         'stats.overall': 'General',
         'stats.wins': 'Victorias',
         'stats.losses': 'Derrotas',
         'stats.ties': 'Empates',
         'stats.totalPlayed': 'Total Jugado',
+        'stats.winRate': 'Tasa de Victoria',
+        
+        // Mensajes de racha
+        'streak.noStreak': 'Sin Racha',
+        'streak.winning': 'Racha de Victorias',
+        'streak.losing': 'Racha de Derrotas',
+        'streak.onFire': '¡EN LLAMAS!',
+        'streak.unstoppable': '¡IMPARABLE!',
+        'streak.legendary': '¡LEGENDARIO!',
+        'streak.longestWinning': 'Racha Ganadora Más Larga',
+        'streak.longestLosing': 'Racha Perdedora Más Larga',
         
         // Patrones
         'pattern.repeatAfterWin': 'Tiendes a repetir tu elección después de ganar',
@@ -341,6 +379,13 @@ const statsPanel = document.getElementById('stats-panel');
 const closeStatsBtn = document.getElementById('close-stats-btn');
 const difficultyBtns = document.querySelectorAll('.difficulty-btn');
 
+// Streak elements
+const streakDisplay = document.getElementById('streak-display');
+const streakEmoji = document.getElementById('streak-emoji');
+const streakText = document.getElementById('streak-text');
+const longestWinningStreakEl = document.getElementById('longest-winning-streak');
+const longestLosingStreakEl = document.getElementById('longest-losing-streak');
+
 // Menu elements
 const menuToggleBtn = document.getElementById('menu-toggle-btn');
 const leftSidebar = document.getElementById('left-sidebar');
@@ -369,7 +414,7 @@ const scissorsWinRateEl = document.getElementById('scissors-win-rate');
 
 // Trend modal
 const trendModal = document.getElementById('trend-modal');
-const closeTrendModal = document.getElementById('close-trend-modal');
+const closeTrendModalBtn = document.getElementById('close-trend-modal');
 const trendChart = document.getElementById('trend-chart');
 const totalGamesStat = document.getElementById('total-games-stat');
 const currentStreakStat = document.getElementById('current-streak-stat');
@@ -431,14 +476,26 @@ function updateDifficultyDisplay() {
 // Load streak data
 function loadStreaks() {
     const savedBestStreak = localStorage.getItem('rps-best-streak');
+    const savedLongestWinning = localStorage.getItem('rps-longest-winning-streak');
+    const savedLongestLosing = localStorage.getItem('rps-longest-losing-streak');
+    
     if (savedBestStreak) {
         bestStreak = parseInt(savedBestStreak);
     }
+    if (savedLongestWinning) {
+        longestWinningStreak = parseInt(savedLongestWinning);
+    }
+    if (savedLongestLosing) {
+        longestLosingStreak = parseInt(savedLongestLosing);
+    }
+    updateLongestStreaksDisplay();
 }
 
 // Save streak data
 function saveStreaks() {
     localStorage.setItem('rps-best-streak', bestStreak.toString());
+    localStorage.setItem('rps-longest-winning-streak', longestWinningStreak.toString());
+    localStorage.setItem('rps-longest-losing-streak', longestLosingStreak.toString());
 }
 
 // Load trend data
@@ -521,25 +578,111 @@ function loadLanguage() {
     }
 }
 
+// Update longest streaks display
+function updateLongestStreaksDisplay() {
+    if (longestWinningStreakEl) {
+        longestWinningStreakEl.textContent = longestWinningStreak;
+    }
+    if (longestLosingStreakEl) {
+        longestLosingStreakEl.textContent = longestLosingStreak;
+    }
+}
+
+// Update streak display
+function updateStreakDisplay() {
+    const absStreak = Math.abs(currentStreak);
+    
+    // Remove all classes
+    streakDisplay.classList.remove('active', 'winning', 'losing', 'on-fire');
+    
+    if (absStreak === 0) {
+        // No streak
+        streakDisplay.classList.remove('active');
+        streakText.textContent = t('streak.noStreak');
+        streakEmoji.textContent = '🎯';
+        return;
+    }
+    
+    // Show streak
+    streakDisplay.classList.add('active');
+    
+    if (currentStreak > 0) {
+        // Winning streak
+        streakDisplay.classList.add('winning');
+        
+        if (absStreak >= 10) {
+            streakDisplay.classList.add('on-fire');
+            streakEmoji.textContent = '👑';
+            streakText.textContent = `${t('streak.legendary')} +${absStreak}!`;
+        } else if (absStreak >= 5) {
+            streakDisplay.classList.add('on-fire');
+            streakEmoji.textContent = '🔥';
+            streakText.textContent = `${t('streak.unstoppable')} +${absStreak}!`;
+        } else if (absStreak >= 3) {
+            streakDisplay.classList.add('on-fire');
+            streakEmoji.textContent = '🔥';
+            streakText.textContent = `${t('streak.onFire')} +${absStreak}!`;
+        } else {
+            streakEmoji.textContent = '✨';
+            streakText.textContent = `${t('streak.winning')} +${absStreak}`;
+        }
+    } else {
+        // Losing streak
+        streakDisplay.classList.add('losing');
+        
+        if (absStreak >= 5) {
+            streakEmoji.textContent = '💀';
+            streakText.textContent = `${t('streak.losing')} -${absStreak}`;
+        } else if (absStreak >= 3) {
+            streakEmoji.textContent = '😰';
+            streakText.textContent = `${t('streak.losing')} -${absStreak}`;
+        } else {
+            streakEmoji.textContent = '😕';
+            streakText.textContent = `${t('streak.losing')} -${absStreak}`;
+        }
+    }
+}
+
 // Update hand statistics display
 function updateHandStatsDisplay() {
     // Rock stats
+    const rockTotal = handStats.rock.wins + handStats.rock.losses + handStats.rock.ties;
+    const rockWinRate = rockTotal > 0 ? ((handStats.rock.wins / rockTotal) * 100).toFixed(1) : 0;
     document.getElementById('rock-wins').textContent = handStats.rock.wins;
     document.getElementById('rock-losses').textContent = handStats.rock.losses;
     document.getElementById('rock-ties').textContent = handStats.rock.ties;
-    document.getElementById('rock-total').textContent = handStats.rock.wins + handStats.rock.losses + handStats.rock.ties;
+    document.getElementById('rock-total').textContent = rockTotal;
+    document.getElementById('rock-winrate').textContent = `${rockWinRate}%`;
     
     // Paper stats
+    const paperTotal = handStats.paper.wins + handStats.paper.losses + handStats.paper.ties;
+    const paperWinRate = paperTotal > 0 ? ((handStats.paper.wins / paperTotal) * 100).toFixed(1) : 0;
     document.getElementById('paper-wins').textContent = handStats.paper.wins;
     document.getElementById('paper-losses').textContent = handStats.paper.losses;
     document.getElementById('paper-ties').textContent = handStats.paper.ties;
-    document.getElementById('paper-total').textContent = handStats.paper.wins + handStats.paper.losses + handStats.paper.ties;
+    document.getElementById('paper-total').textContent = paperTotal;
+    document.getElementById('paper-winrate').textContent = `${paperWinRate}%`;
     
     // Scissors stats
+    const scissorsTotal = handStats.scissors.wins + handStats.scissors.losses + handStats.scissors.ties;
+    const scissorsWinRate = scissorsTotal > 0 ? ((handStats.scissors.wins / scissorsTotal) * 100).toFixed(1) : 0;
     document.getElementById('scissors-wins').textContent = handStats.scissors.wins;
     document.getElementById('scissors-losses').textContent = handStats.scissors.losses;
     document.getElementById('scissors-ties').textContent = handStats.scissors.ties;
-    document.getElementById('scissors-total').textContent = handStats.scissors.wins + handStats.scissors.losses + handStats.scissors.ties;
+    document.getElementById('scissors-total').textContent = scissorsTotal;
+    document.getElementById('scissors-winrate').textContent = `${scissorsWinRate}%`;
+    
+    // Overall stats
+    const totalWins = scores.player;
+    const totalLosses = scores.computer;
+    const totalTies = scores.ties;
+    const totalGames = totalWins + totalLosses + totalTies;
+    const overallWinRate = totalGames > 0 ? ((totalWins / totalGames) * 100).toFixed(1) : 0;
+    document.getElementById('overall-wins').textContent = totalWins;
+    document.getElementById('overall-losses').textContent = totalLosses;
+    document.getElementById('overall-ties').textContent = totalTies;
+    document.getElementById('overall-total').textContent = totalGames;
+    document.getElementById('overall-winrate').textContent = `${overallWinRate}%`;
 }
 
 // Update hand statistics based on game result
@@ -691,9 +834,14 @@ function generateStrategies() {
 
 // Update score display
 function updateScoreDisplay() {
+    console.log('updateScoreDisplay called with:', scores);
+    console.log('playerScoreEl:', playerScoreEl);
+    console.log('computerScoreEl:', computerScoreEl);
+    console.log('tieScoreEl:', tieScoreEl);
     playerScoreEl.textContent = scores.player;
     computerScoreEl.textContent = scores.computer;
     tieScoreEl.textContent = scores.ties;
+    console.log('After update - playerScoreEl.textContent:', playerScoreEl.textContent);
 }
 
 // Display winning hand
@@ -820,6 +968,21 @@ async function playGame(playerChoice, isAutoPlay = false) {
             saveStreaks();
         }
         
+        // Update longest winning/losing streaks
+        if (currentStreak > longestWinningStreak) {
+            longestWinningStreak = currentStreak;
+            updateLongestStreaksDisplay();
+            saveStreaks();
+        }
+        if (Math.abs(currentStreak) > longestLosingStreak && currentStreak < 0) {
+            longestLosingStreak = Math.abs(currentStreak);
+            updateLongestStreaksDisplay();
+            saveStreaks();
+        }
+        
+        // Update streak display
+        updateStreakDisplay();
+        
         // Add to trend data
         trendData.push({
             player: scores.player,
@@ -852,8 +1015,13 @@ async function playGame(playerChoice, isAutoPlay = false) {
         saveScores();
         
     } catch (error) {
-        console.error('Error:', error);
-        resultMessage.textContent = 'Error connecting to server!';
+        console.error('=== GAME ERROR ===');
+        console.error('Error object:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        console.error('Request data was:', requestData);
+        resultMessage.textContent = 'Error connecting to server! Check console (Cmd+Option+I)';
+        resultMessage.style.fontSize = '0.9rem';
     } finally {
         // Re-enable buttons after a short delay
         const delay = isAutoPlay ? 500 : 1000;
@@ -886,9 +1054,13 @@ function resetScores() {
     currentStreak = 0;
     currentStreakType = null;
     bestStreak = 0;
+    longestWinningStreak = 0;
+    longestLosingStreak = 0;
     updateScoreDisplay();
     updateHandStatsDisplay();
     updateWinRates();
+    updateStreakDisplay();
+    updateLongestStreaksDisplay();
     saveScores();
     saveHandStats();
     saveTrend();
@@ -958,7 +1130,11 @@ function changeTheme(theme) {
 
 // Show trend graph modal
 function showTrendGraph() {
+    console.log('showTrendGraph called');
+    console.log('Trend modal:', trendModal);
     trendModal.classList.add('open');
+    document.body.classList.add('trends-open');
+    console.log('After adding open class:', trendModal.classList.contains('open'));
     
     // Update stats
     totalGamesStat.textContent = scores.player + scores.computer + scores.ties;
@@ -973,7 +1149,9 @@ function showTrendGraph() {
 
 // Close trend modal
 function closeTrendGraphModal() {
+    console.log('closeTrendGraphModal called');
     trendModal.classList.remove('open');
+    document.body.classList.remove('trends-open');
 }
 
 // Toggle auto-play mode
@@ -1108,31 +1286,42 @@ themeSelect.addEventListener('change', (e) => changeTheme(e.target.value));
 languageSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
 showAnalysisBtn.addEventListener('click', toggleAnalysis);
 showStatsBtn.addEventListener('click', () => {
+    console.log('Stats button clicked!');
+    console.log('Stats panel:', statsPanel);
+    console.log('Stats panel classes:', statsPanel.classList);
     statsPanel.classList.toggle('open');
-    toggleMenu(); // Close menu after opening stats
+    document.body.classList.toggle('stats-open');
+    console.log('After toggle - open?', statsPanel.classList.contains('open'));
+    // Don't close menu - keep it open
 });
 showTrendsBtn.addEventListener('click', () => {
+    console.log('Trends button clicked!');
+    console.log('Trend modal:', trendModal);
+    console.log('Trend modal classes:', trendModal.classList);
     showTrendGraph();
-    toggleMenu(); // Close menu after opening trend
+    console.log('After showTrendGraph - open?', trendModal.classList.contains('open'));
+    // Don't close menu - keep it open
 });
 menuResetBtn.addEventListener('click', () => {
     resetScores();
-    toggleMenu(); // Close menu after reset
+    // Don't close menu - keep it open
 });
 menuAutoPlayBtn.addEventListener('click', toggleAutoPlay);
+
+// Remove duplicate listener check
+if (showTrendsBtn) {
+    console.log('Skipping duplicate showTrendsBtn listener - already added above');
+}
 
 // Stats panel
 closeStatsBtn.addEventListener('click', () => {
     statsPanel.classList.remove('open');
+    document.body.classList.remove('stats-open');
 });
 
 // Trend modal
-closeTrendModal.addEventListener('click', closeTrendGraphModal);
-trendModal.addEventListener('click', (e) => {
-    if (e.target === trendModal) {
-        closeTrendGraphModal();
-    }
-});
+closeTrendModalBtn.addEventListener('click', closeTrendGraphModal);
+// Remove the click-outside-to-close functionality since it's now a bottom panel
 
 // Difficulty button listeners
 difficultyBtns.forEach(btn => {

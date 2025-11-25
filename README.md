@@ -4,7 +4,35 @@ A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advan
 
 ## 🎯 Version History
 
-### Version 2.0 - Advanced AI & Analytics Update (Current)
+### Version 2.1 - Streak Visualization & AI Evaluation (Nov 2025)
+
+**New Features:**
+
+#### 🔥 **Streak Visualization System**
+- Real-time streak display with dynamic animations
+- Visual feedback for winning/losing streaks
+- Special effects for milestone streaks (3+, 5+, 10+)
+- Multi-language support (English, French, Spanish)
+- Streak emojis that change based on performance:
+  - No Streak: 🎯 Neutral state
+  - Winning +2: ✨ Sparkle effect
+  - On Fire +3: 🔥 Fire animation with green pulse
+  - Unstoppable +5: 🔥 Intensified fire effect
+  - Legendary +10: 👑 Crown emoji with orange gradient
+  - Losing -2: 😕 Warning state
+  - Losing -3: 😰 Concerned state with shake animation
+  - Losing -5+: 💀 Critical state
+
+#### 🧪 **AI Performance Evaluation Framework**
+- Comprehensive testing suite for AI difficulty levels
+- Statistical validation tools (Chi-square, confidence intervals)
+- Pattern exploitation analysis
+- Automated performance benchmarking
+- Visual performance reports (charts and heatmaps)
+- 20+ test scenarios across all difficulty levels
+- See `testing/README.md` for complete documentation
+
+### Version 2.0 - Advanced AI & Analytics Update
 
 **Major Features Added:**
 
@@ -154,6 +182,78 @@ The server will run on `http://0.0.0.0:5000` by default.
 
 ---
 
+## 🧪 AI Testing and Evaluation
+
+A comprehensive testing framework for validating AI performance across all difficulty levels.
+
+### Quick Start
+
+```bash
+# Install testing dependencies
+cd testing
+pip3 install -r requirements.txt
+
+# Run quick test (100 games)
+./run_tests.sh quick
+
+# Run demo
+./run_tests.sh demo
+
+# Full test suite
+./run_tests.sh full 1000
+```
+
+### What Gets Tested
+
+The framework validates:
+- **Randomness**: Easy mode plays truly random (~33% win rate vs all strategies)
+- **Pattern Detection**: Medium/Hard/Very Hard can detect and exploit player patterns
+- **Difficulty Scaling**: Each difficulty level performs as expected
+- **Statistical Significance**: Results include confidence intervals
+
+### Expected AI Performance
+
+| Player Strategy | Easy | Medium | Hard | Very Hard |
+|----------------|------|--------|------|-----------|
+| Random | 33% | 33% | 33% | 33% |
+| Always Rock | 33% | 60% | 70% | 75% |
+| Cycle | 33% | 50% | 60% | 70% |
+| Win-Stay-Lose-Shift | 33% | 50% | 65% | 75% |
+| Anti-AI | 33% | 40% | 50% | 60% |
+
+*Values show expected AI win rate percentage*
+
+### Testing Tools
+
+1. **ai_evaluator.py** - Main test runner
+   - Simulates various player strategies
+   - Tests all difficulty levels
+   - Generates performance reports
+
+2. **statistical_tests.py** - Statistical analysis
+   - Chi-square randomness tests
+   - Confidence intervals
+   - Pattern exploitation rates
+   - Entropy analysis
+
+3. **visualization.py** - Chart generation
+   - Win rate comparisons
+   - Performance heatmaps
+   - Difficulty progression graphs
+
+4. **run_tests.sh** - Convenient wrapper script
+   - Easy commands for common tasks
+   - Automatic server detection
+   - Results visualization
+
+### Documentation
+
+- `testing/README.md` - Complete testing documentation
+- `testing/QUICKSTART.md` - Quick start guide
+- `STRATEGIES.md` - AI algorithm details
+
+---
+
 ## 📖 How to Play
 
 ### Basic Gameplay
@@ -186,6 +286,7 @@ The server will run on `http://0.0.0.0:5000` by default.
 - **Easy**: Computer plays randomly - 50/50 fair chance
 - **Medium**: Computer learns your patterns and counters them
 - **Hard**: Advanced AI predicts your moves using psychology
+- **Very Hard**: Master-level AI using advanced psychological tactics (see `STRATEGIES.md`)
 
 ---
 
