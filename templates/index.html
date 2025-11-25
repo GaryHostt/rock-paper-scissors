@@ -271,11 +271,6 @@
 
     <!-- Bottom Panels Container -->
     <div class="bottom-panels">
-        <!-- DEBUG: Always visible test element -->
-        <div style="background: red; color: white; padding: 30px; font-size: 24px; font-weight: bold; text-align: center; margin: 20px 0;">
-            ⬇️ SCROLL TEST - If you see this on iPhone, panels are working! ⬇️
-        </div>
-        
         <!-- OpenAI Commentary Panel -->
         <div class="openai-sidebar" id="openai-sidebar">
             <div class="openai-header">
@@ -285,6 +280,9 @@
             <div class="openai-content" id="openai-content">
                 <div class="openai-placeholder">
                     <p data-i18n="openai.placeholder">Click "View OpenAI Commentary" to get AI-powered analysis of your gameplay.</p>
+                    <button class="get-commentary-btn" id="get-commentary-btn" style="display: none;">
+                        🤖 Get AI Commentary
+                    </button>
                 </div>
             </div>
             <div class="openai-loading" id="openai-loading" style="display: none;">

@@ -1325,7 +1325,18 @@ async function fetchOpenAICommentary() {
     if (gameHistory.length < 5) {
         openaiContent.innerHTML = `<div class="openai-error"><p>${t('openai.noData')}</p></div>`;
         openaiSidebar.classList.add('open');
+        // Show the button if not enough games
+        const getCommentaryBtn = document.getElementById('get-commentary-btn');
+        if (getCommentaryBtn) {
+            getCommentaryBtn.style.display = 'none'; // Hide since not enough games
+        }
         return;
+    }
+    
+    // Hide the "Get Commentary" button when fetching starts
+    const getCommentaryBtn = document.getElementById('get-commentary-btn');
+    if (getCommentaryBtn) {
+        getCommentaryBtn.style.display = 'none';
     }
     
     // Show loading
@@ -1527,6 +1538,9 @@ if (showOpenAIBtn) {
     // Function to check and update button state
     function updateOpenAIButtonState() {
         const totalGames = scores.player + scores.computer + scores.ties;
+        const getCommentaryBtn = document.getElementById('get-commentary-btn');
+        
+        // Update menu button
         if (totalGames < 5) {
             showOpenAIBtn.disabled = true;
             showOpenAIBtn.style.opacity = '0.5';
@@ -1535,6 +1549,16 @@ if (showOpenAIBtn) {
             showOpenAIBtn.disabled = false;
             showOpenAIBtn.style.opacity = '1';
             showOpenAIBtn.style.cursor = 'pointer';
+        }
+        
+        // Update mobile button (show only if enough games and no commentary loaded)
+        if (getCommentaryBtn) {
+            const hasCommentary = openaiContent && openaiContent.querySelector('.openai-commentary');
+            if (totalGames >= 5 && !hasCommentary) {
+                getCommentaryBtn.style.display = 'block';
+            } else {
+                getCommentaryBtn.style.display = 'none';
+            }
         }
     }
     
@@ -1555,6 +1579,22 @@ if (showOpenAIBtn) {
         
         fetchOpenAICommentary();
     });
+    
+    // Add listener for the "Get Commentary" button inside the panel (mobile)
+    const getCommentaryBtn = document.getElementById('get-commentary-btn');
+    if (getCommentaryBtn) {
+        getCommentaryBtn.addEventListener('click', () => {
+            console.log('=== GET COMMENTARY BUTTON CLICKED (MOBILE) ===');
+            
+            const totalGames = scores.player + scores.computer + scores.ties;
+            if (totalGames < 5) {
+                alert('Play at least 5 games to get meaningful commentary.');
+                return;
+            }
+            
+            fetchOpenAICommentary();
+        });
+    }
     
     // Store original updateScoreDisplay to add our check
     const originalUpdateScoreDisplay = updateScoreDisplay;

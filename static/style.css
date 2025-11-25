@@ -1927,6 +1927,18 @@ body.menu-open .modal {
         border-radius: 15px !important;
         display: block !important; /* Ensure content is visible */
     }
+    
+    /* Make trend chart responsive */
+    #trend-chart {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+    }
+    
+    .modal-body {
+        width: 100%;
+        overflow-x: auto;
+    }
 
     .modal-header {
         padding: 10px;
@@ -2003,6 +2015,27 @@ body.menu-open .modal {
         transform: none !important;
         max-height: none !important;
         overflow: visible !important;
+    }
+    
+    /* Show "Get Commentary" button on mobile */
+    .get-commentary-btn {
+        display: block !important;
+        width: 100%;
+        padding: 15px;
+        margin-top: 15px;
+        background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .get-commentary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
     }
 
     .openai-header {
