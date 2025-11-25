@@ -477,7 +477,7 @@ body {
     border-radius: 20px;
     padding: 40px;
     box-shadow: 0 20px 60px var(--shadow-color);
-    max-width: 600px;
+    max-width: 900px;
     width: 100%;
     animation: fadeIn 0.5s ease-in;
     position: relative;
@@ -1356,6 +1356,7 @@ body {
 @media (max-width: 480px) {
     .container {
         padding: 20px;
+        max-width: 95%;
     }
     
     .title {

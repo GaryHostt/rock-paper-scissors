@@ -90,7 +90,7 @@ const translations = {
         'menu.viewPattern': 'View Pattern Analysis',
         'menu.hidePattern': 'Hide Pattern Analysis',
         'menu.statistics': '📊 Statistics',
-        'menu.viewHandStats': 'View Hand Statistics',
+        'menu.viewHandStats': 'Aggregated Data',
         'menu.showTrendGraph': 'Show Trend Graph',
         'menu.game': '🎮 Game',
         'menu.resetScores': 'Reset Scores',
@@ -195,7 +195,7 @@ const translations = {
         'menu.viewPattern': 'Voir l\'Analyse de Motifs',
         'menu.hidePattern': 'Masquer l\'Analyse de Motifs',
         'menu.statistics': '📊 Statistiques',
-        'menu.viewHandStats': 'Voir Statistiques des Mains',
+        'menu.viewHandStats': 'Données Agrégées',
         'menu.showTrendGraph': 'Afficher Graphique de Tendance',
         'menu.game': '🎮 Jeu',
         'menu.resetScores': 'Réinitialiser les Scores',
@@ -300,7 +300,7 @@ const translations = {
         'menu.viewPattern': 'Ver Análisis de Patrones',
         'menu.hidePattern': 'Ocultar Análisis de Patrones',
         'menu.statistics': '📊 Estadísticas',
-        'menu.viewHandStats': 'Ver Estadísticas de Manos',
+        'menu.viewHandStats': 'Datos Agregados',
         'menu.showTrendGraph': 'Mostrar Gráfico de Tendencia',
         'menu.game': '🎮 Juego',
         'menu.resetScores': 'Reiniciar Puntuaciones',
@@ -378,6 +378,9 @@ const winningEmojiEl = document.getElementById('winning-emoji');
 const statsPanel = document.getElementById('stats-panel');
 const closeStatsBtn = document.getElementById('close-stats-btn');
 const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+console.log('=== DIFFICULTY BUTTONS CHECK ===');
+console.log('Found difficulty buttons:', difficultyBtns);
+console.log('Number of buttons:', difficultyBtns.length);
 
 // Streak elements
 const streakDisplay = document.getElementById('streak-display');
@@ -1094,13 +1097,17 @@ function toggleStatsPanel() {
 
 // Set difficulty level
 function setDifficulty(difficulty) {
+    console.log('setDifficulty called with:', difficulty);
+    console.log('Current difficulty before:', currentDifficulty);
     currentDifficulty = difficulty;
+    console.log('Current difficulty after:', currentDifficulty);
     updateDifficultyDisplay();
     saveDifficulty();
     
     // Show message about difficulty change
     resultMessage.textContent = t(`difficultyMsg.${difficulty}`);
     resultMessage.classList.remove('win', 'lose', 'tie');
+    console.log('Result message set to:', resultMessage.textContent);
 }
 
 // Toggle menu sidebar
@@ -1313,11 +1320,15 @@ if (showTrendsBtn) {
     console.log('Skipping duplicate showTrendsBtn listener - already added above');
 }
 
-// Stats panel
-closeStatsBtn.addEventListener('click', () => {
-    statsPanel.classList.remove('open');
-    document.body.classList.remove('stats-open');
-});
+// Stats panel close button (if it exists)
+if (closeStatsBtn) {
+    closeStatsBtn.addEventListener('click', () => {
+        statsPanel.classList.remove('open');
+        document.body.classList.remove('stats-open');
+    });
+} else {
+    console.log('Note: closeStatsBtn not found in HTML');
+}
 
 // Trend modal
 closeTrendModalBtn.addEventListener('click', closeTrendGraphModal);
@@ -1325,20 +1336,33 @@ closeTrendModalBtn.addEventListener('click', closeTrendGraphModal);
 
 // Difficulty button listeners
 difficultyBtns.forEach(btn => {
+    console.log('Adding listener to difficulty button:', btn, btn.dataset.difficulty);
     btn.addEventListener('click', () => {
+        console.log('Difficulty button clicked:', btn.dataset.difficulty);
         const difficulty = btn.dataset.difficulty;
         setDifficulty(difficulty);
     });
 });
 
 // Load all saved data on page load
+console.log('=== STARTING PAGE LOAD ===');
+console.log('About to load scores...');
 loadScores();
+console.log('About to load hand stats...');
 loadHandStats();
+console.log('About to load difficulty...');
 loadDifficulty();
+console.log('About to load streaks...');
 loadStreaks();
+console.log('About to load trend...');
 loadTrend();
+console.log('About to load dark mode...');
 loadDarkMode();
+console.log('About to load theme...');
 loadTheme();
+console.log('About to load language...');
 loadLanguage();
+console.log('About to update win rates...');
 updateWinRates();
+console.log('=== PAGE LOAD COMPLETE ===');
 
