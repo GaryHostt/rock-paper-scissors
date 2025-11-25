@@ -361,6 +361,18 @@ body {
     animation: autoPlayPulse 1.5s ease-in-out infinite;
 }
 
+.menu-button.github-link-btn {
+    background: linear-gradient(135deg, #24292e 0%, #000000 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-button.github-link-btn:hover {
+    background: linear-gradient(135deg, #3a3f44 0%, #24292e 100%);
+    box-shadow: 0 5px 15px rgba(36, 41, 46, 0.4);
+}
+
 /* AI Analysis in Menu */
 .ai-analysis-content {
     margin-top: 10px;
