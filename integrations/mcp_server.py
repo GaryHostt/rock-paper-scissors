@@ -9,6 +9,7 @@ import json
 import sys
 from typing import Any
 import random
+import math
 from collections import Counter
 
 # MCP protocol messages
@@ -28,7 +29,7 @@ class MCPServer:
                         },
                         "difficulty": {
                             "type": "string",
-                            "enum": ["easy", "medium", "hard", "veryhard", "ultrahard"],
+                            "enum": ["easy", "medium", "hard", "veryhard"],
                             "default": "medium",
                             "description": "AI difficulty level"
                         }
@@ -83,51 +84,33 @@ class MCPServer:
         return random.choice(['rock', 'paper', 'scissors'])
     
     def ai_medium(self):
-        """Medium AI: Counters the player's most frequently played hand."""
+        """Medium AI: Combines frequency analysis with basic psychological patterns."""
         if len(self.game_history) < 3:
             return self.ai_easy()
         
         recent_player_moves = [game['player'] for game in self.game_history[-10:]]
         most_common = Counter(recent_player_moves).most_common(1)[0][0]
         
-        if random.random() < 0.7:
+        # Add psychological patterns if enough history
+        if len(self.game_history) >= 5:
+            last_game = self.game_history[-1]
+            
+            if last_game['result'] == 'player' and random.random() < 0.65:
+                return self.get_counter_move(last_game['player'])
+            
+            if last_game['result'] == 'computer':
+                what_would_have_won = self.get_counter_move(last_game['computer'])
+                if random.random() < 0.65:
+                    return self.get_counter_move(what_would_have_won)
+        
+        if random.random() < 0.70:
             return self.get_counter_move(most_common)
         return self.ai_easy()
     
     def ai_hard(self):
-        """Hard AI: Predicts player's next move based on patterns."""
-        if len(self.game_history) < 5:
-            return self.ai_medium()
-        
-        recent_games = self.game_history[-10:]
-        
-        # Pattern 1: Win-Stay, Lose-Shift
-        last_game = recent_games[-1]
-        if last_game['result'] == 'player':
-            predicted = last_game['player']
-        else:
-            losing_move = last_game['player']
-            what_would_have_won = self.get_counter_move(last_game['computer'])
-            predicted = what_would_have_won
-        
-        # Pattern 2: Recent frequency
-        recent_moves = [g['player'] for g in recent_games]
-        most_common = Counter(recent_moves).most_common(1)[0][0]
-        
-        # Combine predictions
-        predictions = [predicted, most_common]
-        final_prediction = random.choice(predictions)
-        
-        if random.random() < 0.75:
-            return self.get_counter_move(final_prediction)
-        
-        return self.ai_easy()
-    
-    def ai_very_hard(self):
         """
-        Very Hard AI: Master-level play using tiered strategy prioritization.
-        Designed to outperform Medium and Hard by detecting simple patterns first,
-        then applying psychological models.
+        Hard AI: Master-level play using tiered strategy prioritization.
+        (Formerly Very Hard)
         """
         if len(self.game_history) < 5:
             if len(self.game_history) < 2:
@@ -238,15 +221,15 @@ class MCPServer:
         # Final Fallback: Use hard AI logic
         return self.ai_hard()
     
-    def ai_ultra_hard(self):
+    def ai_very_hard(self):
         """
-        Ultra Hard AI: Expert-level play using advanced machine learning techniques.
-        Combines Markov chains, opponent modeling, and counter-counter prediction.
+        Very Hard AI: Ultimate expert-level play with cutting-edge techniques.
+        (Formerly Ultra Hard + Advanced features)
         """
         if len(self.game_history) < 5:
             if len(self.game_history) < 2:
                 return 'paper'
-            return self.ai_very_hard()
+            return self.ai_hard()
         
         predictions = []
         last_game = self.game_history[-1]
@@ -407,7 +390,7 @@ class MCPServer:
             elif best_score >= 0.5 and random.random() < 0.60:
                 return best_move
         
-        return self.ai_very_hard()
+        return self.ai_hard()
     
     def play_game(self, choice: str, difficulty: str = "medium"):
         """Play a game and return the result."""
@@ -424,8 +407,6 @@ class MCPServer:
             computer_choice = self.ai_hard()
         elif difficulty == 'veryhard':
             computer_choice = self.ai_very_hard()
-        elif difficulty == 'ultrahard':
-            computer_choice = self.ai_ultra_hard()
         else:  # medium is default
             computer_choice = self.ai_medium()
         

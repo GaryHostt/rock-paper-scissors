@@ -284,27 +284,32 @@ pip3 install -r requirements.txt
 
 3. **Set up OpenAI API (Optional - for AI Commentary feature):**
 ```bash
-# Create .env file
-touch .env
+# Copy the example config file
+cp config/env.example .env
 
-# Add your OpenAI API key to .env
-echo "OPENAI_API_KEY=your-key-here" >> .env
+# Edit .env and add your OpenAI API key
 ```
 
 **Note**: The `.env` file is automatically ignored by Git for security.
 
-See `OPENAI_SETUP.md` for detailed setup instructions.
+See `docs/OPENAI_SETUP.md` for detailed setup instructions.
 
 ---
 
 ## 🎮 Running the Application
 
-1. **Start the Flask server:**
+### Option 1: Direct Python
 ```bash
 python3 app.py
 ```
 
-2. **Open your browser and navigate to:**
+### Option 2: Using the start script
+```bash
+./scripts/start_server.sh
+```
+
+### Access the Game
+Open your browser and navigate to:
 ```
 http://localhost:5000
 ```
@@ -534,22 +539,39 @@ Calculated separately for:
 
 ```
 cursor-11242025/
-├── .env                   # Environment variables (not in Git)
-├── .gitignore            # Git ignore rules
 ├── app.py                # Flask backend with AI logic
 ├── requirements.txt      # Python dependencies
 ├── README.md            # This file
-├── OPENAI_SETUP.md      # OpenAI API setup guide
-├── STRATEGIES.md        # AI strategy documentation
-├── CHANGELOG_v2.1.md    # Version 2.1 changes
-├── templates/
-│   └── index.html       # Main HTML page with menu & modals
-├── static/
+├── RPS.png              # Screenshot
+├── .env                 # Environment variables (not in Git, create from config/env.example)
+├── .gitignore           # Git ignore rules
+├── config/              # Configuration files
+│   └── env.example      # Environment variables template
+├── deployment/          # Deployment configuration
+│   ├── Procfile         # Heroku process file
+│   └── HEROKU_DEPLOYMENT.md  # Heroku deployment guide
+├── docs/                # Documentation
+│   ├── BEST_PRACTICES.md     # Best practices and recommendations
+│   ├── OPENAI_SETUP.md       # OpenAI API setup guide
+│   ├── STRATEGIES.md         # AI strategy documentation
+│   ├── MCP_SETUP.md          # Claude Desktop integration guide
+│   ├── MCP_IMPLEMENTATION.md # MCP protocol details
+│   ├── TEST_RESULTS.md       # AI performance testing results
+│   └── [other docs...]
+├── integrations/        # External tool integrations
+│   ├── mcp_server.py           # MCP protocol server for Claude Desktop
+│   └── claude_desktop_config.json  # Claude Desktop configuration
+├── scripts/             # Utility scripts
+│   ├── start_server.sh  # Server startup script
+│   └── validate.sh      # Validation script
+├── static/              # Frontend assets
 │   ├── style.css        # Main styles with themes
 │   ├── openai.css       # OpenAI commentary styles
 │   ├── wrapper.css      # Layout wrapper styles
 │   ├── script.js        # Game logic, AI analysis, UI controls
 │   └── chart.min.js     # Lightweight chart rendering
+├── templates/           # HTML templates
+│   └── index.html       # Main game page
 └── testing/             # AI testing framework
     ├── README.md
     ├── ai_evaluator.py
@@ -562,7 +584,7 @@ cursor-11242025/
 ## 🌐 API Endpoints
 
 ### POST `/api/play`
-Play a round of rock, paper, scissors (for human players via web interface).
+Play a round of rock, paper, scissors.
 
 **Request Body:**
 ```json
@@ -587,123 +609,6 @@ Play a round of rock, paper, scissors (for human players via web interface).
   "result": "player|computer|tie"
 }
 ```
-
----
-
-### POST `/mcp/play` - **MCP Endpoint for AI Agents** 🤖
-
-Model Context Protocol (MCP) endpoint designed for AI agents, bots, and automated systems to play Rock Paper Scissors programmatically.
-
-**Use Cases:**
-- AI agent integration (Claude, GPT, etc.)
-- Automated testing
-- Bot tournaments
-- API-based gameplay
-- Machine learning experiments
-
-**Request Body:**
-```json
-{
-  "agent_id": "my_ai_agent_v1",
-  "choice": "rock|paper|scissors",
-  "opponent_difficulty": "easy|medium|hard",
-  "session_history": [
-    {
-      "agent_choice": "rock",
-      "opponent_choice": "paper",
-      "result": "opponent_win"
-    }
-  ]
-}
-```
-
-**Parameters:**
-- `agent_id` (string, optional): Unique identifier for your agent (default: "anonymous_agent")
-- `choice` (string, required): Agent's hand choice - "rock", "paper", or "scissors"
-- `opponent_difficulty` (string, optional): AI opponent difficulty - "easy", "medium", or "hard" (default: "easy")
-- `session_history` (array, optional): Previous games in session for AI pattern learning
-
-**Response:**
-```json
-{
-  "agent_choice": "rock",
-  "opponent_choice": "scissors",
-  "result": "agent_win|opponent_win|tie",
-  "agent_id": "my_ai_agent_v1",
-  "game_number": 5,
-  "session_stats": {
-    "agent_wins": 3,
-    "opponent_wins": 1,
-    "ties": 1
-  },
-  "message": "Agent chose rock, opponent chose scissors. Result: agent_win!"
-}
-```
-
-**Example Usage with cURL:**
-```bash
-curl -X POST http://localhost:5000/mcp/play \
-  -H "Content-Type: application/json" \
-  -d '{
-    "agent_id": "test_agent_001",
-    "choice": "rock",
-    "opponent_difficulty": "hard"
-  }'
-```
-
-**Example Usage with Python:**
-```python
-import requests
-
-response = requests.post('http://localhost:5000/mcp/play', json={
-    'agent_id': 'python_bot',
-    'choice': 'paper',
-    'opponent_difficulty': 'medium',
-    'session_history': []
-})
-
-result = response.json()
-print(f"Result: {result['result']}")
-print(f"Stats: {result['session_stats']}")
-```
-
-**Example Usage with JavaScript:**
-```javascript
-fetch('http://localhost:5000/mcp/play', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    agent_id: 'js_agent',
-    choice: 'scissors',
-    opponent_difficulty: 'easy'
-  })
-})
-.then(res => res.json())
-.then(data => console.log(data));
-```
-
-**Error Response:**
-```json
-{
-  "error": "Invalid choice. Must be rock, paper, or scissors.",
-  "agent_id": "my_agent",
-  "valid_choices": ["rock", "paper", "scissors"]
-}
-```
-
-**Features:**
-- ✅ Stateless - No server-side session tracking
-- ✅ Session history support for AI learning
-- ✅ All three difficulty levels available
-- ✅ Detailed statistics in response
-- ✅ Game numbering
-- ✅ Agent identification
-- ✅ Human-readable messages
-
-**AI Difficulty Behavior:**
-- **Easy**: Completely random, 33.3% win rate expected
-- **Medium**: Learns from session history, counters agent's most common choice (70% rate)
-- **Hard**: Advanced pattern recognition, exploits psychological patterns (75% rate)
 
 ---
 

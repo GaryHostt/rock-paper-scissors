@@ -43,7 +43,7 @@ If the file is empty or has just `{}`, replace it with:
     "rock-paper-scissors": {
       "command": "python3",
       "args": [
-        "/absolute/path/to/cursor-11242025/mcp_server.py"
+        "/absolute/path/to/cursor-11242025/integrations/mcp_server.py"
       ]
     }
   }
@@ -61,7 +61,7 @@ If you already have other MCP servers configured, add the `rock-paper-scissors` 
     "rock-paper-scissors": {
       "command": "python3",
       "args": [
-        "/absolute/path/to/cursor-11242025/mcp_server.py"
+        "/absolute/path/to/cursor-11242025/integrations/mcp_server.py"
       ]
     }
   }
@@ -70,17 +70,17 @@ If you already have other MCP servers configured, add the `rock-paper-scissors` 
 
 ### Step 3: Update the Path
 
-⚠️ **Important**: Replace `/absolute/path/to/cursor-11242025/mcp_server.py` with the actual **absolute path** to the `mcp_server.py` file.
+⚠️ **Important**: Replace `/absolute/path/to/cursor-11242025/integrations/mcp_server.py` with the actual **absolute path** to the `mcp_server.py` file.
 
 To find your project path, run:
 ```bash
-cd /path/to/cursor-11242025
+cd /path/to/cursor-11242025/integrations
 realpath mcp_server.py
 ```
 
 Or on macOS:
 ```bash
-cd /path/to/cursor-11242025
+cd /path/to/cursor-11242025/integrations
 echo "$(pwd)/mcp_server.py"
 ```
 
@@ -173,7 +173,7 @@ If you're using a virtual environment, use the venv's Python executable:
     "rock-paper-scissors": {
       "command": "/absolute/path/to/cursor-11242025/venv/bin/python3",
       "args": [
-        "/absolute/path/to/cursor-11242025/mcp_server.py"
+        "/absolute/path/to/cursor-11242025/integrations/mcp_server.py"
       ]
     }
   }
@@ -273,7 +273,7 @@ After each 5 games, use get_stats to check my performance."
 
 **Test the server manually:**
 ```bash
-python3 /absolute/path/to/mcp_server.py
+python3 /absolute/path/to/integrations/mcp_server.py
 ```
 
 If it runs without errors, type:
@@ -296,7 +296,7 @@ tail -f ~/Library/Logs/Claude/mcp*.log
 
 Make sure the script is executable:
 ```bash
-chmod +x /path/to/cursor-11242025/mcp_server.py
+chmod +x /path/to/cursor-11242025/integrations/mcp_server.py
 ```
 
 ### Import Errors
@@ -325,27 +325,26 @@ Use the `get_stats` tool anytime to check your performance!
 ## 📚 Additional Resources
 
 - See `README.md` for complete game documentation
-- See `STRATEGIES.md` for AI algorithm details
+- See `docs/STRATEGIES.md` for AI algorithm details
 - See `TEST_RESULTS.md` for AI performance analysis
-- See `test_mcp.py` for HTTP API testing (different from MCP protocol)
 
 ## 🔄 MCP vs HTTP API
 
-This project includes **two different ways** to interact programmatically:
+This project includes **two different ways** to interact:
 
 ### MCP Protocol (for Claude Desktop)
-- **File**: `mcp_server.py`
+- **File**: `integrations/mcp_server.py`
 - **Protocol**: stdio, JSON-RPC
 - **Use**: Claude Desktop integration
 - **Tools**: `play_rps`, `get_stats`
 
-### HTTP REST API (for general use)
+### Web Interface (for humans)
 - **File**: `app.py` (Flask server)
 - **Protocol**: HTTP/REST
-- **Endpoints**: `/api/play`, `/mcp/play`
-- **Use**: Web interface, API clients, testing
+- **Endpoint**: `/api/play` (for web UI)
+- **Use**: Web browser gameplay
 
-Both work independently - use MCP for Claude Desktop, HTTP for everything else!
+Both work independently - use MCP for Claude Desktop, HTTP for the web interface!
 
 ## 🎉 Have Fun!
 

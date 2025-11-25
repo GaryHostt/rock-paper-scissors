@@ -11,8 +11,8 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Change to project root
-cd "$(dirname "$0")"
+# Change to project root (one directory up from scripts/)
+cd "$(dirname "$0")/.."
 
 checks_passed=0
 checks_failed=0
