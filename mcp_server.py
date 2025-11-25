@@ -28,7 +28,7 @@ class MCPServer:
                         },
                         "difficulty": {
                             "type": "string",
-                            "enum": ["easy", "medium", "hard"],
+                            "enum": ["easy", "medium", "hard", "veryhard"],
                             "default": "medium",
                             "description": "AI difficulty level"
                         }
@@ -123,6 +123,121 @@ class MCPServer:
         
         return self.ai_easy()
     
+    def ai_very_hard(self):
+        """
+        Very Hard AI: Master-level play using tiered strategy prioritization.
+        Designed to outperform Medium and Hard by detecting simple patterns first,
+        then applying psychological models.
+        """
+        if len(self.game_history) < 5:
+            if len(self.game_history) < 2:
+                return 'paper'  # Counter most common opening (rock)
+            return self.ai_hard()
+        
+        last_game = self.game_history[-1]
+        
+        # TIER 1: Exploit Strong Frequency Bias (HIGHEST PRIORITY)
+        if len(self.game_history) >= 8:
+            recent_choices = [game['player'] for game in self.game_history[-12:]]
+            choice_counts = Counter(recent_choices)
+            most_common_move, count = choice_counts.most_common(1)[0]
+            frequency = count / len(recent_choices)
+            
+            # Strong bias (55%+) - exploit aggressively
+            if frequency >= 0.55:
+                if random.random() < 0.87:  # 87% exploitation rate
+                    return self.get_counter_move(most_common_move)
+            
+            # Moderate bias (45%+) - still exploit firmly
+            elif frequency >= 0.45:
+                if random.random() < 0.76:  # 76% exploitation rate
+                    return self.get_counter_move(most_common_move)
+        
+        # TIER 2: Win-Stay Pattern Detection (HIGH PRIORITY)
+        if last_game['result'] == 'player' and len(self.game_history) >= 4:
+            win_stay_count = 0
+            win_opportunities = 0
+            
+            # Look at last 8 games for win-stay pattern
+            for i in range(max(0, len(self.game_history) - 8), len(self.game_history) - 1):
+                if self.game_history[i]['result'] == 'player':
+                    win_opportunities += 1
+                    if i + 1 < len(self.game_history) and self.game_history[i]['player'] == self.game_history[i + 1]['player']:
+                        win_stay_count += 1
+            
+            # If they've shown win-stay pattern at least 40% of the time
+            if win_opportunities > 0 and (win_stay_count / win_opportunities) >= 0.4:
+                if random.random() < 0.73:  # 73% confidence
+                    return self.get_counter_move(last_game['player'])
+        
+        # TIER 3: Anti-Triple Detection (MEDIUM-HIGH PRIORITY)
+        if len(self.game_history) >= 2:
+            last_two = [self.game_history[-2]['player'], self.game_history[-1]['player']]
+            if last_two[0] == last_two[1]:
+                repeated_move = last_two[0]
+                # Predict they'll switch to what beats the repeated move
+                likely_next = self.get_counter_move(repeated_move)
+                
+                if random.random() < 0.69:  # 69% confidence
+                    return self.get_counter_move(likely_next)
+        
+        # TIER 4: Lose-Shift Pattern Detection (MEDIUM PRIORITY)
+        if last_game['result'] == 'computer' and len(self.game_history) >= 4:
+            lose_shift_count = 0
+            lose_opportunities = 0
+            
+            # Analyze lose-shift behavior
+            for i in range(max(0, len(self.game_history) - 8), len(self.game_history) - 1):
+                if self.game_history[i]['result'] == 'computer':
+                    lose_opportunities += 1
+                    if i + 1 < len(self.game_history) and self.game_history[i]['player'] != self.game_history[i + 1]['player']:
+                        lose_shift_count += 1
+            
+            # If they shift after losing at least 50% of the time
+            if lose_opportunities > 0 and (lose_shift_count / lose_opportunities) >= 0.5:
+                sequence_shift = {
+                    'rock': 'paper',
+                    'paper': 'scissors',
+                    'scissors': 'rock'
+                }
+                predicted_next = sequence_shift[last_game['player']]
+                
+                if random.random() < 0.66:  # 66% confidence
+                    return self.get_counter_move(predicted_next)
+        
+        # TIER 5: Cycle Detection (MEDIUM PRIORITY)
+        if len(self.game_history) >= 4:
+            recent_choices = [game['player'] for game in self.game_history[-4:]]
+            
+            # Check for rock->paper->scissors or similar cycle
+            if len(set(recent_choices[-3:])) == 3:  # All different in last 3
+                cycle_patterns = {
+                    ('rock', 'paper', 'scissors'): 'rock',
+                    ('rock', 'scissors', 'paper'): 'rock',
+                    ('paper', 'scissors', 'rock'): 'paper',
+                    ('paper', 'rock', 'scissors'): 'paper',
+                    ('scissors', 'rock', 'paper'): 'scissors',
+                    ('scissors', 'paper', 'rock'): 'scissors',
+                }
+                
+                last_three = tuple(recent_choices[-3:])
+                predicted = cycle_patterns.get(last_three)
+                
+                if predicted and random.random() < 0.62:  # 62% confidence
+                    return self.get_counter_move(predicted)
+        
+        # TIER 6: General Frequency Counter (LOW PRIORITY)
+        if len(self.game_history) >= 5:
+            recent_choices = [game['player'] for game in self.game_history[-10:]]
+            choice_counts = Counter(recent_choices)
+            most_common = choice_counts.most_common(1)[0][0]
+            
+            if random.random() < 0.58:  # 58% confidence
+                return self.get_counter_move(most_common)
+        
+        # Final Fallback: Use hard AI logic
+        return self.ai_hard()
+    
     def play_game(self, choice: str, difficulty: str = "medium"):
         """Play a game and return the result."""
         choice = choice.lower()
@@ -136,7 +251,9 @@ class MCPServer:
             computer_choice = self.ai_easy()
         elif difficulty == 'hard':
             computer_choice = self.ai_hard()
-        else:
+        elif difficulty == 'veryhard':
+            computer_choice = self.ai_very_hard()
+        else:  # medium is default
             computer_choice = self.ai_medium()
         
         # Determine winner

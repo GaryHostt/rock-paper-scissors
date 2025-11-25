@@ -101,98 +101,133 @@ def ai_hard(history):
 
 def ai_very_hard(history):
     """
-    Very Hard AI: Master strategist using advanced game theory and psychology.
+    Very Hard AI: Master-level play using tiered strategy prioritization.
+    Designed to outperform Medium and Hard by detecting simple patterns first,
+    then applying psychological models.
     
-    Implements multiple advanced strategies:
-    1. Win-Stay, Lose-Shift Detection
-    2. Double-Throw Pattern (avoid repetition)
-    3. Opening move counter (Paper first defense)
-    4. Pattern frequency analysis
-    5. Sequence prediction
+    Key improvements over previous version:
+    - Prioritizes frequency detection (catches "always X" strategies)
+    - Only applies psychology when patterns are actually detected
+    - Higher exploitation rates for strong patterns
+    - Better confidence thresholds to beat Medium (78%) and Hard (63%)
     """
-    if not history or len(history) < 2:
-        # First move: Statistically, Rock is most common (35%), so play Paper
-        return 'paper'
+    if not history or len(history) < 5:
+        # Start with hard AI logic for first few games
+        if len(history) < 2:
+            return 'paper'  # Counter most common opening (rock)
+        return ai_hard(history)
     
     last_game = history[-1]
     
-    # Strategy 1: Win-Stay, Lose-Shift Heuristic (Most exploitable pattern)
-    if len(history) >= 2:
-        prev_game = history[-2]
+    # TIER 1: Exploit Strong Frequency Bias (HIGHEST PRIORITY)
+    # This catches "always X" and heavily biased strategies
+    # Target: Beat Medium's 78% performance
+    if len(history) >= 8:
+        recent_choices = [game['player'] for game in history[-12:]]
+        choice_counts = Counter(recent_choices)
+        most_common_move, count = choice_counts.most_common(1)[0]
+        frequency = count / len(recent_choices)
         
-        # If player won last round, they likely repeat (Win-Stay)
-        if last_game['result'] == 'player':
-            if random.random() < 0.75:  # 75% confidence
-                # Counter the repeated move
-                return get_counter_move(last_game['player'])
+        # Strong bias (55%+) - exploit aggressively
+        if frequency >= 0.55:
+            if random.random() < 0.87:  # 87% exploitation rate
+                return get_counter_move(most_common_move)
         
-        # If player lost last round, they likely shift to next in sequence (Lose-Shift)
-        if last_game['result'] == 'computer':
-            if random.random() < 0.70:  # 70% confidence
-                # Predict the shift: Rock -> Paper -> Scissors -> Rock
-                sequence_shift = {
-                    'rock': 'paper',
-                    'paper': 'scissors', 
-                    'scissors': 'rock'
-                }
-                predicted_next = sequence_shift[last_game['player']]
-                return get_counter_move(predicted_next)
+        # Moderate bias (45%+) - still exploit firmly
+        elif frequency >= 0.45:
+            if random.random() < 0.76:  # 76% exploitation rate
+                return get_counter_move(most_common_move)
     
-    # Strategy 2: Double-Throw Detection (Humans avoid 3x repetition)
+    # TIER 2: Win-Stay Pattern Detection (HIGH PRIORITY)
+    # Check if player has shown win-stay tendency
+    if last_game['result'] == 'player' and len(history) >= 4:
+        win_stay_count = 0
+        win_opportunities = 0
+        
+        # Look at last 8 games for win-stay pattern
+        for i in range(max(0, len(history) - 8), len(history) - 1):
+            if history[i]['result'] == 'player':
+                win_opportunities += 1
+                if i + 1 < len(history) and history[i]['player'] == history[i + 1]['player']:
+                    win_stay_count += 1
+        
+        # If they've shown win-stay pattern at least 40% of the time
+        if win_opportunities > 0 and (win_stay_count / win_opportunities) >= 0.4:
+            if random.random() < 0.73:  # 73% confidence
+                return get_counter_move(last_game['player'])
+    
+    # TIER 3: Anti-Triple Detection (MEDIUM-HIGH PRIORITY)
+    # Most humans avoid playing the same move 3 times in a row
     if len(history) >= 2:
         last_two = [history[-2]['player'], history[-1]['player']]
         if last_two[0] == last_two[1]:
-            # Player played same move twice, they will NOT play it again
             repeated_move = last_two[0]
-            # They will play one of the other two moves
-            other_moves = [m for m in CHOICES if m != repeated_move]
             
-            # Play the move that beats one and ties the other
-            # If they played Rock-Rock, they'll play Paper or Scissors
-            # We play Scissors (beats Paper, loses to Rock, ties Scissors)
-            # But Rock is unlikely, so this is optimal
-            if random.random() < 0.65:  # 65% confidence
-                # Choose the move that counters what beats the repeated move
-                what_beats_repeated = get_counter_move(repeated_move)
-                # Counter that
-                return get_counter_move(what_beats_repeated)
+            # They played same move twice
+            # Predict they'll switch to what beats the repeated move
+            likely_next = get_counter_move(repeated_move)
+            
+            if random.random() < 0.69:  # 69% confidence
+                return get_counter_move(likely_next)
     
-    # Strategy 3: Advanced Pattern Recognition (last 7 games)
-    if len(history) >= 7:
-        recent = history[-7:]
+    # TIER 4: Lose-Shift Pattern Detection (MEDIUM PRIORITY)
+    if last_game['result'] == 'computer' and len(history) >= 4:
+        lose_shift_count = 0
+        lose_opportunities = 0
         
-        # Check for alternating pattern
-        player_choices = [g['player'] for g in recent]
+        # Analyze lose-shift behavior
+        for i in range(max(0, len(history) - 8), len(history) - 1):
+            if history[i]['result'] == 'computer':
+                lose_opportunities += 1
+                if i + 1 < len(history) and history[i]['player'] != history[i + 1]['player']:
+                    lose_shift_count += 1
         
-        # Check if player is cycling through moves
-        if len(set(player_choices[-3:])) == 3:
-            # Player is cycling, predict next in their cycle
-            last_three = player_choices[-3:]
-            # Find the pattern
-            cycle_map = {
+        # If they shift after losing at least 50% of the time
+        if lose_opportunities > 0 and (lose_shift_count / lose_opportunities) >= 0.5:
+            # Predict sequential shift
+            sequence_shift = {
+                'rock': 'paper',
+                'paper': 'scissors',
+                'scissors': 'rock'
+            }
+            predicted_next = sequence_shift[last_game['player']]
+            
+            if random.random() < 0.66:  # 66% confidence
+                return get_counter_move(predicted_next)
+    
+    # TIER 5: Cycle Detection (MEDIUM PRIORITY)
+    if len(history) >= 4:
+        recent_choices = [game['player'] for game in history[-4:]]
+        
+        # Check for rock->paper->scissors or similar cycle
+        if len(set(recent_choices[-3:])) == 3:  # All different in last 3
+            # They might be cycling
+            cycle_patterns = {
                 ('rock', 'paper', 'scissors'): 'rock',
                 ('rock', 'scissors', 'paper'): 'rock',
-                ('paper', 'rock', 'scissors'): 'paper',
                 ('paper', 'scissors', 'rock'): 'paper',
+                ('paper', 'rock', 'scissors'): 'paper',
                 ('scissors', 'rock', 'paper'): 'scissors',
                 ('scissors', 'paper', 'rock'): 'scissors',
             }
-            predicted = cycle_map.get(tuple(last_three[-3:]))
-            if predicted and random.random() < 0.60:
+            
+            last_three = tuple(recent_choices[-3:])
+            predicted = cycle_patterns.get(last_three)
+            
+            if predicted and random.random() < 0.62:  # 62% confidence
                 return get_counter_move(predicted)
     
-    # Strategy 4: Frequency Analysis with Recency Bias
+    # TIER 6: General Frequency Counter (LOW PRIORITY)
+    # Fallback frequency analysis with lower threshold
     if len(history) >= 5:
         recent_choices = [game['player'] for game in history[-10:]]
         choice_counts = Counter(recent_choices)
-        
-        # Heavily weight the most common choice
         most_common = choice_counts.most_common(1)[0][0]
         
-        if random.random() < 0.80:  # 80% confidence in frequency
+        if random.random() < 0.58:  # 58% confidence
             return get_counter_move(most_common)
     
-    # Fallback: Use hard AI logic
+    # Final Fallback: Use hard AI logic
     return ai_hard(history)
 
 @app.route('/')

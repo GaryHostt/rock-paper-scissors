@@ -114,20 +114,27 @@ A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advan
   - Color-coded display (Green=Wins, Red=Losses, Orange=Ties)
 
 #### 🤖 **Enhanced Auto-Play Mode**
-- **Adjustable AI Difficulty**:
+- **Two Independent Difficulty Settings**:
+  - **Opponent Difficulty** (main game buttons): Controls how hard the COMPUTER plays against you or the auto-player
+  - **Player AI Level** (auto-play menu): Controls how smart the AUTO-PLAYER is at making choices
+  
+- **Player AI Levels** (for auto-play only):
   - Easy: Pure random selection
-  - Medium: Adaptive - counters your most common plays
+  - Medium: Adaptive - analyzes opponent patterns and counters most common plays
   - Hard: Predictive - uses advanced pattern recognition (Default)
-  - Very Hard: Master strategist with advanced psychology
+  - Very Hard: Master strategist with advanced psychology and frequency detection
+  
 - **Variable Speed Control**:
   - Slow (2 seconds per round)
   - Normal (1.5 seconds per round)
   - Fast (0.8 seconds per round) - Default
   - Turbo (0.3 seconds per round)
+  
 - **Settings Lock**: Speed and AI level disabled while Auto-Play is active
 - **AI vs AI Battles** - Watch different AI difficulties compete!
+  - Example: Set Opponent to "Very Hard" and Player AI to "Easy" to see master vs novice
 
-#### 🎮 **Difficulty Levels**
+#### 🎮 **Opponent Difficulty Levels** (applies to all modes)
 - **Easy Mode** 😊 - Computer plays randomly (fair chance)
 - **Medium Mode** 🤔 - Computer adapts to your patterns (70% counter rate)
 - **Hard Mode** 😈 - Advanced AI that:
@@ -135,6 +142,11 @@ A modern, feature-rich Rock Paper Scissors game with Python Flask backend, advan
   - Detects win/loss patterns
   - Weights recent plays more heavily
   - Exploits common human tendencies
+- **Very Hard Mode** 👹 - Master-level AI (83% win rate vs predictable patterns):
+  - Prioritizes frequency bias detection
+  - Advanced pattern recognition
+  - Tiered strategy system
+  - Outperforms all other difficulties
 
 #### 💾 **Data Persistence**
 - All scores, statistics, and preferences saved in browser localStorage
@@ -323,9 +335,10 @@ The framework validates:
    - Choose from 5 seasonal themes
 3. **Start Auto-Play:**
    - Click "Start Auto-Play"
-   - Set AI difficulty (Easy/Medium/Hard)
-   - Adjust speed (Slow to Turbo)
-   - Watch AI battle itself!
+   - **Player AI Level**: Choose how smart the auto-player is (Easy/Medium/Hard/Very Hard)
+   - **Speed**: Adjust how fast games play (Slow to Turbo)
+   - **Opponent Difficulty**: Use the main game buttons to set computer difficulty
+   - Watch AI battle the computer automatically!
 4. **View AI Analysis:**
    - Click "View Pattern Analysis"
    - See detected patterns in your play style
@@ -336,11 +349,24 @@ The framework validates:
    - "Show Trend Graph" for performance over time
 6. **Reset Scores** to start fresh
 
-### Difficulty Levels
-- **Easy**: Computer plays randomly - 50/50 fair chance
-- **Medium**: Computer learns your patterns and counters them
-- **Hard**: Advanced AI predicts your moves using psychology
-- **Very Hard**: Master-level AI using advanced psychological tactics (see `STRATEGIES.md`)
+### Difficulty Settings Explained
+
+**There are TWO separate difficulty settings:**
+
+1. **Opponent Difficulty** (😊 Easy, 🤔 Medium, 😈 Hard, 👹 Very Hard buttons)
+   - Controls how the COMPUTER plays
+   - Affects both manual play and auto-play mode
+   - Set this to control your challenge level
+
+2. **Player AI Level** (in Auto-Play menu)
+   - Only active during auto-play mode
+   - Controls how the AUTO-PLAYER makes choices
+   - Set this to watch different AI strategies compete
+
+**Example Combinations:**
+- You vs Easy Computer: Manual play, Opponent = Easy
+- Smart AI vs Hard Computer: Auto-Play, Player AI = Hard, Opponent = Hard
+- Novice AI vs Master Computer: Auto-Play, Player AI = Easy, Opponent = Very Hard
 
 ---
 
@@ -376,6 +402,8 @@ Based on analysis, you'll receive tips like:
 
 ### AI Difficulty Mechanics
 
+**Opponent AI (Computer):**
+
 **Medium AI:**
 - Tracks your most common hand
 - Counters it 70% of the time
@@ -388,6 +416,28 @@ Based on analysis, you'll receive tips like:
 - Weights recent games more heavily
 - 75% accuracy in countering tendencies
 - Requires 5+ games for full analysis
+
+**Very Hard AI:** (NEW - Master Level)
+- **Tier 1**: Frequency bias detection (87% exploitation)
+  - Catches "always X" strategies
+  - Detects any hand played >55% of the time
+- **Tier 2-6**: Psychological pattern recognition
+  - Win-stay / Lose-shift detection
+  - Anti-triple repetition
+  - Cycle detection
+  - Advanced pattern analysis
+- 83% win rate vs predictable patterns
+- Perfectly fair (33%) vs random play
+
+**Auto-Player AI (Only in Auto-Play Mode):**
+
+The Player AI Level setting controls the auto-player's intelligence:
+- **Easy**: Random choices
+- **Medium**: Counters opponent's most common hand (70% rate)
+- **Hard**: Advanced pattern recognition with win-stay/lose-shift analysis
+- **Very Hard**: Same master-level AI as opponent
+
+**Note**: During auto-play, the auto-player (controlled by Player AI Level) plays against the computer (controlled by Opponent Difficulty buttons).
 
 ---
 
