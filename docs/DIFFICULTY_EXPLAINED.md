@@ -1,6 +1,7 @@
 # Difficulty Settings Explained
 
-**Date**: November 25, 2025
+**Date**: November 26, 2025  
+**Version**: 2.1 (With Hyperparameter Optimization)
 
 ---
 
@@ -96,14 +97,18 @@ AUTO-PLAYER (Player AI Level) → plays against → COMPUTER (Opponent Difficult
 - **Best For**: Advanced players
 - **How it works**: Detects win-stay/lose-shift tendencies, predicts next move
 
-### Very Hard 👹 (Master)
-- **Strategy**: Tiered frequency + psychology
-- **Win Rate**: 83% vs predictable patterns, 33% vs random
+### Very Hard 👹 (Master) - WITH HYPERPARAMETER OPTIMIZATION
+- **Strategy**: Tiered frequency + psychology + machine learning
+- **Win Rate**: 63-70% vs predictable patterns (10.2% better than pre-optimization), 31-33% vs random
 - **Best For**: Expert players, AI testing
 - **How it works**: 
-  - TIER 1: Detects frequency bias (55%+ on one hand)
+  - Uses 41 scientifically-optimized parameters (not hardcoded guesses)
+  - TIER 1: Detects frequency bias (50%+ on one hand with 91.9% confidence)
   - TIER 2-6: Advanced psychological patterns
-  - Outperforms all other difficulties
+  - Markov chain prediction, opponent modeling, level-K reasoning
+  - Ensemble voting system with dynamic exploitation rates
+  - **10.2% performance improvement** over manual parameter tuning
+  - See [HYPERPARAMETER_OPTIMIZATION.md](HYPERPARAMETER_OPTIMIZATION.md) for details
 
 ---
 

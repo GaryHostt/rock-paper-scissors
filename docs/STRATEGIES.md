@@ -2,7 +2,9 @@
 
 ## Advanced Game Theory and Psychological Tactics
 
-This document details the strategies implemented in the "Very Hard" difficulty mode, based on game theory, statistical analysis, and behavioral psychology.
+This document details the strategies implemented in all difficulty modes, based on game theory, statistical analysis, behavioral psychology, and **hyperparameter optimization** (v2.1).
+
+**Latest Update (v2.1)**: Very Hard difficulty now uses **41 scientifically-optimized parameters** instead of hardcoded values, achieving a **10.2% performance improvement**. See [HYPERPARAMETER_OPTIMIZATION.md](HYPERPARAMETER_OPTIMIZATION.md) for details.
 
 ---
 
@@ -28,11 +30,16 @@ This document details the strategies implemented in the "Very Hard" difficulty m
   - Recent move weighting (75% confidence)
 - **Pattern Detection**: Requires 5+ games
 
-### Very Hard Mode 👹
-- **Strategy**: Master strategist using multiple advanced tactics
-- **Win Rate**: ~60-70%
-- **Patterns Detected**: All of the above plus advanced game theory
-- **Pattern Detection**: Requires 2+ games for basic, 7+ for advanced
+### Very Hard Mode 👹 (v2.1 - OPTIMIZED)
+- **Strategy**: Master strategist using multiple advanced tactics with **optimized hyperparameters**
+- **Win Rate**: ~63-70% vs predictable patterns (10.2% better than v2.0)
+- **Patterns Detected**: All of the above plus advanced game theory, Markov chains, opponent modeling
+- **Pattern Detection**: Requires 2+ games for basic, 5+ for advanced
+- **Optimization**: 41 parameters tuned via simulation-based optimization
+  - Frequency thresholds: 50.9% (vs 60% hardcoded)
+  - Win-stay confidence: 73.8% (vs 70% hardcoded)
+  - Exploitation rates: 88.5% high confidence (vs 88% hardcoded)
+  - All values data-driven, not guessed
 
 ---
 
