@@ -107,6 +107,14 @@ This directory contains all documentation for the Rock Paper Scissors AI project
 
 ## 🤖 AI Insights
 
+### [CLAUDE_GAMEPLAY_ANALYSIS.md](CLAUDE_GAMEPLAY_ANALYSIS.md) ⭐ NEW
+**Claude vs Very Hard AI case study** - Real 80-turn gameplay analysis
+- 59.5% → 18.2% win rate collapse documented
+- Pattern detection and adaptation timeline
+- Meta-pattern vulnerability analysis
+- Game theory validation (Nash equilibrium)
+- Educational takeaways for strategic decision-making
+
 ### [AI_VS_AI_INSIGHTS.md](AI_VS_AI_INSIGHTS.md)
 **AI battle analysis** - AI vs AI testing results
 - Cross-difficulty matchups

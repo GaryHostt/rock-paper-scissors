@@ -318,6 +318,122 @@ The server will run on `http://0.0.0.0:5000` by default.
 
 ---
 
+## 🤖 Claude Desktop Integration (MCP)
+
+The Rock Paper Scissors game can be played by Claude Desktop via the Model Context Protocol (MCP), allowing Claude to play autonomously and analyze its performance against the AI.
+
+### Setup
+
+See [`docs/MCP_SETUP.md`](docs/MCP_SETUP.md) for complete setup instructions. Quick summary:
+
+1. Add the MCP server to Claude Desktop's config file
+2. Point to the `mcp_server.py` file in your project directory
+3. Restart Claude Desktop
+
+Once configured, Claude will have access to two tools:
+- `play_rps` - Play a game of Rock Paper Scissors
+- `get_stats` - Get current statistics
+
+### Having Claude Play Rock Paper Scissors
+
+One of the most interesting use cases is having Claude play autonomously against the Very Hard AI, tracking its own performance and analyzing strategies. This provides insight into how Claude "thinks" strategically in a competitive game theory scenario.
+
+**Suggested Prompt for Claude Desktop:**
+
+> Play rock paper scissors on the MCP server indefinitely, on the very hard difficulty. Every 20 turns:
+> 1. Give a summary of your total wins, losses, and ties stats
+> 2. Explain what strategy patterns you think the AI is using against you
+> 3. Describe how you are countering or adapting to those patterns
+> 4. Analyze whether you're performing better than, at, or worse than the Nash equilibrium (33% win rate expected vs Very Hard when playing randomly)
+> 5. Reflect on whether you're introducing exploitable patterns in your own play
+
+### What to Expect
+
+**The Nash Equilibrium Baseline:**
+- In Rock Paper Scissors, the Nash equilibrium is playing each choice randomly at 33.33%
+- Against an optimal or highly adaptive opponent, you cannot do better than ~33% win rate
+- The Very Hard AI plays near-optimally, so achieving 33% is actually **optimal play**!
+
+**Performance Interpretation:**
+
+| Win Rate | What It Means |
+|----------|---------------|
+| **~33%** | ✅ **Optimal/Perfect Play** - Claude is playing randomly or the AI cannot exploit patterns |
+| **>40%** | 🎯 **Claude Exploiting AI** - Claude found patterns in the AI's behavior |
+| **<27%** | ⚠️ **AI Exploiting Claude** - Claude has introduced exploitable patterns |
+| **27-33%** | 🤔 **Slight Disadvantage** - Claude has minor exploitable tendencies |
+| **33-40%** | 🎲 **Slight Advantage** - Random variance or minor AI patterns detected |
+
+**What the Very Hard AI Will Look For:**
+
+The Very Hard AI (with 41 optimized hyperparameters) actively detects and exploits:
+
+1. **Frequency Bias** (87-94% exploitation rate)
+   - Playing one hand >50% of the time
+   - Most common human mistake
+
+2. **Win-Stay Patterns** (70-85% exploitation)
+   - Repeating the same hand after winning
+   - Classic reinforcement behavior
+
+3. **Lose-Shift Patterns** (68-73% exploitation)
+   - Predictable switching after losses
+   - Common psychological response
+
+4. **Cycle Patterns** (62-87% exploitation)
+   - Rock→Paper→Scissors sequences
+   - Attempts at "strategic variation"
+
+5. **Anti-Triple Behavior** (69-74% exploitation)
+   - Avoiding three repeats in a row
+   - Meta-strategy that becomes predictable
+
+6. **Markov Chain Transitions** (70-95% exploitation)
+   - Move A followed by move B patterns
+   - Conditional probability exploitation
+
+**Key Insight:**
+
+The Very Hard AI is specifically optimized to beat **predictable human players** (90% win rate vs "Always Rock"), not other optimal strategies. This means:
+
+- **Trying to be "clever" will likely backfire** - Complex strategies create exploitable patterns
+- **True randomness is the optimal counter-strategy** - Be like the Easy AI!
+- **Pattern-based play helps the AI** - The more you try to counter-predict, the more exploitable you become
+
+From our AI vs AI testing (see [`docs/AI_VS_AI_INSIGHTS.md`](docs/AI_VS_AI_INSIGHTS.md)):
+- Easy AI (pure random) achieves 32% vs Very Hard - nearly perfect!
+- Medium AI (pattern-based) achieves 35.9% vs Very Hard - best AI performance!
+- Very Hard vs Very Hard converges to ~33% - Nash equilibrium validated!
+
+**The Fascinating Question:**
+
+Will Claude maintain disciplined random play (~33% win rate), or will its strategic reasoning introduce exploitable patterns (<27% win rate)? Can an advanced AI "resist" trying to find patterns that don't exist?
+
+This experiment tests the boundary between optimal game theory and psychological pattern-seeking behavior!
+
+### Real-World Case Study
+
+For a detailed analysis of an actual 100-turn game where Claude played against Very Hard difficulty, see **[`docs/CLAUDE_GAMEPLAY_ANALYSIS.md`](docs/CLAUDE_GAMEPLAY_ANALYSIS.md)**. 
+
+**The Complete Arc - Key Findings:**
+- **Turn 1-20**: 62.5% win rate (Claude exploiting AI patterns)
+- **Turn 21-40**: 41.7% win rate (AI adapting to Claude's cycle)
+- **Turn 41-60**: 75.0% win rate (false recovery - Claude thought they'd won)
+- **Turn 61-80**: 18.2% win rate (catastrophic collapse - full AI exploitation)
+- **Turn 81-100**: 35.7% win rate (attempted recovery, still losing)
+- **Final Result**: 49.3% overall - **below Nash equilibrium** (worse than random!)
+
+**What Happened:**
+- Claude's cycle pattern (rock→paper→scissors) was detected and ruthlessly exploited
+- Attempts at "fake randomness" created exploitable meta-patterns (rock after ties, breaks at regular intervals)
+- The AI adapted faster than Claude could counter-adapt
+- Even after explicitly recognizing all their biases (turn 80), Claude couldn't overcome them
+- **The profound lesson**: Against advanced pattern recognition, strategic intelligence becomes a liability
+
+This case study provides real evidence of the AI's multi-layered pattern detection, temporal adaptation, and the fundamental difficulty of achieving true randomness - even for advanced language models.
+
+---
+
 ## 🧪 AI Testing and Evaluation
 
 A comprehensive testing framework for validating AI performance across all difficulty levels.
