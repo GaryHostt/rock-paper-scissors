@@ -115,7 +115,7 @@ class MCPServer:
         if len(self.game_history) < 5:
             if len(self.game_history) < 2:
                 return 'paper'  # Counter most common opening (rock)
-            return self.ai_hard()
+            return self.ai_medium()  # Fall back to simpler AI
         
         last_game = self.game_history[-1]
         
@@ -218,8 +218,8 @@ class MCPServer:
             if random.random() < 0.58:  # 58% confidence
                 return self.get_counter_move(most_common)
         
-        # Final Fallback: Use hard AI logic
-        return self.ai_hard()
+        # Final Fallback: Random choice
+        return random.choice(['rock', 'paper', 'scissors'])
     
     def ai_very_hard(self):
         """
@@ -550,6 +550,24 @@ class MCPServer:
     
     async def run(self):
         """Run the MCP server using stdio."""
+        # Configure logging to stderr only (stdout must be clean JSON-RPC)
+        import logging
+        import os
+        logging.basicConfig(
+            level=logging.INFO,
+            stream=sys.stderr,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+        logger = logging.getLogger(__name__)
+        
+        # Write startup banner to stderr for debugging
+        logger.info("=" * 50)
+        logger.info("Rock Paper Scissors MCP Server")
+        logger.info(f"Python: {sys.version}")
+        logger.info(f"Working Directory: {os.getcwd()}")
+        logger.info("Waiting for JSON-RPC requests on stdin...")
+        logger.info("=" * 50)
+        
         while True:
             try:
                 # Read from stdin
@@ -558,10 +576,17 @@ class MCPServer:
                 )
                 
                 if not line:
+                    logger.info("EOF received, shutting down")
                     break
                 
                 # Parse JSON-RPC request
                 request = json.loads(line.strip())
+                logger.info(f"Received request: {request.get('method', 'unknown')}")
+                
+                # Handle notifications (no id field, no response needed)
+                if "id" not in request:
+                    logger.info(f"Notification received (no response): {request.get('method')}")
+                    continue
                 
                 # Handle request
                 response = await self.handle_request(request)
@@ -569,10 +594,14 @@ class MCPServer:
                 # Write response to stdout
                 sys.stdout.write(json.dumps(response) + "\n")
                 sys.stdout.flush()
+                logger.info(f"Sent response for request id: {request.get('id')}")
                 
             except json.JSONDecodeError as e:
+                logger.error(f"JSON parse error: {e}")
+                # Per JSON-RPC spec, parse errors must have id: null
                 error_response = {
                     "jsonrpc": "2.0",
+                    "id": None,  # null for parse errors
                     "error": {
                         "code": -32700,
                         "message": f"Parse error: {str(e)}"
@@ -582,8 +611,12 @@ class MCPServer:
                 sys.stdout.flush()
             
             except Exception as e:
+                logger.error(f"Internal error: {e}", exc_info=True)
+                # Include request id if available
+                request_id = request.get("id") if 'request' in locals() else None
                 error_response = {
                     "jsonrpc": "2.0",
+                    "id": request_id,
                     "error": {
                         "code": -32603,
                         "message": f"Internal error: {str(e)}"

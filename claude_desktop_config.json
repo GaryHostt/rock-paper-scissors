@@ -1,9 +1,9 @@
 {
   "mcpServers": {
     "rock-paper-scissors": {
-      "command": "python3",
+      "command": "/Users/alex.macdonald/cursor-11242025/venv/bin/python",
       "args": [
-        "mcp_server.py"
+        "/Users/alex.macdonald/cursor-11242025/mcp_server.py"
       ]
     }
   }
